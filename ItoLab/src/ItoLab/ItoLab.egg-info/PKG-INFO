@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: ItoLab
+Version: 0.1.0
+Summary: Stochastic process simulation library accompanying the Stochastic Finance book.
+Author: Erik Heitfield
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: matplotlib
+
+## ItoLab: a lightweight stochastic process simulation package.
+
+More details about Itolab....

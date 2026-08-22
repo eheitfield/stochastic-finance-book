@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>8&nbsp; Jump-Diffusion Models – A Practical Introduction to Stochastic Processes and Financial Modeling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/09-stochastic_volatility.html" rel="next">
+<link href="../chapters/07-multi_variable_models.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+    tex: {
+        macros: {
+
+            // --------------------------------------------------------------------
+            // Number systems
+            // --------------------------------------------------------------------
+
+            R: "\\mathbb{R}",                 // Real numbers
+            C: "\\mathbb{C}",                 // Complex numbers
+            N: "\\mathbb{N}",                 // Natural numbers
+            Z: "\\mathbb{Z}",                 // Integers
+            Q: "\\mathbb{Q}",                 // Rational numbers
+
+            // --------------------------------------------------------------------
+            // Probability spaces and measures
+            // --------------------------------------------------------------------
+
+            Prob: "\\mathbb{P}",              // Physical probability measure
+            P: "\\mathbb{P}",                 // Short form for probability measure
+            E: "\\mathbb{E}",                 // Expectation operator
+            F: "\\mathcal{F}",                // Filtration
+            G: "\\mathcal{G}",                // Alternate filtration
+            B: "\\mathcal{B}",                // Borel sigma-algebra
+
+            // --------------------------------------------------------------------
+            // Common probability operators
+            // --------------------------------------------------------------------
+
+            Var: "\\operatorname{Var}",
+            Cov: "\\operatorname{Cov}",
+            Corr: "\\operatorname{Corr}",
+            Covar: "\\operatorname{Cov}",
+            SD: "\\operatorname{SD}",
+            Bias: "\\operatorname{Bias}",
+            MSE: "\\operatorname{MSE}",
+
+            // --------------------------------------------------------------------
+            // Convergence notions
+            // --------------------------------------------------------------------
+
+            eqas: "\\overset{a.s.}{=}",
+            eqms: "\\overset{m.s.}{=}",
+            toas: "\\overset{a.s.}{\\rightarrow}",
+            toms: "\\overset{m.s.}{\\rightarrow}",
+
+            // --------------------------------------------------------------------
+            // Frequently used sets
+            // --------------------------------------------------------------------
+
+            Ft: "\\mathcal{F}_t",
+            Fs: "\\mathcal{F}_s",
+
+            // --------------------------------------------------------------------
+            // Differential notation
+            // --------------------------------------------------------------------
+
+            dd: "\\,\\mathrm{d}",
+            dt: "\\,\\mathrm{d}t",
+            ds: "\\,\\mathrm{d}s",
+            dW: "\\,\\mathrm{d}W",
+            dWt: "\\,\\mathrm{d}W_t",
+            dN: "\\,\\mathrm{d}N",
+            dNt: "\\,\\mathrm{d}N_t",
+
+            // --------------------------------------------------------------------
+            // Common stochastic process notation
+            // --------------------------------------------------------------------
+
+            W: "W_t",                         // Brownian motion
+            Nt: "N_t",                        // Poisson process
+            Xt: "X_t",
+            Yt: "Y_t",
+            St: "S_t",
+            rt: "r_t",
+
+            // --------------------------------------------------------------------
+            // Finance
+            // --------------------------------------------------------------------
+
+            rn: "\\mathbb{Q}",                // Risk-neutral measure
+            drift: "\\mu",
+            vol: "\\sigma",
+            lam: "\\lambda",
+
+            // --------------------------------------------------------------------
+            // Delimiters
+            // --------------------------------------------------------------------
+
+            abs: ["\\left|#1\\right|", 1],
+            norm: ["\\left\\|#1\\right\\|", 1],
+            set: ["\\left\\{#1\\right\\}", 1],
+            paren: ["\\left(#1\\right)", 1],
+            bracket: ["\\left[#1\\right]", 1],
+
+            // --------------------------------------------------------------------
+            // Probability expressions
+            // --------------------------------------------------------------------
+
+            Eof: ["\\mathbb{E}\\left[#1\\right]", 1],
+            CE: ["\\mathbb{E}\\left[#1\\mid#2\\right]", 2],
+            Varof: ["\\operatorname{Var}\\left(#1\\right)", 1],
+            Covof: ["\\operatorname{Cov}\\left(#1,#2\\right)", 2],
+            Probof: ["\\mathbb{P}\\left(#1\\right)", 1],
+
+            // --------------------------------------------------------------------
+            // Calculus
+            // --------------------------------------------------------------------
+
+            pd: ["\\frac{\\partial #1}{\\partial #2}", 2],
+            pdd: ["\\frac{\\partial^2 #1}{(\\partial #2)^2}", 2],
+            diff: ["\\frac{\\mathrm{d}#1}{\\mathrm{d}#2}", 2],
+            diffii: ["\\frac{\\mathrm{d}^2#1}{\\mathrm{d}#2^2}", 2],
+
+            // --------------------------------------------------------------------
+            // Linear algebra
+            // --------------------------------------------------------------------
+
+            transpose: ["#1^{\\mathsf{T}}", 1],
+            inv: ["#1^{-1}", 1],
+
+            // --------------------------------------------------------------------
+            // Optimization operators
+            // --------------------------------------------------------------------
+
+            argmax: "\\operatorname*{arg\\,max}",
+            argmin: "\\operatorname*{arg\\,min}",
+
+            // --------------------------------------------------------------------
+            // Miscellaneous
+            // --------------------------------------------------------------------
+
+            indicator: ["\\mathbf{1}_{\\left\\{#1\\right\\}}", 1],
+            inner: ["\\left\\langle #1,#2\\right\\rangle", 2],
+
+        }
+    }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/08-jump_processes.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Jump-Diffusion Models</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">A Practical Introduction to Stochastic Processes and Financial Modeling</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-stochastic_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Probability Spaces and Stochastic Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-wiener_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Wiener Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-stochastic_calculus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Itô Calculus</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-risk_neutral_expectations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">No Arbitrage Pricing and the Risk-Neutral Measure</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-interest_rate_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Reverting Processes and Interest Rate Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-multi_variable_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-jump_processes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Jump-Diffusion Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-stochastic_volatility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Stochastic Volatility Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-numerical_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Numerical Methods</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/A1-normal_properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Properties of Normally Distributed Random Variables</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-compound-poisson-process" id="toc-the-compound-poisson-process" class="nav-link active" data-scroll-target="#the-compound-poisson-process"><span class="header-section-number">8.1</span> The compound Poisson process</a></li>
+  <li><a href="#stochastic-calculus-for-jump-processes" id="toc-stochastic-calculus-for-jump-processes" class="nav-link" data-scroll-target="#stochastic-calculus-for-jump-processes"><span class="header-section-number">8.2</span> Stochastic calculus for jump processes</a></li>
+  <li><a href="#sec-merton_jd" id="toc-sec-merton_jd" class="nav-link" data-scroll-target="#sec-merton_jd"><span class="header-section-number">8.3</span> The Merton jump-diffusion model</a></li>
+  <li><a href="#sec-mjp_pricing" id="toc-sec-mjp_pricing" class="nav-link" data-scroll-target="#sec-mjp_pricing"><span class="header-section-number">8.4</span> Options pricing in the presence of jumps</a></li>
+  <li><a href="#taking-stock-and-looking-forward" id="toc-taking-stock-and-looking-forward" class="nav-link" data-scroll-target="#taking-stock-and-looking-forward"><span class="header-section-number">8.5</span> Taking stock and looking forward</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-jump_processes" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Jump-Diffusion Models</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In all of the models we have considered thus far, uncertainty has been driven by Wiener diffusion processes. Wiener processes are a flexible and robust tool for modeling uncertainty over time, but they can fail to capture important features of real-world financial market data. Rare, unexpected news events or market disruptions can cause asset prices to move far more than would be predicted by typical diffusion models. For example, take a look at <a href="#fig-nas_daily_ret" class="quarto-xref">Figure&nbsp;<span>8.1</span></a>, which shows daily returns for the NASDAQ composite stock index. On several days since 1990 the index has moved up or down by more than five standard deviations. Compare this with <a href="#fig-gbm_daily_ret" class="quarto-xref">Figure&nbsp;<span>8.2</span></a>, which shows simulated returns for a geometric Brownian motion process. If NASDAQ returns were normally distributed, as implied by the geometric Brownian motion model, the odds of even one five-standard-deviation move would be less than one-in-three-million. One approach to accounting for rare but large shifts in asset prices is to incorporate discontinuous jump processes into our models. In this chapter we examine the stochastic calculus of simple jump processes and illustrate their application using a classic model of equity prices.</p>
+<div id="fig-nas_daily_ret" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nas_daily_ret-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/nas_daily_ret.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nas_daily_ret-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.1: Daily returns on the NASDAQ equity index.
+</figcaption>
+</figure>
+</div>
+<div id="fig-gbm_daily_ret" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gbm_daily_ret-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/gbm_daily_ret.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gbm_daily_ret-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.2: Simulated daily returns from a geometric Brownian motion process
+</figcaption>
+</figure>
+</div>
+<section id="the-compound-poisson-process" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="the-compound-poisson-process"><span class="header-section-number">8.1</span> The compound Poisson process</h2>
+<p>In <a href="01-stochastic_processes.html#sec-poisson_process" class="quarto-xref"><span>Section 1.3</span></a> we introduced the Poisson process, which describes the number of discrete events that accumulate over a period of time. The compound Poisson process augments the Poisson process by modeling the size of events as well as their number.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Compound Poisson Process">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Compound Poisson Process
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(N_t\)</span> be a Poisson process with intensity parameter <span class="math inline">\(\eta\)</span> and let <span class="math inline">\(Y_1, Y_2, ...\)</span> by i.i.d. random variables that are independent of <span class="math inline">\(N_t\)</span>. The <strong>compound Poisson process</strong> is</p>
+<p><span class="math display">\[
+J_t = \sum_i^{N_t} Z_i
+\]</span></p>
+<p><span class="math inline">\(J_t\)</span> changes only when a jump occurs, but these changes cause discontinuities in the sample paths. For this reason the compound Poisson process is often called a jump process.</p>
+<p>Let <span class="math inline">\(m = \E[Z_i]\)</span> and <span class="math inline">\(v = \operatorname{Var}[Z_i]\)</span>, then the mean and variance of the compound Poisson process are given by</p>
+<p><span class="math display">\[
+\E[J_t] = \eta\,m\,t
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\operatorname{Var}(J_t) = \eta\,(v+m^2)\,t.
+\]</span></p>
+<p>Increments of a compound Poisson process, <span class="math inline">\(J_{t+h}-J_t\)</span>, are themselves compound Poisson random variables with mean and variance proportional to <span class="math inline">\(h\)</span>. Increments of disjoint intervals are independent.</p>
+</div>
+</div>
+<p>Figure <a href="#fig-cpp_paths" class="quarto-xref">Figure&nbsp;<span>8.3</span></a> shows simulated sample paths for a compound Poisson process with standard normal jump sizes. In this example, the mean jump size is zero so the process has no trend. Like the compensated Poisson process we saw in <a href="01-stochastic_processes.html#sec-martingales" class="quarto-xref"><span>Section 1.5</span></a>, it is a martingale. More generally, the trend in <span class="math inline">\(J_t\)</span> is the product of the jump arrival intensity, <span class="math inline">\(\eta\)</span>, and the mean jump size, <span class="math inline">\(m\)</span>. Depending on the application, any number of different distributions might be used to model jump sizes. Later in this chapter we will make use of a process with shifted lognormal jumps.</p>
+<div id="fig-cpp_paths" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cpp_paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/cpp_paths.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cpp_paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.3: Five simulated compound Poisson process paths.
+</figcaption>
+</figure>
+</div>
+<p>We have seen in previous chapters that the way new information arrives is central to the definitions of both Ito integrals and martingales, important tools in our continuous-time financial modeling toolkit. Recall that a filtration <span class="math inline">\(\{\mathcal{F}_t\}\)</span> represents the information available to market participants over time. A stochastic process is adapted to a filtration if its value at time <span class="math inline">\(t\)</span> is determined only by information contained in <span class="math inline">\(\mathcal{F}_t\)</span>. Continuous processes, such as the Wiener process, evolve smoothly, so there is no distinction between the value of the process immediately before and immediately after a given instant.</p>
+<p>Working with jump processes requires a little more care. We assume that they are adapted, but not predictable in the sense described in <a href="01-stochastic_processes.html#sec-filtrations" class="quarto-xref"><span>Section 1.4</span></a>. When a jump occurs, the process changes discontinuously, so we must distinguish between its value immediately before and immediately after the jump. Throughout this book we adopt the standard convention that jump processes have <strong>càdlàg</strong> sample paths – that is, they are right-continuous with left limits. If a jump occurs at time <span class="math inline">\(t\)</span>, the notation <span class="math inline">\(J_{t^-}\)</span> denotes the value of the process immediately before the jump, while <span class="math inline">\(J_t\)</span> denotes its value immediately afterward. This convention captures the idea that trading decisions made at time <span class="math inline">\(t\)</span> must be based on information available immediately before any jump that might occur at that instant.</p>
+</section>
+<section id="stochastic-calculus-for-jump-processes" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="stochastic-calculus-for-jump-processes"><span class="header-section-number">8.2</span> Stochastic calculus for jump processes</h2>
+<p>Earlier we developed tools for working with Ito processes that combine a deterministic drift component with a stochastic Wiener process component. In this section we will augment this toolkit, enabling us to manipulate processes that also include a jump component. The differential notation introduced in <a href="03-stochastic_calculus.html#sec-differentials" class="quarto-xref"><span>Section 3.1</span></a> extends naturally to Poisson and compound Poisson processes. As with Wiener processes, the resulting differential rules allow us to work with stochastic differential equations using ordinary algebra.</p>
+<p>The differential rules for Wiener and Poisson processes arise for fundamentally different reasons. For Wiener processes, the increments themselves are infinitesimal, and the rules follow from comparing the orders of magnitude of different terms. For Poisson processes, however, the increment <span class="math inline">\(dN_t\)</span> is either zero or one. The increment is not small; rather, the probability of observing a nonzero increment over an infinitesimal interval is small. The key observation is that, over an infinitesimal time interval, <span class="math inline">\(dt\)</span>, a Poisson process either records no jump or exactly one jump. Consequently,</p>
+<p><span class="math display">\[
+dN_t =
+\begin{cases}
+1, &amp; \text{if a jump occurs during } [t,t+dt), \\
+0, &amp; \text{otherwise.}
+\end{cases}
+\]</span></p>
+<p>Since <span class="math inline">\(dN_t\)</span> can take only the values <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>, its powers satisfy</p>
+<p><span class="math display">\[
+(dN_t)^k = dN_t,
+\qquad k \ge 1.
+\]</span></p>
+<p>In particular,</p>
+<p><span class="math display">\[
+(dN_t)^2 = dN_t.
+\]</span></p>
+<p>This identity is the jump-process analogue of the familiar Wiener result <span class="math inline">\((dW_t)^2 = dt\)</span>. Unlike the Wiener case, however, it follows directly from the fact that squaring either <span class="math inline">\(0\)</span> or <span class="math inline">\(1\)</span> leaves the value unchanged.</p>
+<p>As before, products involving <span class="math inline">\(dt\)</span> are negligible because <span class="math inline">\(dt\)</span> is infinitesimal. As a result</p>
+<p><span class="math display">\[
+dt\,dN_t = 0,
+\]</span></p>
+<p>and, more generally,</p>
+<p><span class="math display">\[
+(dt)^m(dN_t)^n = 0,
+\qquad m \ge 1,\; n \ge 1.
+\]</span></p>
+<p>If the Poisson process is independent of the Wiener process then their product is also negligible:</p>
+<p><span class="math display">\[
+dW_t\,dN_t = 0.
+\]</span></p>
+<p>These rules provide the algebraic foundation for extending Itô calculus to jump processes. The extension of these rules to compound Poisson processes follows directly from the definition of <span class="math inline">\(dN_t\)</span>. If</p>
+<p><span class="math display">\[
+J_t = \sum_i^{N_t} Z_i
+\]</span></p>
+<p>then</p>
+<p><span class="math display">\[
+dJ_t = dN_t\,Z_t.
+\]</span></p>
+<p>Thus, when working with the differential of a compound Poisson process, we can first convert it to a function involving a Poisson process differential and then apply the rules for Poisson processes.</p>
+<p>The stochastic integral for the Poisson process is defined in almost exactly the same way as the Ito integral for the Wiener process. Divide the interval <span class="math inline">\([0,T]\)</span> into <span class="math inline">\(n\)</span> subintervals</p>
+<p><span class="math display">\[
+0=t_0&lt;t_1&lt;\cdots&lt;t_n=T
+\]</span></p>
+<p>so that <span class="math inline">\(\Delta N_{t_i} = N_{t_{i+i}}-N_{t_i}\)</span> is the Poisson increment corresponding to subinterval <span class="math inline">\([t_i,t_{i+1}]\)</span>, and let <span class="math display">\[
+I_n = \sum_{i=0}^{n-1} X_{t_i} \Delta N_{t_i},
+\]</span></p>
+<p>where <span class="math inline">\(\{X_t\}\)</span> is a a predictable Ito process. Then <span class="math display">\[
+I = \lim_{n\to\infty} I_n = \int_0^T X_t\,dN_t
+\]</span></p>
+<p>is the integral of <span class="math inline">\(X_t\)</span> with respect to the Poisson process.</p>
+<p>This integral has a particularly simple interpretation. Each term in <span class="math inline">\(I_n\)</span> is equal to either zero or <span class="math inline">\(X_{t_i}\)</span> depending on whether <span class="math inline">\([t_i,t_{i+t}]\)</span> contains a jump. Thus</p>
+<p><span class="math display">\[
+\int_0^T X_t\,dN_t=\sum_{i=1}^{N_T}X_{\tau_i^-},
+\]</span></p>
+<p>where <span class="math inline">\(0 &lt; \tau_1 &lt; \tau_2 &lt; \ldots T\)</span> denotes the random jump times of <span class="math inline">\(\{N_t\}\)</span>. Unlike an Itô integral, it is simply the sum of the integrand evaluated at each jump. Note that, even if <span class="math inline">\(X_t\)</span> is a deterministic function, the integral is a random variable that depends on the Poisson process <span class="math inline">\(\{N_t\}\)</span>.</p>
+<p>A general <strong>jump-diffusion process</strong> can be written as</p>
+<p><span class="math display">\[
+dX_t = \mu(X_t,t)\,dt + \sigma(X_t,t)\,dW_t + dJ_t,
+\]</span></p>
+<p>where <span class="math inline">\(W_t\)</span> is a standard Wiener process and <span class="math inline">\(J_t\)</span> is a compound Poisson jump process. A jump-diffusion process is the sum of two independent sources of randomness. The Wiener process models the continuous accumulation of many small shocks, while the compound Poisson process models rare but potentially large discontinuous events. By combining the two, we obtain a flexible class of stochastic processes capable of describing both gradual fluctuations and sudden jumps.</p>
+<p>The extension of Itô’s lemma to jump-diffusion processes is remarkably simple. Between jumps, the process evolves continuously and the usual Itô formula applies. When a jump occurs, however, the change in the process is finite rather than infinitesimal. So, instead of approximating the change in the function using a Taylor expansion, we simply evaluate its exact change across the jump.</p>
+<p>If <span class="math inline">\(X_t\)</span> is a jump-diffusion process and <span class="math inline">\(f(x,t)\)</span> is continuously differentiable with respect to <span class="math inline">\(t\)</span> and twice continuously differentiable with respect to <span class="math inline">\(x\)</span>, then</p>
+<p><span class="math display">\[
+\begin{aligned}
+df(X_t,t)
+={}&amp;
+\left(
+\frac{\partial f}{\partial t}
++
+\mu
+\frac{\partial f}{\partial x}
++
+\frac{1}{2}\sigma^2
+\frac{\partial^2 f}{\partial x^2}
+\right)dt
++
+\sigma
+\frac{\partial f}{\partial x}
+\,dW_t \\
+&amp;
++
+\Bigl[
+f(X_{t},t)
+-
+f(X_{t^-},t)
+\Bigr]dN_t.
+\end{aligned}
+\]</span></p>
+<p>The first line is identical to the ordinary Itô formula for continuous diffusion processes. The second line is the jump correction. Whenever no jump occurs <span class="math inline">\(dJ_t=0\)</span>, so this term vanishes. When a jump does occur, it contributes the exact change in the function resulting from the discontinuous movement in the underlying process.</p>
+</section>
+<section id="sec-merton_jd" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="sec-merton_jd"><span class="header-section-number">8.3</span> The Merton jump-diffusion model</h2>
+<p>The <span class="citation" data-cites="merton1976jump">Merton (<a href="#ref-merton1976jump" role="doc-biblioref">1976</a>)</span> jump-diffusion model extends the GBM equity price mode we first encountered in <a href="03-stochastic_calculus.html#sec-gbm" class="quarto-xref"><span>Section 3.4</span></a> to allow for discontinuous jumps in the value of an asset. Under the basic GBM model <span class="math inline">\(S_t\)</span>, follows the SDE</p>
+<p><span class="math display">\[
+\frac{dS_t}{S_t} = d\ln(S_t) = \mu\,dt + \sigma\,dW_t.
+\]</span> Now suppose we maintain this assumption at most points in time, but introduce a separate jump process that causes <span class="math inline">\(S_t\)</span> to shift in discontinuous jumps at random times. Jumps arrive according to a Poisson process, <span class="math inline">\(\{N_t\}\)</span>. We assume that the jumps in value are multiplicative so that when jumps arrive they scale <span class="math inline">\(S_t\)</span> up or down by a random amount in proportion to its current level. The <span class="math inline">\(i\text{th}\)</span> such shift is described by the random variable <span class="math inline">\(Y_i\)</span>. If this jump arrives at time <span class="math inline">\(t\)</span> then</p>
+<p><span class="math display">\[
+S_t = Y_i\,S_{t^-}.
+\]</span> In this case</p>
+<p><span class="math display">\[
+\Delta S_t = Y_t\,S_{t^-}-S_{t^-} = (Y_t-1)\,S_{t^-}
+\]</span> If no jump occurs over the interval <span class="math inline">\([t, t+dt]\)</span> then <span class="math inline">\(S_t\)</span> follows a GBM process. If a jump occurs in the interval then it follows a GBM process but also shifts by the amount <span class="math inline">\((Y_t-1)\,S_{t^-}\)</span>. Whether or not a jump occurs is determined by <span class="math inline">\(dN_t\)</span>, so the SDE for <span class="math inline">\(S_t\)</span> becomes</p>
+<p><span class="math display">\[
+dS_t = S_{t^-}\,\mu\,dt + S_{t^-}\,\sigma\,dW_t + (Y_t-1)\,S_{t^-}\,dN_t
+\]</span> or, equivalently, <span class="math display">\[
+\frac{dS_t}{S_{t^-}} = d\ln(S_t) = \mu\,dt + \sigma\,dW_t + (Y_t-1)\,dN_t.
+\]</span></p>
+<p>Thus, the price growth dynamics are determined by the GBM process we have already seen plus a compound Poisson process where <span class="math inline">\(Z_i = Y_i-1\)</span>. To ensure that the multiplicative jump sizes are strictly positive, we assume that</p>
+<p><span class="math display">\[
+\ln(Y_i) \sim N(\alpha\,,\,\delta^2).
+\]</span> This setup described a jump-diffusion process where the Ito process component is geometric Brownian motion and the jump component is a compound Poisson process with jump sizes that are shifted lognormal random variables.</p>
+<p>At this point it should come as no surprise that the solution to this SDE lies in applying Ito’s Lemma. The extended version of Ito’s Lemma for jump diffusion processes implies that</p>
+<p><span class="math display">\[
+d\ln{S_t} = \left(\mu - \frac12 \sigma^2\right)\,dt + \sigma\,dW_t + \ln(Y_t.)\,dN_t.
+\]</span></p>
+<p>Integrating both sides yields</p>
+<p><span class="math display">\[
+\begin{align*}
+\int_0^Td\ln{S_t} =&amp; \int_0^T\left(\mu - \frac12 \sigma^2\right)\,dt + \int_0^T\sigma\,dW_t + \int_0^T\ln(Y_t)\,dN_t \\
+\ln(S_T)-\ln(S_0) =&amp; \left(\mu - \frac12 \sigma^2\right)T + \sigma\,W_T + \sum_{\tau_i=0}^{N_T}\ln(Y_{\tau_i}) \\
+\ln(S_T) =&amp;\ln(S_0) + \left(\mu - \frac12 \sigma^2\right)T + \sigma\,W_T + \sum_{i=i}^{N_T}\ln(Y_{\tau_i}).
+\end{align*}
+\]</span></p>
+<p>This pathwiise solution to the SDE if nearly identical to the solution to the GBM SDE. The only difference is the final term which captures the accumulation of jumps up to time <span class="math inline">\(T\)</span>.</p>
+<p>As with the GBM process, we can characterize the transition distribution for the Merton jump-diffusion Process, though this characterization does not yield a simple closed-form expression for the probabiity density function. Looking at our pathwise solution, we see that if <span class="math inline">\(N_T=n\)</span> then <span class="math inline">\(\ln(S_t)\)</span> is a constant plus a weighted sum of <span class="math inline">\(n+1\)</span> independent normal random variables. Thus, we have</p>
+<p><span class="math display">\[
+\ln(S_t)\mid N_t \sim N\left(\ln(S_0) + \left(\mu - \frac12 \sigma^2\right)t + N_t\,\alpha,\;\sigma^2\,t + N_t\,\delta^2 \right).
+\]</span></p>
+<p>We do not know <span class="math inline">\(N_t\)</span>, of course, but we can determine the unconditional transition distribution by integrating it out, producing a Poisson-normal mixture distribution. The probability density function for <span class="math inline">\(X_t=\ln(S_t)\)</span> is given by</p>
+<p><span class="math display">\[
+f(x) = \sum_{n=0}^{\infty} \phi\left(\frac{x-\left(\ln(S_0) + \left(\mu - \frac12 \sigma^2\right)t + n\,\alpha\right)}{\sqrt(\sigma^2\,t + n\,\delta^2)}\right)p(n\,;\,\eta)
+\]</span> where <span class="math inline">\(\phi(\cdot)\)</span> is the standard normal PDF, and <span class="math inline">\(p(\cdot;\,\eta)\)</span> is the probability mass function for a Poisson distribution with arrival intensity <span class="math inline">\(\eta\)</span>. This function can be approximated to any desired level of precision by simply truncating the series on the right-hand-side or using Fourier transforms. Furthermore the Poisson-normal mixture distributions’ moment generating function is know, so we can compute any moments we wish. <span class="math inline">\(S_t\)</span> has a Poisson-lognormal mixture distribution, which is similarly easy to deal with.</p>
+<p><a href="#fig-merton_paths" class="quarto-xref">Figure&nbsp;<span>8.4</span></a> shows simulated paths for a Merton jump-diffusion process calibrated using moments of the NASDAQ equity index from 1990 to 2026. <a href="#fig-mjd_daily_ret" class="quarto-xref">Figure&nbsp;<span>8.5</span></a> shows simulated daily returns for the same model. Comparing this figure with <a href="#fig-gbm_daily_ret" class="quarto-xref">Figure&nbsp;<span>8.2</span></a> we see that the jump-diffusion model is much better able to capture the occasional large jumps in equity prices observed in real-world data.</p>
+<div id="fig-merton_paths" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-merton_paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/mertaon_paths.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-merton_paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.4: Ten simulated Merton jump-diffusion model paths.
+</figcaption>
+</figure>
+</div>
+<div id="fig-mjd_daily_ret" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mjd_daily_ret-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/mjd_daily_ret.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mjd_daily_ret-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.5: Simulated daily returns from a Merton jump-diffusion process.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="sec-mjp_pricing" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="sec-mjp_pricing"><span class="header-section-number">8.4</span> Options pricing in the presence of jumps</h2>
+<p>The Merton jump-diffusion model differs in a fundamental way from the models we have seen up to this point. Unlike the basic Black-Scholes GBM pricing framework, which assumes a single source of uncertainty that can be hedged using tradable assets, the Merton model describes an incomplete market. There are multiple sources of uncertainty – the diffusion process, the jump process, and the jump sizes – that cannot all be hedged in a portfolio consisting of a single traded asset and a derivative. More fundamentally, since the jump process is not predictable in the sense described in <a href="01-stochastic_processes.html#sec-martingales" class="quarto-xref"><span>Section 1.5</span></a>, the jump risk could not be fully hedged even if more traded assets were available. As a result, the Second Fundamental Theorem of Asset Pricing does not hold.</p>
+<p>Although the market is incomplete, the no-arbitrage condition is satisfied so we can make use of the First Fundemental Theorem of Asset Pricing and derive a risk-neutral measure that makes the discounted stock price a martingale. There are, in fact, many such measures, and therein lies a practical problem. In order to select a single risk-neutral pricing measure we will need to impose additional assumptions on the relationship between the <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> measures.</p>
+<p>The instantaneous expected return on <span class="math inline">\(S_t\)</span> is</p>
+<p><span class="math display">\[
+\begin{align*}
+\E_t\left[\frac{dS_t}{S_{t^-}}\right] =&amp; \E_t[\mu\,dt + \sigma\,dW_t + (Y_t-1)\,dN_t] \\
+=&amp; \E_t[\mu\,dt] + \sigma\,\E_t[W_t] + \E_t[Y_t-1]\E_t[dN_t] \\
+=&amp; \mu\,dt + k\,\eta\,dt
+\end{align*}
+\]</span> where <span class="math inline">\(k = \E[Y_t-1] = e^{\alpha + \frac12\delta^2}-1\)</span> is the expected jump size should one occur.</p>
+<p>The version of Girsanov’s Theorem introduced earlier is extremely helpful because it gives us a way to change the probability measure of an Ito Process without changing the underlying mathematical structure of the model. We usually don’t have to derive different types of probability distributions under the risk-neutral and natural probability measures, for example; all we need to do is change how the drift component of the process is parameterized. As it turns out, a more general version of Girsanov’s Theorem applies to processes with jumps and allows us to change measure by simply shifting the diffusion drift, jump intensity, and expected jump size parameters. Thus, there exists a Q-measure specification of the Merton model under which</p>
+<p><span class="math display">\[
+\E_t^Q\left[\frac{dS_t}{S_{t^-}}\right] = \mu^Q\,dt + k^Q\,\eta^Q\,dt.
+\]</span></p>
+<p>The First Fundimental Theorem of Asset Pricing implies that at all <span class="math inline">\(t\)</span> the <span class="math inline">\(Q\)</span>-measure expected instantaneous return should be equal to the risk-free return <span class="math inline">\(r\,dt\)</span>, so</p>
+<p><span class="math display">\[
+\mu^Q + k^Q\,\eta^Q = r.
+\]</span> From this condition we immediately see the problem the incomplete market posses for us. We have three <span class="math inline">\(Q\)</span>-measure parameters — <span class="math inline">\(\mu^Q\)</span>, <span class="math inline">\(k^Q\)</span>, and <span class="math inline">\(\eta^Q\)</span> — but only one equation from which to identify them. There are an infinite number of combinations of parameters that can satisfy the martingale condition.</p>
+<p>Merton addressed this problem by simply imposing the additional assumptions that <span class="math inline">\(\eta^P=\eta^Q\)</span> and <span class="math inline">\(k^P=k^Q\)</span>. Given this assumption, we can express the Q-measure diffusion drift parameter as</p>
+<p><span class="math display">\[
+\mu^Q = r - k^P\,\eta^P.
+\]</span> The economic substance of Merton’s assumption is that, while the jump risk cannot be hedged, it can be diversified away so that investors do not need to be compensated for the uncertainty it contributes to the stock return process. We can see this by observing that the instantaneous excess return investors expect to earn over the risk free rate is</p>
+<p><span class="math display">\[
+\begin{align*}
+\E_t^P\left[\frac{dS_t}{S_{t^-}}\right] -r = \mu^P-k^P\,\eta^P - r = \mu^P-\mu^Q.
+\end{align*}
+\]</span></p>
+<p>This is simply the risk premium adjustment to the diffusion component of the model. The jump component has no effect on excess return.</p>
+<p>Having derived a risk neutral measure that satisfies the martingale condition, we can now use this measure to value options on our jumpy asset. We will price the same European put option described in <a href="04-risk_neutral_expectations.html#sec-hedging_bs" class="quarto-xref"><span>Section 4.2</span></a> and <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.6</span></a>. Recall that at expiry the option payoff is</p>
+<p><span class="math display">\[
+V_T^{\text{Put}} = \max\left(K-S_T, 0\right).
+\]</span> The FTAP ensures that under the <span class="math inline">\(Q\)</span>-measure the expected present value of the option is a martingale, so</p>
+<p><span class="math display">\[
+\begin{align*}
+V_t^\text{Put} =&amp; \E_t^Q\left[e^{-r(T-t)}V_T^\text{Put}\right] \\
+=&amp; \E_t^Q\left[\E_t^Q\left[e^{-r(T-t)}V_T^\text{Put} \mid N_T\right]\right] \\
+=&amp; \sum_{n=0}^\infty \E_t^Q\left[e^{-r(T-t)}V_T^\text{Put} \mid N_T\right]p(n-N_t\,;\,\eta)
+\end{align*}
+\]</span></p>
+<p>where <span class="math inline">\(p(\cdot\,;\,\eta)\)</span> is the Poisson probability mass function. The second line follows from the Law of Iterated Expectations. The third line is simply the definition of the outer expectation operator. This decomposition is helpful because we already know quite a lot about the conditional expectation in the last line.</p>
+<p>In <a href="#sec-merton_jd" class="quarto-xref"><span>Section 8.3</span></a> we showed that given information available at time <span class="math inline">\(t\)</span> described by <span class="math inline">\(\mathcal{F}_t\)</span> and conditional on <span class="math inline">\(N_T\)</span>, <span class="math inline">\(S_T\)</span> has a lognormal distribution under the physical measure. Since changing to the risk-neutral measure simply involves substitution <span class="math inline">\(\mu^Q\)</span> in place of <span class="math inline">\(\mu^P\)</span>, it is easy to see that</p>
+<p><span class="math display">\[
+S_T\mid N_T, \mathcal{F_t} \sim \operatorname{LogNormal}\left(m,\;v\right)
+\]</span> where</p>
+<p><span class="math display">\[
+m = \ln(S_t) + \alpha\,(N_T-N_t) + \left(r-k\,\eta - \frac12 \sigma^2\right)(T-t)
+\]</span></p>
+<p>and <span class="math display">\[
+v = \sigma^2\,(T-t) + \delta^2\,(N_T-N_t).
+\]</span> We computed the expected present value of the put option when <span class="math inline">\(S_T\)</span> has a lognormal distribution in <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.6</span></a>. We can use identical steps to compute the expected present value of the option conditional on <span class="math inline">\(N_T\)</span>.</p>
+<p><span class="math display">\[
+\E_t^Q\left[e^{-r\,(T-t)}V_T^\text{Put} \mid N_T\right] = e^{-r(T-t)}\Phi(-d_2(N_T))-S_t\Phi(-d_1(N_T))
+\]</span> where</p>
+<p><span class="math display">\[
+d_1(N_t) =
+\frac{\ln\left(\frac{S_t}{K}\right) +
+\left(r-k\,\eta+\frac{1}{2}\sigma^2\right)(T-t) + (\alpha + \delta^2)(N_T-N_t)}
+{\sqrt{\sigma^2\,(T-t) + \delta^2\,(N_T-N_t)}},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+d_2(N_t) = d_1(N_t)-\sqrt{\sigma^2\,(T-t) + \delta^2\,(N_T-N_t)}.
+\]</span> Thus</p>
+<p><span class="math display">\[
+V_t^\text{Put} = \sum_{n=0}^\infty \left(e^{-r(T-t)}\Phi(-d_2(N_t+n))-S_t\Phi(-d_1(N_t+n))\right)p(n\,;\,\eta).
+\]</span></p>
+<p>Calculating <span class="math inline">\(V_t^\text{Put}\)</span> is simply a matter of taking a series of weighted functions of standard normal CDFs. The first term in this series, where <span class="math inline">\(n=0\)</span>, is exactly the pricing formula we derived for a geometric Brownian motion stock price process in <a href="04-risk_neutral_expectations.html#sec-q_bs_derivation" class="quarto-xref"><span>Section 4.5</span></a> with a drift term adjusted for expected jumps. The additional terms represents the contributions from paths that experience one, two, three, or more jumps.</p>
+<p>We saw in <a href="#sec-merton_jd" class="quarto-xref"><span>Section 8.3</span></a> that incorporating jumps into the stock price process generated much more frequent extreme moves in stock prices than would be predicted by a GBM process with comparable volatility. Put another way, jumps give the distribution of returns “thick” of “fat” tails. Statisticians call this property <em>excess kurtosis</em>. A consequence of this is that the Merton jump diffusion model generates higher prices for deep “out-of-the-money” options and lower prices for deep “in-the-money” options. For example, as shown in <a href="#fig-mjd_vs_bs_put_payoff" class="quarto-xref">Figure&nbsp;<span>8.6</span></a>, relative to the Black-Scholes GBM model, the Merton jump-diffusion model places a higher value on puts for which the stock price is far above the strike price and somewhat lower value on puts for which the stack price is well below the strike price.</p>
+<div id="fig-mjd_vs_bs_put_payoff" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-mjd_vs_bs_put_payoff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/mjd_vs_bs_put_payoff.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-mjd_vs_bs_put_payoff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.6: Comparison of jump-diffusion and GBM model values for a put option with a strike price of $100 as a function of the current stock price.
+</figcaption>
+</figure>
+</div>
+<p>If nothing else, this example underscores the practical benefits of more realistic modeling. If actual stock prices have a significant jump component, a trader who relies solely on a GBM-style model would tend to sell out-of-the-money puts and calls too cheaply. He would presumably sell those positions to other trades with more sophisticated models, who would happily buy them.</p>
+</section>
+<section id="taking-stock-and-looking-forward" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="taking-stock-and-looking-forward"><span class="header-section-number">8.5</span> Taking stock and looking forward</h2>
+<p>In this chapter we learned now to incorporate jumps into stochastic processes to more realistically model the fat tails commonly observed in financial asset returns. In Merton’s jump-diffusion model, jump risk cannot be hedged by traders, leading to our first example of an incomplete market. When markets are incomplete the FTAP does not guarantee unique asset prices, but we can still value derivatives if we are willing to impose additional identifying assumptions.</p>
+<p>In comparing <a href="#fig-nas_daily_ret" class="quarto-xref">Figure&nbsp;<span>8.1</span></a> and <a href="#fig-mjd_daily_ret" class="quarto-xref">Figure&nbsp;<span>8.5</span></a>, the diligent reader may have observed that while the jump-diffusion model effectively captures large spiked in equity returns, if fails to reproduce other important features of real-world data. The NASDAQ seems to go through periods of high and low volatility when the dispersion in daily returns in higher or lower than the long run average. In contrast, dispersion in returns produced by the Merton model is constant over time. In the next chapter, we will show how time-varying volatility can be incorporated stochastic asset price models.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-merton1976jump" class="csl-entry" role="listitem">
+Merton, Robert C. 1976. <span>“Option Pricing When Underlying Stock Returns Are Discontinuous.”</span> <em>Journal of Financial Economics</em> 3 (1–2): 125–44. <a href="https://doi.org/10.1016/0304-405X(76)90022-2">https://doi.org/10.1016/0304-405X(76)90022-2</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/07-multi_variable_models.html" class="pagination-link" aria-label="Multiple Sources of Uncertainty">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/09-stochastic_volatility.html" class="pagination-link" aria-label="Stochastic Volatility Models">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Stochastic Volatility Models</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

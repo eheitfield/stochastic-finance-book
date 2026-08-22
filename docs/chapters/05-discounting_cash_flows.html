@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Dicsounting Future Cash Flows – A Practical Introduction to Stochastic Processes and Financial Modeling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/06-interest_rate_models.html" rel="next">
+<link href="../chapters/04-risk_neutral_expectations.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+    tex: {
+        macros: {
+
+            // --------------------------------------------------------------------
+            // Number systems
+            // --------------------------------------------------------------------
+
+            R: "\\mathbb{R}",                 // Real numbers
+            C: "\\mathbb{C}",                 // Complex numbers
+            N: "\\mathbb{N}",                 // Natural numbers
+            Z: "\\mathbb{Z}",                 // Integers
+            Q: "\\mathbb{Q}",                 // Rational numbers
+
+            // --------------------------------------------------------------------
+            // Probability spaces and measures
+            // --------------------------------------------------------------------
+
+            Prob: "\\mathbb{P}",              // Physical probability measure
+            P: "\\mathbb{P}",                 // Short form for probability measure
+            E: "\\mathbb{E}",                 // Expectation operator
+            F: "\\mathcal{F}",                // Filtration
+            G: "\\mathcal{G}",                // Alternate filtration
+            B: "\\mathcal{B}",                // Borel sigma-algebra
+
+            // --------------------------------------------------------------------
+            // Common probability operators
+            // --------------------------------------------------------------------
+
+            Var: "\\operatorname{Var}",
+            Cov: "\\operatorname{Cov}",
+            Corr: "\\operatorname{Corr}",
+            Covar: "\\operatorname{Cov}",
+            SD: "\\operatorname{SD}",
+            Bias: "\\operatorname{Bias}",
+            MSE: "\\operatorname{MSE}",
+
+            // --------------------------------------------------------------------
+            // Convergence notions
+            // --------------------------------------------------------------------
+
+            eqas: "\\overset{a.s.}{=}",
+            eqms: "\\overset{m.s.}{=}",
+            toas: "\\overset{a.s.}{\\rightarrow}",
+            toms: "\\overset{m.s.}{\\rightarrow}",
+
+            // --------------------------------------------------------------------
+            // Frequently used sets
+            // --------------------------------------------------------------------
+
+            Ft: "\\mathcal{F}_t",
+            Fs: "\\mathcal{F}_s",
+
+            // --------------------------------------------------------------------
+            // Differential notation
+            // --------------------------------------------------------------------
+
+            dd: "\\,\\mathrm{d}",
+            dt: "\\,\\mathrm{d}t",
+            ds: "\\,\\mathrm{d}s",
+            dW: "\\,\\mathrm{d}W",
+            dWt: "\\,\\mathrm{d}W_t",
+            dN: "\\,\\mathrm{d}N",
+            dNt: "\\,\\mathrm{d}N_t",
+
+            // --------------------------------------------------------------------
+            // Common stochastic process notation
+            // --------------------------------------------------------------------
+
+            W: "W_t",                         // Brownian motion
+            Nt: "N_t",                        // Poisson process
+            Xt: "X_t",
+            Yt: "Y_t",
+            St: "S_t",
+            rt: "r_t",
+
+            // --------------------------------------------------------------------
+            // Finance
+            // --------------------------------------------------------------------
+
+            rn: "\\mathbb{Q}",                // Risk-neutral measure
+            drift: "\\mu",
+            vol: "\\sigma",
+            lam: "\\lambda",
+
+            // --------------------------------------------------------------------
+            // Delimiters
+            // --------------------------------------------------------------------
+
+            abs: ["\\left|#1\\right|", 1],
+            norm: ["\\left\\|#1\\right\\|", 1],
+            set: ["\\left\\{#1\\right\\}", 1],
+            paren: ["\\left(#1\\right)", 1],
+            bracket: ["\\left[#1\\right]", 1],
+
+            // --------------------------------------------------------------------
+            // Probability expressions
+            // --------------------------------------------------------------------
+
+            Eof: ["\\mathbb{E}\\left[#1\\right]", 1],
+            CE: ["\\mathbb{E}\\left[#1\\mid#2\\right]", 2],
+            Varof: ["\\operatorname{Var}\\left(#1\\right)", 1],
+            Covof: ["\\operatorname{Cov}\\left(#1,#2\\right)", 2],
+            Probof: ["\\mathbb{P}\\left(#1\\right)", 1],
+
+            // --------------------------------------------------------------------
+            // Calculus
+            // --------------------------------------------------------------------
+
+            pd: ["\\frac{\\partial #1}{\\partial #2}", 2],
+            pdd: ["\\frac{\\partial^2 #1}{(\\partial #2)^2}", 2],
+            diff: ["\\frac{\\mathrm{d}#1}{\\mathrm{d}#2}", 2],
+            diffii: ["\\frac{\\mathrm{d}^2#1}{\\mathrm{d}#2^2}", 2],
+
+            // --------------------------------------------------------------------
+            // Linear algebra
+            // --------------------------------------------------------------------
+
+            transpose: ["#1^{\\mathsf{T}}", 1],
+            inv: ["#1^{-1}", 1],
+
+            // --------------------------------------------------------------------
+            // Optimization operators
+            // --------------------------------------------------------------------
+
+            argmax: "\\operatorname*{arg\\,max}",
+            argmin: "\\operatorname*{arg\\,min}",
+
+            // --------------------------------------------------------------------
+            // Miscellaneous
+            // --------------------------------------------------------------------
+
+            indicator: ["\\mathbf{1}_{\\left\\{#1\\right\\}}", 1],
+            inner: ["\\left\\langle #1,#2\\right\\rangle", 2],
+
+        }
+    }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/05-discounting_cash_flows.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">A Practical Introduction to Stochastic Processes and Financial Modeling</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-stochastic_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Probability Spaces and Stochastic Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-wiener_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Wiener Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-stochastic_calculus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Itô Calculus</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-risk_neutral_expectations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">No Arbitrage Pricing and the Risk-Neutral Measure</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-interest_rate_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Reverting Processes and Interest Rate Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-multi_variable_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-jump_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Jump-Diffusion Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-stochastic_volatility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Stochastic Volatility Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-numerical_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Numerical Methods</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/A1-normal_properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Properties of Normally Distributed Random Variables</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-discounting" id="toc-sec-discounting" class="nav-link active" data-scroll-target="#sec-discounting"><span class="header-section-number">5.1</span> Discounting cash flows with time-varying interest rates</a></li>
+  <li><a href="#sec-yield_curve" id="toc-sec-yield_curve" class="nav-link" data-scroll-target="#sec-yield_curve"><span class="header-section-number">5.2</span> Real bonds and the term structure of interest rates</a></li>
+  <li><a href="#application-two-views-of-duration-and-convexity" id="toc-application-two-views-of-duration-and-convexity" class="nav-link" data-scroll-target="#application-two-views-of-duration-and-convexity"><span class="header-section-number">5.3</span> Application: Two views of duration and convexity</a></li>
+  <li><a href="#application-the-economic-difference-between-futures-and-forwards" id="toc-application-the-economic-difference-between-futures-and-forwards" class="nav-link" data-scroll-target="#application-the-economic-difference-between-futures-and-forwards"><span class="header-section-number">5.4</span> Application: The economic difference between futures and forwards</a></li>
+  <li><a href="#taking-stock-and-looking-forward" id="toc-taking-stock-and-looking-forward" class="nav-link" data-scroll-target="#taking-stock-and-looking-forward"><span class="header-section-number">5.5</span> Taking stock and looking forward</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The Fundamental Theorem of Asset Pricing places discounted future payoffs at the center of asset valuation. In the previous chapter, and in many of the models to come, we assume that a risk-free asset grows a constant, deterministic interest rate <span class="math inline">\(r\)</span>. This assumption simplifies the math of discounting future cash flows, enabling to focus on other important model features. But it not particularly realistic over anything but a very short time horizon. <a href="#fig-effr" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> shows the effective federal funds rate, a overnight interest rate managed by the Federal Reserve, from 1970 to 2026. While it was low and stable for nearly a decade following the global financial crisis in 2008, it has fluctuated over a considerable range at other times. In this chapter we show how future cash flows can be discounted when the instantaneous short rate is a stochastic process <span class="math inline">\(\{r_t\}\)</span> that evolves over time.</p>
+<div id="fig-effr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-effr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/effr.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-effr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.1: The Effective Federal Funds Rate from 1960 to 2026.
+</figcaption>
+</figure>
+</div>
+<section id="sec-discounting" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="sec-discounting"><span class="header-section-number">5.1</span> Discounting cash flows with time-varying interest rates</h2>
+<p>Given a constant risk-free interest rate <span class="math inline">\(r\)</span>, the present value at time <span class="math inline">\(t\)</span> of a certain payout <span class="math inline">\(X_T\)</span> in the future is</p>
+<p><span class="math display">\[
+V_t = e^{-r(T-t)}X_T = D_{t,T}\,X_T
+\]</span> where the function <span class="math inline">\(D_{t,T}\)</span> is called the <strong>discount factor</strong>. This simple discounting formula, which we have already used repeatedly, is a direct consequence of the no arbitrage condition. <span class="math inline">\(V_0\)</span> dollars invested at a constant, continuously-compounding interest rate evolves according to the geometric growth rule <span class="math inline">\(V_t = e^{rt}\)</span>. In the absence of arbitrage, a guaranteed payment <span class="math inline">\(X_T\)</span> at time <span class="math inline">\(T\)</span> must be equal in value to an investment in the risk-free account that is allowed to grow until time <span class="math inline">\(T\)</span>, so <span class="math inline">\(V_0e^{rT}=X_T\)</span>. A little division yields the discount formula.</p>
+<p>When <span class="math inline">\(X_T\)</span> is uncertain, we can appeal to the FTAP to obtain</p>
+<p><span class="math display">\[
+V_t = \E_t^Q[D_{t,T}\,X_T] = D_{t,T}\E_t^Q[X_T].
+\]</span></p>
+<p>Now suppose the instantaneous rate of growth of money deposited in a risk-free account – the <strong>short rate</strong> – evolve over time according to the deterministic function <span class="math inline">\(r_t\)</span>. If our account contains <span class="math inline">\(V_t\)</span> at time <span class="math inline">\(t\)</span> then over a short interval we will receive <span class="math inline">\(r_t\,dt\)</span> in interest. If we invest <span class="math inline">\(V_0\)</span> dollars in the risk-free account and immediately reinvest all interest received so that it compounds, then the value in our account at time <span class="math inline">\(T\)</span> will be approximately equal to</p>
+<p><span class="math display">\[
+V_T \approx V_0\,\prod_{i=0}^{n-1} (1+r_{t_i}\Delta t),
+\]</span> where <span class="math inline">\(\Delta t = T/n\)</span> and <span class="math inline">\(t_i = i\Delta t\)</span>. Taking logs and using the first-order approximation of the natural logarithm produces</p>
+<p><span class="math display">\[
+\ln\left(\frac{V_T}{V_0}\right) \approx \sum_{i=0}^{n-1}\ln(1+r_{t_i}\Delta t) \approx \sum_{i=0}^{n-1}r_{t_i}\Delta t.
+\]</span></p>
+<p>The exact formula for <span class="math inline">\(V_T\)</span> derives from the limit</p>
+<p><span class="math display">\[
+\ln\left(\frac{V_T}{V_0}\right) = \lim_{n\to\infty}\sum_{i=0}^{n-1}r_{t_i}\Delta t = \int_0^Tr_t\,dt.
+\]</span> So</p>
+<p><span class="math display">\[
+V_0 = D_{0,T}V_t
+\]</span> where the discount factor from <span class="math inline">\(t\)</span> to <span class="math inline">\(T\)</span> is</p>
+<p><span class="math display">\[
+D_{t,T} = e^{-\int_t^T r_s ds}.
+\]</span></p>
+<p>We can use this generalization of the constant-rate discount factor we saw earlier to determine the present value of any certain future cash flows we like, provided we know the path of <span class="math inline">\(r_t\)</span>. In particular</p>
+<p><span class="math display">\[
+V_t = D_{t,T}\E_t^Q[X_t].
+\]</span></p>
+<p>The discount factor has changed to reflect variation over time in the short rate, but the basic discounting approach is the same as before.</p>
+<p>But what if we don’t know the short-rate path in advance? Then, of course, <span class="math inline">\(\{r_t\}\)</span> is a random process, and so is the discount factor <span class="math inline">\(\{D_{t,T}\}\)</span>. The pricing formula for an uncertain payout <span class="math inline">\(X_T\)</span> becomes</p>
+<p><span class="math display">\[
+V_t = \E_t^Q\left[D_{t,T}X_t\right].
+\]</span></p>
+<p>Thus, generalizing from a known, deterministic short rate <span class="math inline">\(r\)</span> to a stochastic short rate process <span class="math inline">\(\{r_t\}\)</span> requires two changes to our basic discounting approach. First, we must use a discount factor that reflects the shape of the short-rate path from <span class="math inline">\(t\)</span> to <span class="math inline">\(T\)</span>. Second, and more substantively, the discount factor is itself a random process. We cannot take <span class="math inline">\(D_{t,T}\)</span> outside of the expectations operator.</p>
+<p>One implication of the result above is that the discounted value of a future payout <span class="math inline">\(X_T\)</span> is a random variable, even if <span class="math inline">\(X_T\)</span> is known in advance. Even if one invests in very safe assets, such as U.S. Treasury securities, with certain future case flows, one still bares economic risk because of uncertainty about the future path of interest rates.</p>
+</section>
+<section id="sec-yield_curve" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-yield_curve"><span class="header-section-number">5.2</span> Real bonds and the term structure of interest rates</h2>
+<p>Consider a risk-free, zero-coupon bond that provides a certain payment of exactly one dollar at date <span class="math inline">\(T\)</span>. Its value at date <span class="math inline">\(t\)</span> is</p>
+<p><span class="math display">\[
+P_{t,T} = \E_t^Q[D_{t,T}].
+\]</span> This trivial application of our risk-neutral discounting formula is tremendously useful. If we observe the price of a risk-free, zero-coupon bond, we also observe the <span class="math inline">\(Q\)</span>-measure expectation of the discount factor. We don’t need a model of the short-rate process to value a certain future payout at date <span class="math inline">\(T\)</span>; all we need is the current price of a zero coupon bond that matures at <span class="math inline">\(T\)</span>.</p>
+<p>More generally, for an uncertain payout, <span class="math inline">\(X_T\)</span>,</p>
+<p><span class="math display">\[
+\begin{align*}
+V_t =&amp; \E_t^Q[D_{t,T} X_T] \\
+=&amp; \E_t^Q[D_{t,T}]\E_t^Q[X_T] + \Cov_t^Q[D_{t,T},X_T] \\
+=&amp; P_{t,T}\E_t^Q[X_T] +  \Cov_t^Q[D_{t,T},X_T].
+\end{align*}
+\]</span> If <span class="math inline">\(X_T\)</span> is uncorrelated under the <span class="math inline">\(Q\)</span> measure with the discount factor then we can value the claim by discounting its <span class="math inline">\(Q\)</span>-measure expectation using a zero-coupon bond price. If not, we need to account for the correlation between payouts and interest rates.</p>
+<p>The valuation formula above conveys an important economic insight. The random discount factor <span class="math inline">\(D_{t,T}\)</span> can be viewed as a kind of state-dependent exchange rate that converts future dollars into current dollars. In future states of the world in which <span class="math inline">\(D_{t,T}\)</span> is high, we value wealth available at time <span class="math inline">\(T\)</span> relatively more highly than in states of the world in which <span class="math inline">\(D_{t,T}\)</span> is low. An asset that pays a random amount <span class="math inline">\(X_T\)</span> at time <span class="math inline">\(T\)</span> will be more highly valued at time <span class="math inline">\(t\)</span> if it tends to pay more in those future states of the world in which wealth is particularly valuable. All else equal, the asset will command a higher price today if its payoffs are positively correlated with the stochastic discount factor. Since the stochastic discount factor is negatively related to the realized path of interest rates, another way of saying this is that an asset with uncertain payouts will be relatively more valuable if its payouts are negatively correlated with future interest rates.</p>
+<p>In applied work it is common to express the return on an asset in terms of an implied continuously compounding fixed interest rate, called the <em>yield</em>. The <strong>zero yield</strong> <span class="math inline">\(y\)</span> on a zero-coupon bond is defined implicitly by the identity</p>
+<p><span class="math display">\[
+\frac{1}{P_{t,T}} = e^{y(t-T)}.
+\]</span> Taking logs and rearranging terms produces the explicit expression</p>
+<p><span class="math display">\[
+y_{t,T} = - \frac{\ln(P_{t,T})}{T-t}.
+\]</span> When you read about the <em>yield curve</em> in the financial press, you are reading about the relationship between time to maturity <span class="math inline">\((T-t)\)</span> and the prices of risk-free bonds.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> As shown in <a href="#fig-yield_curve_ex" class="quarto-xref">Figure&nbsp;<span>5.2</span></a>, the yield curve may be upward- or downward-sloped or non-monotonic, depending on the <span class="math inline">\(Q\)</span>-measure expected short-rate path at the time it is computed.</p>
+<div id="fig-yield_curve_ex" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-yield_curve_ex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/yield_curve_ex.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-yield_curve_ex-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.2: U.S. Treasury yield curves for selected dates.
+</figcaption>
+</figure>
+</div>
+<p>Consider two alternative one-dollar investments made at time <span class="math inline">\(t\)</span>. In the first case, we invest one dollar in a zero coupon bond maturing at date <span class="math inline">\(T\)</span> with price (<span class="math inline">\(P_{t,T}\)</span>) and then immediately reinvest the proceeds in a new bond that matures at <span class="math inline">\(T+\Delta T\)</span> with a time-<span class="math inline">\(T\)</span> price of <span class="math inline">\(F(T,T+\Delta T)\)</span>. In the second case, we invest one dollar directly in a bond that matures at <span class="math inline">\(T+\Delta T\)</span> whose price is <span class="math inline">\(P(t,T+\Delta T)\)</span>. Because both investments have a value of one dollar today, and both investments are risk free, they must have the same value at <span class="math inline">\(T+\Delta T\)</span>. Thus</p>
+<p><span class="math display">\[
+P_{t,T}\,F_{T,T+\Delta T} = P_{t,T+\Delta T}.
+\]</span> The formula for the zero-coupon bond yield implies</p>
+<p><span class="math display">\[
+\begin{align*}
+y_{T,T+\Delta T} =&amp; -\frac{ln(F_{T,T+\Delta T)}}{\Delta T} \\
+=&amp; -\frac{\ln(P_{t,T+\Delta T})-\ln(P_{t,T})}{\Delta T}.
+\end{align*}
+\]</span> This is the forward rate of interest for borrowing from <span class="math inline">\(T\)</span> to <span class="math inline">\(T+\Delta\)</span> implied by date-<span class="math inline">\(t\)</span> bond prices. Taking the limit as <span class="math inline">\(\Delta T \to 0\)</span> gives us the time-<span class="math inline">\(t\)</span> <strong>instantaneous forward rate</strong>: <span class="math display">\[
+f_{t,T} = - \frac{\partial \ln(P_{t,T})}{\partial T}.
+\]</span> $f_{t,T}, it is the market rate at date <span class="math inline">\(t\)</span> for guaranteed short-term funding at date <span class="math inline">\(T\)</span>. In principle, one could lock in this rate using a portfolio of risk free-bonds, though in practice this is more commonly done using interest rate futures.</p>
+<p>Notice that <span class="math display">\[
+y_{t,T} = \frac{1}{T-t}\int_t^T f_{t,s} ds
+\]</span> so we can think of the zero yield from as an average of instantaneous forward rates.</p>
+<p>One might imagine that the instantaneous forward rate is simply the <span class="math inline">\(Q\)</span>-measure expected short rate <span class="math inline">\(\E_t^Q[r_T]\)</span>. After all, they can both be interpreted as kinds of market-price-implied forecasts of future short-term interest rates. In fact, while the two quantities are related, they are not the same. Through a series of straightforward substitutions, one can show that</p>
+<p><span class="math display">\[
+f_{t,T} = \E_t^Q[r_T] + \frac{\Cov_t^Q[r_T,\,D_{t,T}]}{P_{t,T}}.
+\]</span></p>
+<p>Though the specific relationship is model dependent, future short rates and stochastic discount factors are usually negatively correlated, so typically <span class="math inline">\(f_{t,T} &gt; \E_t^Q[r_T]\)</span>. The difference between the expected future short rate and the forward rate reflects the interaction between uncertainty about the path of future interest rates and the nonlinear relationship between interest rates and discount factors.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> These interactions are also important for understanding how bond prices respond to changes in interest rates, the topic of the next section.</p>
+</section>
+<section id="application-two-views-of-duration-and-convexity" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="application-two-views-of-duration-and-convexity"><span class="header-section-number">5.3</span> Application: Two views of duration and convexity</h2>
+<p>In trading and risk management applications it is often necessary to know how a bond’s value will be affected by changes in the prevailing interest rate environment. And, because one must often draw comparisons among many different bonds with different terms and payout structures, it is helpful to have common metrics with which to compare interest rate sensitivities. In this section we will take a closer look at the two most popular such metrics: Macaulay duration and convexity.</p>
+<p>The first task in measuring a bond’s sensitivity to changes in interest rates is to answer the question, “which interest rates?” As we have just seen, a time-varying short rate path implies an entire term structure of interest rates, and it is entirely possible that rates at different points on the term structure may move differently. In practice, duration and convexity are most commonly defined with respect to a parallel shift in the entire risk-free yield curve. If, at time <span class="math inline">\(t\)</span>, the yield curve is perturbed by an amount <span class="math inline">\(\Delta y\)</span>, then each discount factor <span class="math inline">\(D_{t,T}\)</span> is shifted to <span class="math inline">\(D_{t,T}d^{\Delta y(T-t)}\)</span>, so <span class="math inline">\(\frac{\partial}{\partial y} D_{t,T} = -D_{t,T}(T-t)\)</span>.</p>
+<p>If <span class="math inline">\(B_t\)</span> is the price of a bond at time <span class="math inline">\(t\)</span>, the bond’s <strong>duration</strong> is</p>
+<p><span class="math display">\[
+\mathcal{D} = -\frac{1}{B_t}\frac{\partial B_t}{\partial y}.
+\]</span> Duration measures the percentage change in a bond’s value for a small change in yield. By convention, duration is expressed as the negative of the semi-elasticity because bond prices decrease with future interest rates and it is convenient to work with positive numbers.</p>
+<p><strong>Convexity</strong> is defined as</p>
+<p><span class="math display">\[
+\mathcal{C} = \frac{1}{B_t}\frac{\partial^2 B_t}{(\partial y)^2}.
+\]</span></p>
+<p>Convexity measures the curvature of a bond’s price-yield relationship and captures the second-order effect of small change in yield on the bond’s price.</p>
+<p>Taken together, duration and convexity describe a second order approximation of the percentage change in the bond price given a <span class="math inline">\(\Delta y\)</span> shift in the yield curve:</p>
+<p><span class="math display">\[
+\frac{\Delta B_t}{B_t} \approx -\mathcal{D}\Delta y + \frac12 \mathcal{D}(\Delta y)^2
+\]</span></p>
+<p><a href="#fig-d_and_c" class="quarto-xref">Figure&nbsp;<span>5.3</span></a> shows an example of how a bond’s price might change for a given parallel shift in the yield curve. A second-order approximation of this change will can be expected to perform better for small values of <span class="math inline">\(\Delta y\)</span> than a simple linear approximation that reflects only the effect of duration, but there is no guarantee that this will be true for larger yield curve shifts.</p>
+<div id="fig-d_and_c" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-d_and_c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/d_and_c.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-d_and_c-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5.3: The effect of a parallel shift in the yield curve on the price of a coupon bond.
+</figcaption>
+</figure>
+</div>
+<p>Suppose a bond pays a certain stream of future cash flows described by the function <span class="math inline">\(c_t\)</span> so that the amount it pays over a small interval of time is <span class="math inline">\(c_t\,dt\)</span> Our standard valuation formula implies that its price at time <span class="math inline">\(t\)</span> is</p>
+<p><span class="math display">\[
+B_t = \E_t^Q\left[\int_t^TD_{t,s}\,c_s\,ds\right] = \int_t^T P_{t,s}\,c_s\,dt.
+\]</span></p>
+<p>The bond’s duration is</p>
+<p><span class="math display">\[
+\mathcal{D} = \frac{1}{B_t}\int_t^T P_{t,s}\,(s-t)\,c_s\,ds = \int_t^T(s-t)\,w(s)\,ds
+\]</span> and its convexity is</p>
+<p><span class="math display">\[
+\mathcal{C} = \frac{1}{B_t}\int_t^T P_{t,s}\,(s-t)^2\,c_s\,ds = \int_t^T(s-t)^2\,w(s)\,ds.
+\]</span></p>
+<p>where <span class="math inline">\(w(s) = \frac{P_{t,s}c_s}{B_t}\)</span>.</p>
+<p>Notice that <span class="math inline">\(\int_t^T w(s) ds = 1\)</span> so we can think of <span class="math inline">\(w(s)\)</span> as a weighting function. If we impose the assumption that <span class="math inline">\(c_t \geq 0\)</span> for all <span class="math inline">\(t\)</span>, as is true for most bonds, then <span class="math inline">\(w(s)ds\)</span> is the share of the bond’s current value contributed by cash flows that arrive in a short time interval near <span class="math inline">\(s\)</span>. In fact, <span class="math inline">\(w(s)\)</span> a valid probability density function, and bond duration and convexity can be interpreted as moments.</p>
+<p><span class="math display">\[
+\mathcal{D} = \E^{w}[s-t]
+\]</span></p>
+<p>describes the present-value-weighted mean of cash flow arrival times.</p>
+<p><span class="math display">\[
+\mathcal{C} = \Var^{w}[s-t] + \mathcal{D}^2
+\]</span> describes the dispersion of cash flow arrival times.</p>
+<p>We can generalize the present value weighting measure <span class="math inline">\(w(s)\)</span> to include discrete payoffs as well. When the cash flows are continuously distributed, this measure has a density <span class="math inline">\(\w(s)\)</span>. When the cash flows occur at discrete dates, it consists of point masses. In either case, it defines a probability distribution over the timing of a bond’s cash flows. So our interpretation of duration and convexity as moments can be applied to bonds that with either continuous or discrete cash flows, or a mix of the two.</p>
+<p>The moment interpretation of duration and convexity becomes a little more complicated when applied to assets like swaps or portfolios of long and short bond positions that have both positive and negative cash flows. In this case we can separate <span class="math inline">\(c_t\)</span> into positive and negative cash flow components so that <span class="math inline">\(c_t = c_t^+ - c_t^-\)</span>. Each component can be viewed a separate positive cash flow asset with its own present value <span class="math inline">\(B_t^.\)</span>, duration <span class="math inline">\(\mathcal{D}^.\)</span>, and convexity <span class="math inline">\(\mathcal{C}^.\)</span>. The duration of the net position is</p>
+<p><span class="math display">\[
+\mathcal{D} = \frac{B_t^+\mathcal{D}^+ - B_t^-\mathcal{D}^+}{B_t^+ - B_t^-}
+\]</span> and its convexity is</p>
+<p><span class="math display">\[
+\mathcal{C} = \frac{B_t^+\mathcal{C}^+ - B_t^-\mathcal{C}^+}{B_t^+ - B_t^-}.
+\]</span> These are not moments of the net cash flow, but instead are differences of the moments of the positive and negative cash flow components weighted by each component’s contribution to the present value of the net position.</p>
+</section>
+<section id="application-the-economic-difference-between-futures-and-forwards" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="application-the-economic-difference-between-futures-and-forwards"><span class="header-section-number">5.4</span> Application: The economic difference between futures and forwards</h2>
+<p>Futures and forwards are derivative contracts designed to allow market participants to lock in the price they will pay for an asset in the future, or to express a view on the change in the value of that asset over time. Despite their similarity, the market structure for trading and clearing these contracts differ markedly. Forward contracts are bespoke, bilateral arrangements between a pair of counterparties, while futures contracts are standardized, exchange traded, and centrally cleared. Abstracting from these differences, forwards and futures also differ in terms of the timing of contract payment streams. As we will show in this note, these timing difference mean that the economic interpretation of forwards and futures priced are not the same.</p>
+<p>A forward contract is similar to a European call option except that the there is no optionality. At date <span class="math inline">\(t\)</span>, the counterparty who is long a forward contract agrees to pay a fixed price <span class="math inline">\(K_t\)</span> at date <span class="math inline">\(T\)</span> in exchange for a specified quantity of an asset whose future value is <span class="math inline">\(S_T\)</span>. In the absence of arbitrage, <span class="math inline">\(K_t\)</span> must be set so that the value of the forward contract is zero at date <span class="math inline">\(t\)</span>. Otherwise either the buyer or the seller would earn positive risk-neutral returns. Thus, using our standard <span class="math inline">\(Q\)</span>-measure valuation formula,</p>
+<p><span class="math display">\[
+\begin{align*}
+0 =&amp; E_t^Q[D_{t,T}(S_T-K_t)] \\
+K_t =&amp; \frac{E_t^Q(D_{t,T}S_T)}{P_{t,T}} \\
+K_t =&amp; E_t^Q[S_T] + \frac{Cov_t^Q[D_{t,T}, S_t]}{P_{t,T}}.
+\end{align*}
+\]</span></p>
+<p>The forward price is the <span class="math inline">\(Q\)</span>-measure expectation of the asset value plus an adjustment term that reflects the extent to which the asset will tend to have higher value in states of the world where future wealth is more highly valued today.</p>
+<p>In a futures contract, market participants also transact at a price <span class="math inline">\(F_t\)</span> that ensures that the value of the contract at <span class="math inline">\(t\)</span> is zero. However, rather than exchanging the full amount of the contract price at expiry, counterparties agree to mark the contract to market and exchange cash flows on an ongoing basis as gains and losses are realized. If the contract rises in value, the seller pays the buyer the amount of this appreciation, and, likewise, if the contract falls in value the buyer makes a payment to the seller. These payments are called <em>variation margin</em>. The cumulative net payments to the buyer over the life of the contract is <span class="math display">\[
+\int_t^T dF_s = F_T-F_t.
+\]</span> The present value of these payments depends on the times at which they are realized. Since the margin payments are computed to keep the value of the contract at zero over time, the futures price process <span class="math inline">\(\{F_t\}\)</span> must satisfy <span class="math display">\[
+E_t^Q\left[\int_t^T D_{t,s}dF_s\right] = 0.
+\]</span> An implication of this is that <span class="math inline">\(\{F_t\}\)</span> must have zero drift. Otherwise someone could enter into the contract with a long or short position at no cost and instantly receive a positive <span class="math inline">\(Q\)</span>-measure expected payment, which would violate the no arbitrage condition. Thus <span class="math display">\[
+E_t^Q[dF_t]=0
+\]</span> and <span class="math inline">\(\{F_t\}\)</span> is a martingale. At expiry the seller delivers the asset valued at <span class="math inline">\(S_T\)</span> to the buyer in exchange for the futures price, so <span class="math inline">\(F_T=S_T\)</span>. Thus, it must be the case that <span class="math display">\[
+F_t = E_t^Q[S_t].
+\]</span></p>
+<p>Comparing <span class="math inline">\(K_t\)</span> and <span class="math inline">\(F_t\)</span>, we see that when the future path of interest rates is uncertain, forward and futures prices for delivery of the same asset at the same expiry date will differ from one another. If the asset’s future value is positively correlated with future interest rates, then a holder of a long futures position will tend to receive positive variation margin payments at times when the present value of those payments are relatively low and will need to make variation margin payments when their present values are relatively high. This timing effect exactly offsets the correlation between asset values and discount rates embedded in the forward price. Only when the asset’s value is uncorrelated with interest rates can futures and forwards prices match.</p>
+</section>
+<section id="taking-stock-and-looking-forward" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="taking-stock-and-looking-forward"><span class="header-section-number">5.5</span> Taking stock and looking forward</h2>
+<p>In this chapter we have shown how time-varying short interest rates complicates the valuation of both known and unknown future cash flows. This additional complexity brings with it new economic insights. We have seen that when interest rates are uncertain, even assets with certain future cash flows entail risks because their present value may change over time as interest rates move. This is not merely an academic risk mattering only to quant nerds; investors ignore it at their peril. For example, in 2023 Silicon Valley Bank famously failed, in part, because it lost money on “safe” U.S. Treasury securities whose market values were marked down when interest rates unexpectedly rose. The situation become even more nuanced when future payoffs are uncertain. In this case an asset’s current value depends not only on its risk neutral expected payout, but also on the correlation between future payouts and future interest rates. Assets that generate higher payouts when interest rates are low command a premium relative to risk-neutral expectations. This correlation effect can be undone by marking assets to market and transferring payments between buyers and sellers over time, as is done with futures contracts.</p>
+<p>Whether certain or uncertain, we cannot value future cash flows without knowing something about the time path of future interest rates. In the next chapter we introduce two classic models of interest rates and show how they can be used to value bonds with certain cash flows. In later chapters we will model uncertain cash flows and uncertain interest rates together.</p>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>In practice, published yields are usually computed from the traded prices coupon-paying Treasury securities rather than directly from zero-coupon bond prices.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Readers interested in exploring this relationship more deeply are encouraged to investigate the literature on “t-forward measures.” This literature shows that it is possible to reweight <span class="math inline">\(Q\)</span>-measure probabilities by stochastic discount factors and thereby construct an alternative pricing measure under which forward rates are equal to expected short rates.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/04-risk_neutral_expectations.html" class="pagination-link" aria-label="No Arbitrage Pricing and the Risk-Neutral Measure">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">No Arbitrage Pricing and the Risk-Neutral Measure</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/06-interest_rate_models.html" class="pagination-link" aria-label="Mean-Reverting Processes and Interest Rate Models">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Reverting Processes and Interest Rate Models</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

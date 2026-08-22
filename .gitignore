@@ -1,0 +1,11 @@
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.env
+.quarto/
+.DS_Store
+/.quarto/
+**/*.quarto_ipynb
+scripts/__pycache__/
+scripts/raw_data/
+scripts/data/

@@ -1,0 +1,37 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "A Practical Introduction to Stochastic Processes and Financial Modeling"
+  author: "Erik Heitfield"
+  date: "6/30/2026"
+  chapters:
+    - index.qmd
+    - chapters/01-stochastic_processes.qmd
+    - chapters/02-wiener_processes.qmd
+    - chapters/03-stochastic_calculus.qmd
+    - chapters/04-risk_neutral_expectations.qmd
+    - chapters/05-discounting_cash_flows.qmd
+    - chapters/06-interest_rate_models.qmd
+    - chapters/07-multi_variable_models.qmd
+    - chapters/08-jump_processes.qmd
+    - chapters/09-stochastic_volatility.qmd
+    - chapters/10-numerical_methods.qmd
+  appendices: 
+    - chapters/A1-normal_properties.qmd
+
+bibliography: references.bib
+
+execute: 
+  execute-dir: project
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+    callout-icon: False
+    include-in-header: mathjax-config.html
+
+

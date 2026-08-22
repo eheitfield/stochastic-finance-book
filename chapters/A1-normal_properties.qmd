@@ -1,0 +1,478 @@
+---
+title: "Properties of Normally Distributed Random Variables"
+title-block-attributes:
+    id: sec-normal_properties
+---
+
+Throughout this appendix, let
+
+$$
+X \sim N(\mu\,\sigma^2)
+$$
+
+denote a normally distributed random variable with mean $\mu$ and variance $\sigma^2$. The standard normal random variable is denoted by
+
+$$
+Z \sim N(0,1).
+$$
+
+The standard normal probability density function and cumulative distribution function are
+
+$$
+\phi(z)=\frac{1}{\sqrt{2\pi}}e^{-z^2/2},
+$$
+
+and
+
+$$
+\Phi(z)=\int_{-\infty}^{z}\phi(u)\,du\,
+$$
+
+respectively.
+
+## Basic Properties
+
+::: {#thm-normal-basic .theorem name="Basic Properties of the Normal Distribution"}
+If $X\sim N(\mu\,\sigma^2)$, then
+
+$$
+\E[X]=\mu,
+$$
+
+$$
+\Var[X]=\sigma^2.
+$$
+
+Furthermore,
+
+$$
+\Phi(-z)=1-\Phi(z).
+$$
+:::
+
+## Linear Transformations and Linear Combinations
+
+The following theorem is the fundamental structural property of the normal distribution. Many familiar results are immediate consequences.
+
+::: {#thm-normal-linear .theorem name="Linear Combinations of Jointly Normal Random Variables"}
+Let
+
+$$
+X=(X_1\,\ldots\,X_n)'
+$$
+
+be jointly normally distributed with mean vector $\mu$ and covariance matrix $\Sigma$. Then every linear combination
+
+$$
+Y=a'X+b
+$$
+
+is normally distributed with
+
+$$
+Y
+\sim
+N(a^T\mu+b,\, a^T\Sigma a).
+$$
+:::
+
+The following corollaries are used frequently throughout this book.
+
+::: {#cor-normal-affine .corollary name="Affine Transformation"}
+If
+
+$$
+X\sim N(\mu,\,\sigma^2)\,
+$$
+
+then
+
+$$
+aX+b
+\sim
+N(a\mu+b,\,a^2\sigma^2).
+$$
+:::
+
+::: {#cor-normal-standardize .corollary name="Standardization"}
+If
+
+$$
+X\sim N(\mu,\,\sigma^2),
+$$
+
+then
+
+$$
+\frac{X-\mu}{\sigma}
+\sim
+N(0\,1).
+$$
+:::
+
+::: {#cor-normal-independent .corollary name="Sum of Independent Normal Random Variables"}
+If
+
+$$
+X_i\sim N(\mu_i,\,\sigma_i^2)\,
+\qquad i=1,\,\ldots,\,n,
+$$
+
+are independent, then
+
+$$
+\sum_{i=1}^{n} X_i
+\sim
+N\left(
+\sum_{i=1}^{n}\mu_i,\,
+\sum_{i=1}^{n}\sigma_i^2
+\right).
+$$
+:::
+
+::: {#cor-normal-correlated .corollary name="Sum of Correlated Normal Random Variables"}
+If $X$ and $Y$ are jointly normal, then
+
+$$
+X+Y
+$$
+
+is normally distributed with
+
+$$
+\E[X+Y]
+=
+\E[X]+\E[Y],
+$$
+
+and
+
+$$
+\operatorname{Var}(X+Y)
+=
+\operatorname{Var}(X)
++
+\operatorname{Var}(Y)
++
+2\operatorname{Cov}(X,Y).
+$$
+:::
+
+## Noncentral Moments
+
+::: {#thm-noncentral-moments .theorem name="Noncentral Moments of a Standard Normal Random Variable"}
+If
+$$
+Z\sim N(0,1)
+$$
+and $n$ is a positive integer, then
+
+$$
+\E[Z^n] = \begin{cases} 
+0 & \text{if } n \text{ is odd} \\ 
+\frac{n!}{2^{n/2} (n/2)!} & \text{if } n \text{ is even} 
+\end{cases}.
+$$
+More generally, if
+
+$$
+X\sim N(\mu,\sigma^2),
+$$
+then
+$$
+\mathbb{E}[X^n] = \sum_{k=0}^{n} \binom{n}{k} \mu^{n-k} \sigma^k \mathbb{E}[Z^k].
+$$
+:::
+
+## Exponential Moments
+
+The following identity is one of the most useful properties of the normal distribution in mathematical finance. It is used repeatedly in the derivation of geometric Brownian motion, risk-neutral pricing, and the Black--Scholes option pricing formula.
+
+::: {#thm-normal-exp-moment .theorem name="Exponential Moments"}
+If
+
+$$
+X\sim N(\mu,\sigma^2),
+$$
+
+then for every real number $t$,
+
+$$
+\E[e^{tX}]
+=
+\exp\left(
+t\mu+\frac12t^2\sigma^2
+\right).
+$$
+:::
+
+Two important special cases are
+
+$$
+M_X(t)
+=
+\E[e^{tX}]
+=
+\exp\left(
+t\mu+\frac12t^2\sigma^2
+\right),
+$$
+
+which is the moment generating function of $X$, and
+
+$$
+\E[e^X]
+=
+e^{\mu+\frac12\sigma^2}.
+$$
+
+## Truncated Normal Expectations
+
+Many option pricing problems require expectations conditioned on a normal random variable lying above or below a threshold.
+
+Define
+
+$$
+\alpha=\frac{c-\mu}{\sigma}.
+$$
+
+::: {#thm-normal-tail .theorem name="Tail Probability"}
+If
+
+$$
+X\sim N(\mu,\,\sigma^2),
+$$
+
+then
+
+$$
+P(X>c)
+=
+1-\Phi(\alpha).
+$$
+:::
+
+::: {#thm-normal-upper-mean .theorem name="Conditional Mean Above a Threshold"}
+If
+
+$$
+X\sim N(\mu,\,\sigma^2),
+$$
+
+then
+
+$$
+\E[X\mid X>c]
+=
+\mu
++
+\sigma
+\frac{\phi(\alpha)}
+{1-\Phi(\alpha)}.
+$$
+:::
+
+::: {#thm-normal-lower-mean .theorem name="Conditional Mean Below a Threshold"}
+If
+
+$$
+X\sim N(\mu,\,\sigma^2),
+$$
+
+then
+
+$$
+\E[X\mid X<c]
+=
+\mu
+-
+\sigma
+\frac{\phi(\alpha)}
+{\Phi(\alpha)}.
+$$
+:::
+
+::: {#thm-normal-exp-tail .theorem name="Exponential Tail Expectation"}
+If
+
+$$
+X\sim N(\mu,\,\sigma^2),
+$$
+
+then
+
+$$
+\E\left[
+e^{tX}
+\mathbf{1}_{{X>c}}
+\right]
+=
+\exp\left(
+t\mu+\frac12t^2\sigma^2
+\right)
+\Phi\left(
+\frac{\mu+t\sigma^2-c}{\sigma}
+\right).
+$$
+
+In particular,
+
+$$
+\E\left[
+e^{X}
+\mathbf{1}_{{X>c}}
+\right]
+=
+e^{\mu+\frac12\sigma^2}
+\Phi\left(
+\frac{\mu+\sigma^2-c}{\sigma}
+\right).
+$$
+:::
+
+## The Lognormal Distribution
+
+The exponential of a normally distributed random variable has a lognormal distribution.
+
+::: {#thm-lognormal .theorem name="Relationship Between the Normal and Lognormal Distributions"}
+Suppose
+
+$$
+X \sim N(\mu,\,\sigma^2)\,
+$$
+
+and define
+
+$$
+Y=e^X.
+$$
+
+Then $Y$ is lognormally distributed, written
+
+$$
+Y \sim \operatorname{LogNormal}(\mu,\,\sigma^2).
+$$
+
+Conversely, if
+
+$$
+Y \sim \operatorname{LogNormal}(\mu,\,\sigma^2),
+$$
+
+then
+
+$$
+\ln Y \sim N(\mu,\,\sigma^2).
+$$
+:::
+
+::: {#thm-lognormal-moments .theorem name="Moments of the Lognormal Distribution"}
+If
+
+$$
+Y \sim \operatorname{LogNormal}(\mu,\,\sigma^2)\,
+$$
+
+then
+
+$$
+E[Y]
+=
+e^{\mu+\frac12\sigma^2},
+$$
+
+and
+
+$$
+\operatorname{Var}(Y)
+=
+\left(e^{\sigma^2}-1\right)
+e^{2\mu+\sigma^2}.
+$$
+
+More generally,
+
+$$
+E[Y^t]
+=
+\exp\!\left(
+t\mu+\frac12t^2\sigma^2
+\right)
+$$
+
+for every real number $t$.
+:::
+
+## Truncated Lognormal Expectations
+
+Suppose
+
+$$
+Y \sim \operatorname{LogNormal}(\mu,\,\sigma^2)\,
+$$
+
+and let $K>0$.
+
+::: {#thm-lognormal-tail .theorem name="Lognormal Tail Probability"}
+The probability that $Y$ exceeds $K$ is
+
+$$
+P(Y>K)
+=
+\Phi\!\left(
+\frac{\mu-\log K}{\sigma}
+\right)
+=
+1-
+\Phi\!\left(
+\frac{\log K-\mu}{\sigma}
+\right).
+$$
+:::
+
+::: {#thm-lognormal-truncated-first-moment .theorem name="Truncated First Moment"}
+The expectation of a truncated lognormal random variable is
+
+$$
+E\left[
+Y\,\mathbf{1}_{{Y>K}}
+\right]
+=
+e^{\mu+\frac12\sigma^2}
+\,
+\Phi\left(
+\frac{\mu+\sigma^2-\log K}{\sigma}
+\right).
+$$
+:::
+
+::: {#cor-lognormal-call-payoff .corollary name="Expected Positive Part"}
+The expectation of the positive part of $Y-K$ is
+
+$$
+E[(Y-K)^+]
+=
+e^{\mu+\frac12\sigma^2}
+\Phi(d_1)
+-
+K\Phi(d_2)\,
+$$
+
+where
+
+$$
+d_1
+=
+\frac{\mu+\sigma^2-\log K}{\sigma}\,
+$$
+
+and
+
+$$
+d_2
+=
+\frac{\mu-\log K}{\sigma}
+=
+d_1-\sigma .
+$$
+:::

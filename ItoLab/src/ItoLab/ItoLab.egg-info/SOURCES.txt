@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+src/ItoLab.egg-info/PKG-INFO
+src/ItoLab.egg-info/SOURCES.txt
+src/ItoLab.egg-info/dependency_links.txt
+src/ItoLab.egg-info/requires.txt
+src/ItoLab.egg-info/top_level.txt

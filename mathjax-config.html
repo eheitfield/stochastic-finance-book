@@ -1,0 +1,140 @@
+<script>
+window.MathJax = {
+    tex: {
+        macros: {
+
+            // --------------------------------------------------------------------
+            // Number systems
+            // --------------------------------------------------------------------
+
+            R: "\\mathbb{R}",                 // Real numbers
+            C: "\\mathbb{C}",                 // Complex numbers
+            N: "\\mathbb{N}",                 // Natural numbers
+            Z: "\\mathbb{Z}",                 // Integers
+            Q: "\\mathbb{Q}",                 // Rational numbers
+
+            // --------------------------------------------------------------------
+            // Probability spaces and measures
+            // --------------------------------------------------------------------
+
+            Prob: "\\mathbb{P}",              // Physical probability measure
+            P: "\\mathbb{P}",                 // Short form for probability measure
+            E: "\\mathbb{E}",                 // Expectation operator
+            F: "\\mathcal{F}",                // Filtration
+            G: "\\mathcal{G}",                // Alternate filtration
+            B: "\\mathcal{B}",                // Borel sigma-algebra
+
+            // --------------------------------------------------------------------
+            // Common probability operators
+            // --------------------------------------------------------------------
+
+            Var: "\\operatorname{Var}",
+            Cov: "\\operatorname{Cov}",
+            Corr: "\\operatorname{Corr}",
+            Covar: "\\operatorname{Cov}",
+            SD: "\\operatorname{SD}",
+            Bias: "\\operatorname{Bias}",
+            MSE: "\\operatorname{MSE}",
+
+            // --------------------------------------------------------------------
+            // Convergence notions
+            // --------------------------------------------------------------------
+
+            eqas: "\\overset{a.s.}{=}",
+            eqms: "\\overset{m.s.}{=}",
+            toas: "\\overset{a.s.}{\\rightarrow}",
+            toms: "\\overset{m.s.}{\\rightarrow}",
+
+            // --------------------------------------------------------------------
+            // Frequently used sets
+            // --------------------------------------------------------------------
+
+            Ft: "\\mathcal{F}_t",
+            Fs: "\\mathcal{F}_s",
+
+            // --------------------------------------------------------------------
+            // Differential notation
+            // --------------------------------------------------------------------
+
+            dd: "\\,\\mathrm{d}",
+            dt: "\\,\\mathrm{d}t",
+            ds: "\\,\\mathrm{d}s",
+            dW: "\\,\\mathrm{d}W",
+            dWt: "\\,\\mathrm{d}W_t",
+            dN: "\\,\\mathrm{d}N",
+            dNt: "\\,\\mathrm{d}N_t",
+
+            // --------------------------------------------------------------------
+            // Common stochastic process notation
+            // --------------------------------------------------------------------
+
+            W: "W_t",                         // Brownian motion
+            Nt: "N_t",                        // Poisson process
+            Xt: "X_t",
+            Yt: "Y_t",
+            St: "S_t",
+            rt: "r_t",
+
+            // --------------------------------------------------------------------
+            // Finance
+            // --------------------------------------------------------------------
+
+            rn: "\\mathbb{Q}",                // Risk-neutral measure
+            drift: "\\mu",
+            vol: "\\sigma",
+            lam: "\\lambda",
+
+            // --------------------------------------------------------------------
+            // Delimiters
+            // --------------------------------------------------------------------
+
+            abs: ["\\left|#1\\right|", 1],
+            norm: ["\\left\\|#1\\right\\|", 1],
+            set: ["\\left\\{#1\\right\\}", 1],
+            paren: ["\\left(#1\\right)", 1],
+            bracket: ["\\left[#1\\right]", 1],
+
+            // --------------------------------------------------------------------
+            // Probability expressions
+            // --------------------------------------------------------------------
+
+            Eof: ["\\mathbb{E}\\left[#1\\right]", 1],
+            CE: ["\\mathbb{E}\\left[#1\\mid#2\\right]", 2],
+            Varof: ["\\operatorname{Var}\\left(#1\\right)", 1],
+            Covof: ["\\operatorname{Cov}\\left(#1,#2\\right)", 2],
+            Probof: ["\\mathbb{P}\\left(#1\\right)", 1],
+
+            // --------------------------------------------------------------------
+            // Calculus
+            // --------------------------------------------------------------------
+
+            pd: ["\\frac{\\partial #1}{\\partial #2}", 2],
+            pdd: ["\\frac{\\partial^2 #1}{(\\partial #2)^2}", 2],
+            diff: ["\\frac{\\mathrm{d}#1}{\\mathrm{d}#2}", 2],
+            diffii: ["\\frac{\\mathrm{d}^2#1}{\\mathrm{d}#2^2}", 2],
+
+            // --------------------------------------------------------------------
+            // Linear algebra
+            // --------------------------------------------------------------------
+
+            transpose: ["#1^{\\mathsf{T}}", 1],
+            inv: ["#1^{-1}", 1],
+
+            // --------------------------------------------------------------------
+            // Optimization operators
+            // --------------------------------------------------------------------
+
+            argmax: "\\operatorname*{arg\\,max}",
+            argmin: "\\operatorname*{arg\\,min}",
+
+            // --------------------------------------------------------------------
+            // Miscellaneous
+            // --------------------------------------------------------------------
+
+            indicator: ["\\mathbf{1}_{\\left\\{#1\\right\\}}", 1],
+            inner: ["\\left\\langle #1,#2\\right\\rangle", 2],
+
+        }
+    }
+};
+</script>

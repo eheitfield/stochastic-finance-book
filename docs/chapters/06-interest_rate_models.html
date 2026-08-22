@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>6&nbsp; Mean-Reverting Processes and Interest Rate Models – A Practical Introduction to Stochastic Processes and Financial Modeling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/07-multi_variable_models.html" rel="next">
+<link href="../chapters/05-discounting_cash_flows.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+    tex: {
+        macros: {
+
+            // --------------------------------------------------------------------
+            // Number systems
+            // --------------------------------------------------------------------
+
+            R: "\\mathbb{R}",                 // Real numbers
+            C: "\\mathbb{C}",                 // Complex numbers
+            N: "\\mathbb{N}",                 // Natural numbers
+            Z: "\\mathbb{Z}",                 // Integers
+            Q: "\\mathbb{Q}",                 // Rational numbers
+
+            // --------------------------------------------------------------------
+            // Probability spaces and measures
+            // --------------------------------------------------------------------
+
+            Prob: "\\mathbb{P}",              // Physical probability measure
+            P: "\\mathbb{P}",                 // Short form for probability measure
+            E: "\\mathbb{E}",                 // Expectation operator
+            F: "\\mathcal{F}",                // Filtration
+            G: "\\mathcal{G}",                // Alternate filtration
+            B: "\\mathcal{B}",                // Borel sigma-algebra
+
+            // --------------------------------------------------------------------
+            // Common probability operators
+            // --------------------------------------------------------------------
+
+            Var: "\\operatorname{Var}",
+            Cov: "\\operatorname{Cov}",
+            Corr: "\\operatorname{Corr}",
+            Covar: "\\operatorname{Cov}",
+            SD: "\\operatorname{SD}",
+            Bias: "\\operatorname{Bias}",
+            MSE: "\\operatorname{MSE}",
+
+            // --------------------------------------------------------------------
+            // Convergence notions
+            // --------------------------------------------------------------------
+
+            eqas: "\\overset{a.s.}{=}",
+            eqms: "\\overset{m.s.}{=}",
+            toas: "\\overset{a.s.}{\\rightarrow}",
+            toms: "\\overset{m.s.}{\\rightarrow}",
+
+            // --------------------------------------------------------------------
+            // Frequently used sets
+            // --------------------------------------------------------------------
+
+            Ft: "\\mathcal{F}_t",
+            Fs: "\\mathcal{F}_s",
+
+            // --------------------------------------------------------------------
+            // Differential notation
+            // --------------------------------------------------------------------
+
+            dd: "\\,\\mathrm{d}",
+            dt: "\\,\\mathrm{d}t",
+            ds: "\\,\\mathrm{d}s",
+            dW: "\\,\\mathrm{d}W",
+            dWt: "\\,\\mathrm{d}W_t",
+            dN: "\\,\\mathrm{d}N",
+            dNt: "\\,\\mathrm{d}N_t",
+
+            // --------------------------------------------------------------------
+            // Common stochastic process notation
+            // --------------------------------------------------------------------
+
+            W: "W_t",                         // Brownian motion
+            Nt: "N_t",                        // Poisson process
+            Xt: "X_t",
+            Yt: "Y_t",
+            St: "S_t",
+            rt: "r_t",
+
+            // --------------------------------------------------------------------
+            // Finance
+            // --------------------------------------------------------------------
+
+            rn: "\\mathbb{Q}",                // Risk-neutral measure
+            drift: "\\mu",
+            vol: "\\sigma",
+            lam: "\\lambda",
+
+            // --------------------------------------------------------------------
+            // Delimiters
+            // --------------------------------------------------------------------
+
+            abs: ["\\left|#1\\right|", 1],
+            norm: ["\\left\\|#1\\right\\|", 1],
+            set: ["\\left\\{#1\\right\\}", 1],
+            paren: ["\\left(#1\\right)", 1],
+            bracket: ["\\left[#1\\right]", 1],
+
+            // --------------------------------------------------------------------
+            // Probability expressions
+            // --------------------------------------------------------------------
+
+            Eof: ["\\mathbb{E}\\left[#1\\right]", 1],
+            CE: ["\\mathbb{E}\\left[#1\\mid#2\\right]", 2],
+            Varof: ["\\operatorname{Var}\\left(#1\\right)", 1],
+            Covof: ["\\operatorname{Cov}\\left(#1,#2\\right)", 2],
+            Probof: ["\\mathbb{P}\\left(#1\\right)", 1],
+
+            // --------------------------------------------------------------------
+            // Calculus
+            // --------------------------------------------------------------------
+
+            pd: ["\\frac{\\partial #1}{\\partial #2}", 2],
+            pdd: ["\\frac{\\partial^2 #1}{(\\partial #2)^2}", 2],
+            diff: ["\\frac{\\mathrm{d}#1}{\\mathrm{d}#2}", 2],
+            diffii: ["\\frac{\\mathrm{d}^2#1}{\\mathrm{d}#2^2}", 2],
+
+            // --------------------------------------------------------------------
+            // Linear algebra
+            // --------------------------------------------------------------------
+
+            transpose: ["#1^{\\mathsf{T}}", 1],
+            inv: ["#1^{-1}", 1],
+
+            // --------------------------------------------------------------------
+            // Optimization operators
+            // --------------------------------------------------------------------
+
+            argmax: "\\operatorname*{arg\\,max}",
+            argmin: "\\operatorname*{arg\\,min}",
+
+            // --------------------------------------------------------------------
+            // Miscellaneous
+            // --------------------------------------------------------------------
+
+            indicator: ["\\mathbf{1}_{\\left\\{#1\\right\\}}", 1],
+            inner: ["\\left\\langle #1,#2\\right\\rangle", 2],
+
+        }
+    }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/06-interest_rate_models.html"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Reverting Processes and Interest Rate Models</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">A Practical Introduction to Stochastic Processes and Financial Modeling</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-stochastic_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Probability Spaces and Stochastic Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-wiener_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Wiener Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-stochastic_calculus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Itô Calculus</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-risk_neutral_expectations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">No Arbitrage Pricing and the Risk-Neutral Measure</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-interest_rate_models.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Reverting Processes and Interest Rate Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-multi_variable_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-jump_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Jump-Diffusion Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-stochastic_volatility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Stochastic Volatility Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-numerical_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Numerical Methods</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/A1-normal_properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Properties of Normally Distributed Random Variables</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#the-ornstein-uhlenbeck-process" id="toc-the-ornstein-uhlenbeck-process" class="nav-link active" data-scroll-target="#the-ornstein-uhlenbeck-process"><span class="header-section-number">6.1</span> The Ornstein-Uhlenbeck process</a></li>
+  <li><a href="#vasiceks-model-and-the-valuation-of-real-bonds" id="toc-vasiceks-model-and-the-valuation-of-real-bonds" class="nav-link" data-scroll-target="#vasiceks-model-and-the-valuation-of-real-bonds"><span class="header-section-number">6.2</span> Vasicek’s model and the valuation of real bonds</a></li>
+  <li><a href="#the-cox-ingersoll-ross-process" id="toc-the-cox-ingersoll-ross-process" class="nav-link" data-scroll-target="#the-cox-ingersoll-ross-process"><span class="header-section-number">6.3</span> The Cox-Ingersoll-Ross Process</a></li>
+  <li><a href="#bond-pricing-under-the-cir-model" id="toc-bond-pricing-under-the-cir-model" class="nav-link" data-scroll-target="#bond-pricing-under-the-cir-model"><span class="header-section-number">6.4</span> Bond pricing under the CIR model</a></li>
+  <li><a href="#taking-stock-and-looking-forward" id="toc-taking-stock-and-looking-forward" class="nav-link" data-scroll-target="#taking-stock-and-looking-forward"><span class="header-section-number">6.5</span> Taking stock and looking forward</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-interest_rate_models" class="quarto-section-identifier"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Reverting Processes and Interest Rate Models</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Geometric Brownian Motion is a natural way to model a process that can grow without bound, such as the price of a stock, but in many settings negative feedback effects are likely to keep a process from moving too far away from a long-run equilibrium. For example, consider <a href="05-discounting_cash_flows.html#fig-effr" class="quarto-xref">Figure&nbsp;<span>5.1</span></a> and <a href="#fig-ust_10_yr" class="quarto-xref">Figure&nbsp;<span>6.1</span></a>, which show short- and long-term U.S. interest rates over sixty years. Interest rates are rarely negative because households and businesses typically value current consumption more highly than future consumption. In those rare circumstances when interest rates drift into negative territory, monetary authorities are very likely to intervene, as negative interest rates can have adverse consequences for financial stability. Likewise, when interest rates become too high, monetary authorities face strong pressure to bring them down to avoid stifling economic growth. Processes that involve these kinds of stabilizing feedback effects are called <em>mean-reverting</em>. In this section we introduce two widely used mean-reverting stochastic processes and show how they can be used to model interest rates and price real bonds. Along the way, we will learn that risk premiums are not only relevant for pricing traded assets, but also for describing non-traded state variables.</p>
+<div id="fig-ust_10_yr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-ust_10_yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/ust_10_yr.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-ust_10_yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.1: Yield on 10-year U.S. Treasury securities.
+</figcaption>
+</figure>
+</div>
+<section id="the-ornstein-uhlenbeck-process" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="the-ornstein-uhlenbeck-process"><span class="header-section-number">6.1</span> The Ornstein-Uhlenbeck process</h2>
+<p>The Ornstein-Uhlenbeck process is a mean-reverting stochastic process constructed from a Wiener process according to the following SDE:</p>
+<p><span class="math display">\[
+dX_t = \kappa (\theta - X_t) dt + \sigma dW_t.
+\]</span></p>
+<p>Notice that if <span class="math inline">\(\kappa &gt; 0\)</span>, <span class="math inline">\(X_t\)</span> will trend downward when <span class="math inline">\(X_t &gt; \theta\)</span> and upward when <span class="math inline">\(X_t &lt; \theta\)</span>, so <span class="math inline">\(X_t\)</span> will move toward <span class="math inline">\(\theta\)</span> over time. <span class="math inline">\(\theta\)</span> captures the long-run equilibrium value of <span class="math inline">\(X_t\)</span>, <span class="math inline">\(\kappa\)</span> describes the speed with which <span class="math inline">\(X_t\)</span> moves toward this equilibrium, and <span class="math inline">\(\sigma\)</span> captures the magnitude of shocks that may move <span class="math inline">\(X_t\)</span> away from equilibrium.</p>
+<p>From this SDE we can derive the distribution of <span class="math inline">\(X_t\)</span> at any time <span class="math inline">\(t\)</span>. To do so, we will use an integrating factor. The following simple application of the standard chain rule</p>
+<p><span class="math display">\[
+\begin{align*}
+\diff{x_t\,e^{k t}}{t} &amp;= \diff{dx_t}{dt} e^{k t} + k x_t e^{k t} \\
+d \left(x_t e^{k t}\right) &amp;= e^{k t} d x_t + k x_t e^{k t} dt.
+\end{align*}
+\]</span></p>
+<p>suggests that the integrating factor <span class="math inline">\(e^{k t}\)</span> can help us simplify the SDE. Using this factor we can rewrite the SDE as follows:</p>
+<p><span class="math display">\[
+\begin{align*}
+dX_t &amp;= \kappa\,(\theta - X_t)\,dt + \sigma\,dW_t \\
+dX_t + \kappa\,X_t\,dt &amp;= \kappa\,\theta\,dt + \sigma\,dW_t \\
+e^{\kappa t}\,dX_t + e^{\kappa t}\,\kappa\,X_t\,dt &amp;= e^{\kappa t}\,\kappa\,\theta\,dt + e^{\kappa t}\,\sigma\,dW_t \\
+d \left(X_t\,e^{\kappa t}\right) &amp;= e^{\kappa t}\,\kappa\,\theta\,dt + e^{\kappa t}\,\sigma\,dW_t.
+\end{align*}
+\]</span></p>
+<p>Now that we’ve brought <span class="math inline">\(r_t\,e^{\kappa t}\)</span> to the left-hand side, we can integrate both sides of the equation to obtain</p>
+<p><span class="math display">\[
+\begin{align*}
+\int_0^t d \left(X_s e^{\kappa s}\right) &amp;= \int_0^t e^{\kappa s}\,\kappa\,\theta\,ds + \int_0^t e^{\kappa s}\,\sigma\,dW_s \\
+X_t\,e^{\kappa t} - X_0 &amp;= \theta \,\left(e^{\kappa t} - 1\right) + \sigma\,\int_0^t e^{\kappa s}\,dW_s \\
+X_t &amp;= X_0\,e^{-\kappa t} + \theta\,\left(1-e^{-\kappa t}\right) + e^{-\kappa t}\,\sigma\,\int_0^t e^{\kappa s}\,dW_s \\
+X_t &amp;= \theta + e^{-\kappa t}\,\left(X_0 - \theta\right)  + e^{-\kappa t}\,\sigma\,\int_0^t e^{\kappa s}\,dW_s.
+\end{align*}
+\]</span></p>
+<p>Looking at the right-hand expression of the final line, note that <span class="math inline">\(\int_0^t e^{\kappa s}\,dW_s\)</span> is an Itô integral with a deterministic integrand. Applying what we’ve learned about Ito Integrals, we have</p>
+<p><span class="math display">\[
+\int_0^t e^{\kappa s} dW_s \sim N\left(0,\:\int_0^t \left(e^{\kappa s}\right)^2 ds\right) = N\left(0,\:\frac{e^{2\,\kappa\,t}-1}{2\kappa}\right).
+\]</span></p>
+<p>Since all other terms in the right-hand expression of the integrated SDE are constants, we can conclude that</p>
+<p><span class="math display">\[
+X_t\,|\,X_0 \sim N\left(\theta + e^{-\kappa t}\left(X_0 - \theta\right),\:\sigma^2\,\frac{1-e^{-2\,\kappa\,t}}{2\kappa}\right).
+\]</span></p>
+<p>The long-run steady-state distribution of <span class="math inline">\(r_t\)</span> is</p>
+<p><span class="math display">\[
+\lim_{t\to\infty} X_t\,|\,X_0 \sim N\left(\theta,\:\frac{\sigma^2}{2\kappa}\right).
+\]</span></p>
+<p>The definition below summarizes the key properties of the Ornstein-Uhlenbeck process we’ve just derived for future reference.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Ornstein-Uhlenbeck Process">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Ornstein-Uhlenbeck Process
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An <strong>Ornstein–Uhlenbeck (OU) process</strong> is a continuous-time stochastic process that evolves according to the stochastic differential equation</p>
+<p><span class="math display">\[
+dX_t = \kappa(\theta - X_t)\,dt + \sigma\,dW_t,
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(\theta\)</span> is the <strong>long-run mean</strong> of the process,</li>
+<li><span class="math inline">\(\kappa &gt; 0\)</span> is the <strong>speed of mean reversion</strong>,</li>
+<li><span class="math inline">\(\sigma &gt; 0\)</span> is the <strong>diffusion coefficient</strong>, and</li>
+<li><span class="math inline">\(W_t\)</span> is a Wiener process.</li>
+</ul>
+<p>The Ornstein–Uhlenbeck process has the following conditional distribution:</p>
+<p><span class="math display">\[
+X_t \mid X_s
+\sim
+N\!\left(
+X_s e^{-\kappa (t-s)}
++
+\theta\left(1-e^{-\kappa (t-s)}\right),
+\;
+\frac{\sigma^2}{2\kappa}
+\left(1-e^{-2\kappa (t-s)}\right)
+\right),
+\qquad t&gt;s.
+\]</span></p>
+<p>As the time horizon becomes large, the effects of the initial condition gradually disappear and the process converges to its stationary distribution,</p>
+<p><span class="math display">\[
+X_t
+\sim
+N\!\left(
+\theta,
+\frac{\sigma^2}{2\kappa}
+\right).
+\]</span></p>
+</div>
+</div>
+<p>As show in <a href="#fig-OU_paths" class="quarto-xref">Figure&nbsp;<span>6.2</span></a> and <a href="#fig-OU_dist" class="quarto-xref">Figure&nbsp;<span>6.3</span></a>, even when the O-U process starts far from its long-run mean, it tends to shift toward that level over time. The variance of the long-run distribution reflects a balancing between the stabilizing effect of mean reversion and the destabilizing effect of random shocks. The stronger the mean-reversion parameter, <span class="math inline">\(\kappa\)</span>, the more tightly the process is centered around its long-run mean, <span class="math inline">\(\theta\)</span>. The larger the diffusion parameter <span class="math inline">\(\sigma\)</span>, the more widely the process fluctuates around this mean.</p>
+<div id="fig-OU_paths" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-OU_paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/ou_paths.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-OU_paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.2: Five realizations of an Ornstein-Uhlenbeck process.
+</figcaption>
+</figure>
+</div>
+<div id="fig-OU_dist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-OU_dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/ou_dist.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-OU_dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.3: Probability densities of 10,000 Ornstein-Uhlenbeck process simulations over time.
+</figcaption>
+</figure>
+</div>
+<p>The Ornstein–Uhlenbeck process provides the mathematical foundation for several important financial models. In the next section we will examine a classic model that makes use of an Ornstein–Uhlenbeck process to describe short-term interest rates.</p>
+</section>
+<section id="vasiceks-model-and-the-valuation-of-real-bonds" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="vasiceks-model-and-the-valuation-of-real-bonds"><span class="header-section-number">6.2</span> Vasicek’s model and the valuation of real bonds</h2>
+<p>As discussed in the previous chapter, in continuous-time finance the <strong>short rate</strong> is the instantaneous interest rate at which an investor can borrow or lend money. The short rate is a non-traded state variable that is not directly observable in the market, though in practice it is well proxied by very short-term overnight risk-free rates such as the effective federal funds rate or the secured overnight financing rate (SOFR). <span class="citation" data-cites="vasicek1977equilibrium">Vašı́ček (<a href="#ref-vasicek1977equilibrium" role="doc-biblioref">1977</a>)</span> models the short rate <span class="math inline">\(r_t\)</span> as a mean-reverting Ornstein-Uhlenbeck process under the physical measure:</p>
+<p><span class="math display">\[
+dr_t = \kappa\,(\theta_P - r_t)\,dt + \sigma\,dW_t^P.
+\]</span></p>
+<p>To model the short rate process under the <span class="math inline">\(Q\)</span>-measure, we assume a constant risk premium parameter, <span class="math inline">\(\lambda\)</span>, and use the Girsanov result</p>
+<p><span class="math display">\[
+dW_t^Q = dW_t^P + \lambda\,dt.
+\]</span></p>
+<p>We can then rewrite the SDE as follows:</p>
+<p><span class="math display">\[
+\begin{align*}
+dr_t &amp;= \kappa\,(\theta_P - r_t)\,dt + \sigma\,dW_t^P \\
+&amp;= \kappa\,(\theta_P - r_t)\,dt + \sigma\,\left(dW_t^Q - \lambda\,dt\right) \\
+&amp;= \kappa\,(\theta_Q - r_t)\,dt + \sigma\,dW_t^Q
+\end{align*}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\theta_Q = \theta_P - \frac{\sigma}{\kappa}\lambda.
+\]</span></p>
+<p>Notice that under this change of measure the long-run equilibrium interest rate shifts but the mean-reversion and volatility parameters remain the same. We can use what we already know about the O-U process to describe the short rate process under the <span class="math inline">\(Q\)</span>-measure; all we have to do is change the value of <span class="math inline">\(\theta\)</span>.</p>
+<p>At this point you may be wondering about the Fundamental Theorem of Asset Pricing and whether it allows us to say more about <span class="math inline">\(\theta_Q\)</span>. After all, in our earlier discussion of risk-neutral asset valuation we saw that the FTAP implies that the expected rate of return on traded assets under the <span class="math inline">\(Q\)</span>-measure must equal the risk-free rate. Importantly, the short rate is not a traded asset and so its change over time is not directly constrained by the FTAP.</p>
+<p>So if the short rate is a non-traded asset, what is it good for? While the FTAP does not allow us to pin down the risk premium associated with non-traded state variables like the short rate, it can be used to value other assets that depend on those variables. In particular, we can use the short rate to value real bonds that pay a known payment with certainty at maturity.</p>
+<p>Consider again a risk-free, zero-coupon bond that pays $1 at date <span class="math inline">\(T\)</span>. To trim notation a bit, we will only derive the value of a bond at date <span class="math inline">\(t=0\)</span>. Once we’ve done this, the generalization to arbitrary values of <span class="math inline">\(t\)</span> should be obvious. Recall from <a href="05-discounting_cash_flows.html#sec-yield_curve" class="quarto-xref"><span>Section 5.2</span></a> that the bond’s value is given by <span class="math display">\[
+P_{0,T}=\E_0^Q\left[e^{-\int_0^T r_s\,ds}\right].
+\]</span></p>
+<p>Our analysis of the O-U process has established that <span class="math inline">\(r_t\)</span> is normally distributed. Since <span class="math inline">\(\int_0^\tau r_s ds\)</span> is simply the limit of a sum of normal random variables, it also has a normal distribution. We can write</p>
+<p><span class="math display">\[
+r_s = \theta + e^{-\kappa\,s}\,\left(r_0 - \theta\right)  + e^{-\kappa\,s}\,\sigma\,\int_0^s e^{\kappa\,u}\,dW_u.
+\]</span></p>
+<p>Integrating <span class="math inline">\(r_s\)</span> yields</p>
+<p><span class="math display">\[
+\begin{align*}
+\int_0^T r_s\,ds &amp;= \int_0^T\left(\theta + e^{-\kappa\,s}\,\left(r_0 - \theta\right)  + e^{-\kappa\,s}\,\sigma\,\int_0^s e^{\kappa\,u}\,dW_u\right)ds \\
+&amp;= \int_0^T\left(\theta + e^{-\kappa\,s}\,\left(r_0 - \theta\right)\right) ds  + \int_0^T e^{-\kappa\,s}\,\sigma\,\int_0^s e^{\kappa\,u}\,dW_u ds \\
+&amp;= \theta\,T + \frac{r_0 - \theta}{\kappa}\left(1-e^{-\kappa\,T}\right)
++ \sigma\,\int_0^T \int_0^s e^{-\kappa\,(s-u)}\,dW_u\,ds \\
+&amp;= \theta\,T + \frac{r_0 - \theta}{\kappa}\left(1-e^{-\kappa\,T}\right)
++ \sigma \int_0^T\,\int_u^T e^{-\kappa\,(s-u)}\,ds\,dW_u \\
+&amp;= \theta\,T + \frac{r_0 - \theta}{\kappa}\left(1-e^{-\kappa\,T}\right)
++ \frac{\sigma}{\kappa} \int_0^T \left(1-e^{-\kappa\,(T-u)}\right)\,dW_u
+\end{align*}
+\]</span></p>
+<p>Looking at the last expression, we have a constant part plus an Itô integral of a deterministic function. Hence we know that</p>
+<p><span class="math display">\[
+\int_0^T r_s\,ds \sim N(m,v)
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+m = \theta\,T + \frac{r_0 - \theta}{\kappa}\left(1-e^{-\kappa\,T}\right)
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\begin{align*}
+v &amp;= \frac{\sigma^2}{\kappa^2} \int_0^T \left(1-e^{-\kappa\,(T-u)}\right)^2 du \\
+&amp;= \frac{\sigma^2}{\kappa^2} \int_0^T \left(1-2e^{-\kappa\,(T-u)} + e^{-2\kappa\,(T-u)}\right) du \\
+&amp;= \frac{\sigma^2}{\kappa^2} \left(
+    T - \frac{2}{\kappa}\left(1-e^{-\kappa\,T}\right) + \frac{1}{2\kappa} \left(1-e^{-2\kappa\,T}\right)
+\right).
+\end{align*}
+\]</span></p>
+<p>Now <a href="A1-normal_properties.html#thm-normal-exp-moment" class="quarto-xref">Theorem&nbsp;<span>A.4</span></a> implies that</p>
+<p><span class="math display">\[
+P_{0,T} = e^{-m_Q + \frac{1}{2}v}.
+\]</span></p>
+<p>A little additional algebra produces the canonical form of the Vasicek affine term structure bond pricing equation.</p>
+<p><span class="math display">\[
+P_{t,T} = \exp(\mathcal{A}(t,T)-\mathcal{B}(t,T)\,r_t),
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\mathcal{B}(t,T) = \frac{1-e^{-\kappa\,\tau}}{\kappa},
+\]</span></p>
+<p><span class="math display">\[
+\mathcal{A}(t,T) = \left(\theta_Q-\frac{\sigma^2}{2\kappa^2}\right)
+\left(\mathcal{B}(t,T)-\tau\right)-\frac{\sigma^2}{4\kappa}\mathcal{B}(t,T)^2,
+\]</span></p>
+<p>and <span class="math inline">\(\tau = T-t\)</span>.</p>
+<p>The functions <span class="math inline">\(\mathcal{A}(t,T)\)</span> and <span class="math inline">\(\mathcal{B}(t,T)\)</span> depend only on the model parameters and the time remaining to maturity, while all dependence on the current state of the economy enters through the current short rate <span class="math inline">\(r_0\)</span>. <span class="math inline">\(\mathcal{B}(t,T)\)</span> measures the bond price’s sensitivity to the current short rate and can be viewed as a measure of duration. <span class="math inline">\(\mathcal{A}(t,T)\)</span> accounts for the expected future path and uncertainty of future short rates. The Vasicek model is a member of broader class of <strong>affine term structure models</strong> in which the logarithm of the bond price can be expressed as a linear function of the short rate. We will see another example of such a model later in this chapter.</p>
+<p>The Vasicek model captures important features of the real-world bond market. By describing the short rate as a mean-reverting process it can produce both upward and downward sloping yield curves, depending on the relationship between the current short rate and the <span class="math inline">\(Q\)</span>-measure long-run equilibrium short rate <span class="math inline">\(\theta_Q\)</span>. For most values of <span class="math inline">\(r_0\)</span> the yield curve shifts monotonically from the current short rate towards the <span class="math inline">\(Q\)</span>-measure equilibrium short rate plus a convexity adjustment that reflects the nonlinear relationship between bond prices and yields. When <span class="math inline">\(r_0\)</span> is close to <span class="math inline">\(\theta_Q\)</span> the yield curve may be non-monotonic, but for plausible values of <span class="math inline">\(\kappa\)</span> and <span class="math inline">\(\sigma\)</span> this range of values is quite small. <a href="#fig-Vasicek_term_structure" class="quarto-xref">Figure&nbsp;<span>6.4</span></a> shows the yield curves implied by the Vasicek model for different values of the initial short rate, <span class="math inline">\(r_0\)</span>. When <span class="math inline">\(r_0 &lt; \theta_Q\)</span>, the yield curve is upward sloping, reflecting the expectation that interest rates will rise over time. When <span class="math inline">\(r_0 &gt; \theta_Q\)</span>, the yield curve is downward sloping.</p>
+<div id="fig-Vasicek_term_structure" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-Vasicek_term_structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/vasicek_term_structure.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-Vasicek_term_structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.4: Yield curves implied by the Vasicek model given different initial short rates (<span class="math inline">\(r_0\)</span>).
+</figcaption>
+</figure>
+</div>
+<p>We can gain insights into the Vasicek model’s predictions for bond price dynamics by differentiating <span class="math inline">\(B_{t,T}\)</span> using Ito’s Lemma.</p>
+<p><span class="math display">\[
+\begin{align*}
+dP =&amp; \pd{B}{t}\,dt + \pd{P}{r}\,dr_t + \frac12\pdd{P}{r}\,(dr)^2 \\
+dP =&amp; P\,(\mathcal{A}_t-\mathcal{B}_t\,r)\,dt - P\,\mathcal{B}\,dr + \frac12 P\,\mathcal{B}^2\,(dr)^2 \\
+\frac{dP}{P} =&amp; (\mathcal{A}_t-\mathcal{B}_t\,r)\,dt - \mathcal{B}\,dr + \frac12 \mathcal{B}^2\,(dr)^2
+\end{align*}
+\]</span></p>
+<p>where <span class="math inline">\(\mathcal{A}_t\)</span> and <span class="math inline">\(\mathcal{B}_t\)</span> are derivatives of <span class="math inline">\(\mathcal{A}(t,T)\)</span> and <span class="math inline">\(\mathcal{B}(t,T)\)</span> with respect to <span class="math inline">\(t\)</span>. Under the physical measure</p>
+<p><span class="math display">\[
+dr = \kappa\,\left(\theta_P-r\right)\,dt + \sigma\,dW^P
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+(dr)^2 = \sigma^2\,dt.
+\]</span></p>
+<p>Substitution yields</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{dP}{P} =&amp; (\mathcal{A}_t-\mathcal{B}_t\,r)\,dt - \mathcal{B}\,dr + \frac12 \mathcal{B}^2\,(dr)^2 \\
+=&amp; (\mathcal{A}_t-\mathcal{B}_t\,r)\,dt - \mathcal{B}\,(\kappa\,\left(\theta_P-r\right)\,dt + \sigma\,dW^P) + \frac12 \mathcal{B}^2\,\sigma^2\,dt \\
+=&amp; \mu_P^\text{Bond}\,dt + \sigma^\text{Bond}\,dW^P,
+\end{align*}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\mu_P^\text{Bond} = \mathcal{A}_t - \mathcal{B}_t\,r - \kappa\,\mathcal{B}\,(\theta_P - r) + \frac12 \mathcal{B}^2\sigma^2
+\]</span></p>
+<p>is the drift and</p>
+<p><span class="math display">\[
+\sigma^\text{Bond} = \sigma\,\mathcal{B}
+\]</span></p>
+<p>is the volatility of the bond’s instantaneous return under the physical measure. Thus we have shown that the bond return follows an Ito process!</p>
+<p>Under the Vasicek model the drift in bond returns under the physical measure depends on both the level of the current spot rate and its difference from its long-run mean. This contrasts sharply with the assumptions of the geometric Brownian motion model used to describe equity returns, which assumes a constant drift. Since <span class="math inline">\(\mathcal{B}(t,T)\)</span> is an increasing function time-to-maturity, the model predicts that, all else equal, longer maturity bonds will exhibit higher volatility. This makes sense, as longer maturity bonds are exposed to greater uncertainty about future short interest rates.</p>
+<p>The fact that the short rate follows an O-U process under both the physical and the risk-neutral measure makes the Vasicek model particularly well suited to exploring the effects of investor preferences on the term structure of interest rates. The relationship between the long-run equilibrium short rate under the physical measure, <span class="math inline">\(\theta_P\)</span>, and under the risk-neutral measure, <span class="math inline">\(\theta_Q\)</span>, is a direct reflection of the risk premium parameter, <span class="math inline">\(\lambda\)</span>, which captures investor preferences.</p>
+<p>In general <span class="math inline">\(\lambda\)</span> may either be positive or negative, depending on the risk preferences of investors in the market. A positive value of <span class="math inline">\(\lambda\)</span> implies that <span class="math inline">\(\theta_Q &lt; \theta_P\)</span>, meaning that investors price bonds “as if” future interest rates will be lower than they actually expect them to be. Lower interest rates imply higher bond prices, which means that investors are willing to pay more for bonds today, all else equal, when <span class="math inline">\(\lambda\)</span> is positive. This is consistent with the idea that bonds tend to be viewed as a hedge against adverse economic conditions. Risk averse investors are willing to pay a premium for them, accepting a lower expected return in exchange for the protection they provide. The opposite situation arises when <span class="math inline">\(\lambda &lt; 0\)</span>, as could occur if inflation were a significant concern. In this case bond investors price bonds “as if” future spot interest rates will be higher than expected and bond prices are correspondingly lower.</p>
+<p>The bond return drift under the risk neutral measure, <span class="math inline">\(\mu_Q^\text{Bond}\)</span>, can be derived using the same steps we used to derive <span class="math inline">\(\mu_P^\text{Bond}\)</span>. The difference between the physical and risk neutral drifts is</p>
+<p><span class="math display">\[
+\mu_P^\text{Bond} - \mu_Q^\text{Bond} = \kappa\,\mathcal{B}\,(\theta_Q - \theta_P) = -\kappa\,\mathcal{B}\,\left(\frac{\sigma}{\kappa}\lambda\right) = -\mathcal{B}\,\sigma\,\lambda.
+\]</span></p>
+<p>The bond is a traded asset, so the FTAP implies that <span class="math inline">\(\mu_Q^\text{Bond} = r\)</span> at every point in time. Thus</p>
+<p><span class="math display">\[
+\mu_P^\text{Bond} - r = - \mathcal{B}\,\sigma\,\lambda.
+\]</span></p>
+<p>The bond’s instantaneous excess return over the risk-free short rate at any point in time is proportional to its exposure to interest rate risk. When <span class="math inline">\(\lambda\)</span> is positive the excess return is negative, consistent with the idea that investors might be willing to “overpay” for bonds that are viewed as a hedge against macroeconomic risk. When <span class="math inline">\(\lambda &lt;0\)</span> investors must receive a premium in excess of the risk-free rate to accept the interest rate risk associated with holding long-term bonds. For a given value of <span class="math inline">\(\lambda\)</span>, the magnitude of a bond’s excess return increases with its duration. Since bonds are tradable and we have only introduced one source of uncertainty, the market is complete. In principle we could infer <span class="math inline">\(\lambda\)</span> from the term structure of bond prices or yields.</p>
+</section>
+<section id="the-cox-ingersoll-ross-process" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="the-cox-ingersoll-ross-process"><span class="header-section-number">6.3</span> The Cox-Ingersoll-Ross Process</h2>
+<p>A consequence of the Vasicek model’s constant short-rate volatility assumption is that the volatility of bond returns is also constant. However, as shown in <a href="#fig-bond_vol" class="quarto-xref">Figure&nbsp;<span>6.5</span></a> bond return volatility tends to be higher during periods of high interest rates. The model of <span class="citation" data-cites="cox1985cir">Cox, Ingersoll., and Ross (<a href="#ref-cox1985cir" role="doc-biblioref">1985</a>)</span> preserves much of the structure of the Vasicek model but allows the short rate volatility to grow in proportion to the short rate itself. Not only does this allow for a more accurate description of bond volatility, it also ensures, realistically, that the modeled short rate will not become negative.</p>
+<div id="fig-bond_vol" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bond_vol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/bond_vol.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bond_vol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.5: 10-year Treasury note yield annual average yield versus price volatilty, 1961 to 2025.
+</figcaption>
+</figure>
+</div>
+<p>The CIR process used to model the short rate is described by the SDE</p>
+<p><span class="math display">\[
+d X_t = \kappa\,\left(\theta - X_t\right)\,dt + \sigma \sqrt{X_t}\,dW_t.
+\]</span></p>
+<p>Note the similarity between the CIR process and the O-U process. Both are mean reverting with parameters <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\kappa\)</span> determining the speed of convergence and the long-run equilibrium. The only difference is the appearance of <span class="math inline">\(\sqrt{X_t}\)</span> in the dispersion term, which causes the volatility of the process to grow in proportion to its level. If <span class="math inline">\(2\kappa\theta &gt; \sigma^2\)</span> the CIR process almost surely never hits zero.</p>
+<p>Unfortunately, the presence of the <span class="math inline">\(\sqrt{X_t}\)</span> term in the CIR process prevents us from using an integrating factor to solve for the distribution of <span class="math inline">\(X_t\)</span>, as we did with the O-U process. Nonetheless the SDE embeds useful information about the moments of the process.</p>
+<p>Taking expectations of both sides of the SDE produces</p>
+<p><span class="math display">\[
+\begin{align*}
+\E[d X_t] &amp;= E\left[\kappa\,\left(\theta - X_t\right)\,dt + \sigma\,\sqrt{X_t}\,dW_t\right] \\
+d \E[X_t] &amp;= \kappa\,\left(\theta - E[X_t]\right)\,dt + \sigma\,\E\left[\sqrt{X_t}\,dW_t\right] \\
+d \E[X_t] &amp;= \kappa\,\left(\theta - E[X_t]\right)dt \\
+d \E[X_t] + \kappa\,\E[X_t]\,dt &amp;= \kappa\,\theta\,dt.
+\end{align*}
+\]</span></p>
+<p>The final expression is an ODE that can be solved using an integrating factor:</p>
+<p><span class="math display">\[
+\begin{align*}
+e^{\kappa t}\,d\E[X_t] + e^{\kappa t}\,\kappa\,\E[X_t] dt &amp;= e^{\kappa t}\,\kappa\,\theta\,dt \\
+d\left(e^{\kappa t}\,\E[X_t]\right) &amp;= e^{\kappa t}\, \kappa\,\theta\,dt \\
+\int_0^t d\left(e^{\kappa s} \E[X_s]\right) &amp;= \int_0^t e^{\kappa s} \kappa\theta ds \\
+e^{\kappa t}\,\E[X_t] - \E[X_0] &amp;= \theta\,\left(e^{\kappa t}-1\right) \\
+\E[X_t] &amp;= X_0\,e^{-\kappa t} + \theta\,\left(1-e^{-\kappa t}\right)
+\end{align*}
+\]</span></p>
+<p>Thus, just as with the O-U process, the expectation of <span class="math inline">\(X_t\)</span> shifts from <span class="math inline">\(X_0\)</span> toward <span class="math inline">\(\theta\)</span> over time.</p>
+<p>To compute the variance of <span class="math inline">\(X_t\)</span> we make use of Itô’s Lemma:</p>
+<p><span class="math display">\[
+\begin{align*}
+d(X_t^2) &amp;= \pd{X_t^2}{t}\,dt + \pd{X_t^2}{X}\,dX + \frac12\pdd{X_t^2}{X_t}\,(d X_t)^2 \\
+&amp;= 2\,X_t\,dX_t + (d X_t)^2 \\
+&amp;= 2\,X_t\,(\kappa\,\left(\theta - X_t\right)\,dt + \sigma\,\sqrt{X_t}\,dW_t) + (\kappa\,\left(\theta - X_t\right)\,dt + \sigma\,\sqrt{X_t}\,dW_t)^2 \\
+&amp;= 2\,X_t\,(\kappa\,\left(\theta - X_t\right)\,dt + \sigma\,\sqrt{X_t}\,dW_t) + \sigma^2\,X_t\,dt.
+\end{align*}
+\]</span></p>
+<p>Taking the expectation of both sides of the equation produces</p>
+<p><span class="math display">\[
+\begin{align*}
+\E[d(X_t^2)] &amp;= \E\left[2\,X_t\,(\kappa\,\left(\theta - X_t\right)\,dt + \sigma\,\sqrt{X_t}\,dW_t) + \sigma^2\,X_t\,dt\right] \\
+d \E[X_t^2] &amp;= 2\,\E\left[X_t \kappa\,\left(\theta - X_t\right)\right]\,dt + 2\,\sigma\,\E[X_t\,\sqrt{X_t}\,dW_t] + \sigma^2\,\E[X_t]\,dt \\
+d \E[X_t^2] &amp;= 2\,\E\left[X_t\,\kappa\,\left(\theta - X_t\right)\right]\,dt + \sigma^2\,\E[X_t]\,dt \\
+d \E[X_t^2] &amp;= 2\,\kappa\,\theta\,\E[X_t]\,dt - 2\,\kappa\,\E[X_t^2]\,dt + \sigma^2\,\E[X_t]\,dt \\
+\frac{d\E[X_t^2]}{dt} &amp;= (2\,\kappa + \sigma^2)\,\E[X_t] - 2 \kappa\,\E[X_t^2]
+\end{align*}
+\]</span></p>
+<p>Once again we have a simple ODE which can be solved using an integration factor to obtain</p>
+<p><span class="math display">\[
+\E[X_t^2]=\left(\theta+(X_0-\theta)\,e^{-\kappa t}\right)^2 +
+\frac{\sigma^2}{\kappa}X_0\,e^{-\kappa t}
+\left(1-e^{-\kappa t}\right) + \frac{\theta\,\sigma^2}{2\,\kappa}
+\left( 1- e^{-\kappa t}\right)^2.
+\]</span></p>
+<p>Using our results for <span class="math inline">\(\E[X_t]\)</span> and <span class="math inline">\(\E[X_t^2]\)</span> we can compute the variance of <span class="math inline">\(X_t\)</span>. A bit of algebra produces</p>
+<p><span class="math display">\[
+\operatorname{Var}(X_t) =
+\frac{\sigma^2}{\kappa}r_0\,e^{-\kappa t}
+\left(1-e^{-\kappa t}\right) +
+\frac{\theta\,\sigma^2}{2\,\kappa}
+\left(1-e^{-\kappa t}\right)^2.
+\]</span></p>
+<p>Unlike the GBM and O-U processes, the CIR process does not admit a simple closed-form pathwise solution. Nevertheless, its transition distribution is known exactly. Standard derivations for the distribution of <span class="math inline">\(X_t | X_0\)</span> rely on solving the Kolmogorov (Fokker–Planck) forward equation or by transforming the CIR process into a squared Bessel process. Both of these approaches are beyond the scope of this text, so we simply state the result below.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Cox--Ingersoll--Ross Process">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Cox–Ingersoll–Ross Process
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <strong>Cox–Ingersoll–Ross (CIR) process</strong> is a continuous-time stochastic process defined by the stochastic differential equation</p>
+<p><span class="math display">\[
+dX_t
+=
+\kappa(\theta-X_t)\,dt
++
+\sigma\sqrt{X_t}\,dW_t,
+\]</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(X_t\)</span> is the value of the process at time <span class="math inline">\(t\)</span>,</li>
+<li><span class="math inline">\(\kappa&gt;0\)</span> is the speed of mean reversion,</li>
+<li><span class="math inline">\(\theta&gt;0\)</span> is the long-run mean,</li>
+<li><span class="math inline">\(\sigma&gt;0\)</span> is the volatility parameter, and</li>
+<li><span class="math inline">\(W_t\)</span> is a standard Wiener process.</li>
+</ul>
+<p>The conditional mean and variance are</p>
+<p><span class="math display">\[
+\E[X_t \mid X_0]
+=
+\theta
++
+(X_0-\theta)e^{-\kappa t},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\operatorname{Var}(X_t \mid X_0)
+=
+\frac{\sigma^2}{\kappa}
+X_0\,
+e^{-\kappa t}
+\left(1-e^{-\kappa t}\right)
++
+\frac{\theta\sigma^2}{2\kappa}
+\left(1-e^{-\kappa t}\right)^2.
+\]</span></p>
+<p>The transition distribution of the process is</p>
+<p><span class="math display">\[
+X_t
+=
+cY,
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+Y
+\sim
+\chi'^2_d(\xi)
+\]</span></p>
+<p>is a non-central chi-squared random variable with</p>
+<p><span class="math display">\[
+c
+=
+\frac{\sigma^2\left(1-e^{-\kappa t}\right)}
+{4\kappa},
+\]</span></p>
+<p>degrees of freedom</p>
+<p><span class="math display">\[
+d
+=
+\frac{4\kappa\theta}{\sigma^2},
+\]</span></p>
+<p>and non-centrality parameter</p>
+<p><span class="math display">\[
+\xi
+=
+\frac{4\kappa e^{-\kappa t}}
+{\sigma^2\left(1-e^{-\kappa t}\right)}
+\,r_0.
+\]</span></p>
+<p>When the <strong>Feller condition</strong></p>
+<p><span class="math display">\[
+2\kappa\theta
+\ge
+\sigma^2
+\]</span></p>
+<p>is satisfied, the process remains strictly positive with probability one. Otherwise, the process may reach zero, although it remains non-negative.</p>
+</div>
+</div>
+<p>Comparing <a href="#fig-OU_paths" class="quarto-xref">Figure&nbsp;<span>6.2</span></a> and <a href="#fig-cir_paths" class="quarto-xref">Figure&nbsp;<span>6.6</span></a>, the most obvious differences from the O-U process is that CIR paths never cross the x axis and tend to fluctuate more when they are farther from the axis. Similar to the O-U process, the CIR process shifts toward a steady state distribution centered on <span class="math inline">\(\theta\)</span> over time, but the steady state distribution is right skewed because it is bounded below by zero.</p>
+<div id="fig-cir_paths" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cir_paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/cir_paths.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cir_paths-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.6: Five realizations of a Cox-Ingersoll-Ross process.
+</figcaption>
+</figure>
+</div>
+<div id="fig-cir_dist" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cir_dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/cir_dist.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cir_dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.7: Probability densities of 10,000 CIR process simulations over time.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="bond-pricing-under-the-cir-model" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="bond-pricing-under-the-cir-model"><span class="header-section-number">6.4</span> Bond pricing under the CIR model</h2>
+<p>Under the Cox-Ingersoll-Ross model, the short rate, <span class="math inline">\(r_t\)</span>, follows a CIR process. This is a bit more realistic than the Vasicek model because the short rate remains strictly positive and its volatility increases in proportional to its level. This improvement notwithstanding, the CIR model exhibits many of the same features as the Vasicek model. It produces an affine bond pricing formula that can generate both upward and downward sloping yield curves, and investor preferences affect the shape of the yield curve in a similar way. The CIR model’s main technical innovation is that it embeds state-dependent volatility. Since volatility depends on <span class="math inline">\(r_t\)</span> we can think of it as being sensitive to the state of the economy. This is the first model we have encountered with state-dependent volatility. It will not be the last.</p>
+<p>As with the Vasicek model, the CIR model can be used to value real bonds. We begin by relating the P-measure and Q-measure processes. Similar to previous examples, our objective is to find a risk-neutral measure that preserves the main features of he CIR model so we can leverage the results we have already derived. Then we will derive a pricing equation that satisfied the martingale property.</p>
+<p>In the simple Vasicek model we assumed a constant risk premium, <span class="math inline">\(\lambda\)</span>. For the CIR model, we instead choose a risk premium that depends on the state variable <span class="math inline">\(r_t\)</span>. Specifically let</p>
+<p><span class="math display">\[
+\lambda(r) = \lambda\sqrt{r}.
+\]</span></p>
+<p>The Girsanov’s theorem implies that</p>
+<p><span class="math display">\[
+dW_t^P = dW_t^Q - \lambda\sqrt{r_t}dt
+\]</span></p>
+<p>so</p>
+<p><span class="math display">\[
+\begin{align*}
+d r_t &amp;= \kappa_P \left(\theta_P - r_t\right)dt + \sigma \sqrt{r_t}dW_t^P \\
+&amp;= \kappa_P \left(\theta_P - r_t\right)dt + \sigma \sqrt{r_t}[dW_t^Q - \lambda\sqrt{r_t}dt] \\
+&amp;= \kappa_P\theta_P dt - \kappa_P r_t dt - \sigma\lambda r_t dt + \sigma \sqrt{r_t}dW_t^Q \\
+&amp;= (\kappa_P+\sigma\lambda)\left(\theta_P\left(1-\frac{\lambda\sigma}{\kappa_P + \sigma\lambda}\right)-r_t\right)dt + \sigma \sqrt{r_t}dW_t^Q\\
+&amp;= \kappa_Q(\theta_Q -r_t )dt + \sigma \sqrt{r_t}dW_t^Q
+\end{align*}
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\kappa_Q = \kappa_P + \sigma\lambda
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\theta_Q = \theta_P\frac{\kappa_P}{\kappa_P + \sigma\lambda}.
+\]</span></p>
+<p>The change of measure affects the drift component of the SDE but not the volatility component and preserves the model’s CIR process structure.</p>
+<p>The Q-measure pricing expectation under the CIR model is identical to that under the Vasicek model. As before, to keep our notation from getting too cluttered, we will omit labels for Q-measure parameters (recognizing that we will use the Q measure throughout the derivation) and we will frequently use the symbol <span class="math inline">\(\tau\)</span> as a shorter way of denoting the remaining time to maturity, <span class="math inline">\(T-t\)</span>. Once again, the price of a zero-coupon bond is</p>
+<p><span class="math display">\[
+P_{t,T}=\E_t\left[e^{-\int_t^T r_s\,ds} \right].
+\]</span></p>
+<p>Unfortunately we can not solve this expectation directly by integration, as we did with the Vasicek model. Instead we proceed by assuming that the price has the same basic affine structure as with the Vasicek model. We then apply Itô’s Lemma to pin down specific properties of the equation. This strategy might seem a bit like magic, as we have introduced no clear reason for the assumed an affine structure beyond appealing to the general similarities between the Vasicek and CIR models. While there do exist theorems describing the general class of models that have this structure, a more practical way to reconcile ourselves with this approach is to simply recognize that it is similar to the strategy used to solve broad classes of ordinary differential equations. Essentially, we assume an answer and then test whether it works.</p>
+<p>We assume</p>
+<p><span class="math display">\[
+P_{t,T} = e^{\mathcal{A}(t,T)-\mathcal{B}(t,T)\,r_t}.
+\]</span></p>
+<p>As a notations convenience, we will write <span class="math inline">\(\mathcal{A}(t)\)</span> and <span class="math inline">\(\mathcal{B}(t)\)</span> for the two affine pricing terms since <span class="math inline">\(T\)</span> remains constant in the derivation that follows.</p>
+<p>Using Ito’s Lemma to differentiate the valuation function with respect to <span class="math inline">\(t\)</span> produces</p>
+<p><span class="math display">\[
+\begin{align*}
+dP_{t,T} =&amp; \left(\mathcal{A}'(t)\,P_{t,T} - r_t\,\mathcal{B}'(t)\,P_{t,T}\right)\,dt \\
+&amp; + \left(-\mathcal{B}(t)\,P_{t,T}\right)\,dr_t \\
+&amp; + \frac12 \left(\mathcal{B}(t)^2\,P_{t,T}\right)\,(dr_t)^2 \\
+\frac{dP_{t,T}}{P_{t,T}} =&amp;
+\left(\mathcal{A}'(t) - r_t\,\mathcal{B}'(t)\right)\,dt
+-\mathcal{B}(t)\,dr_t
++ \frac12 \mathcal{B}(t)^2\,(dr_t)^2. \\
+\end{align*}
+\]</span></p>
+<p>The Ito differential rules imply that <span class="math inline">\((dr_t)^2 = r_t\,\sigma^2\,dt\)</span>. Substituting <span class="math inline">\(dr_t\)</span> and <span class="math inline">\((dr_t)^2\)</span> out of the above equation and rearranging terms gives us</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{dP_{t,T}}{P_{t,T}} =&amp;
+\left(\mathcal{A}'(t) - r_t\,\mathcal{B}'(t)\right)\,dt \\
+&amp; - \mathcal{B}(t)\,\left(\kappa(\theta -r_t)\,dt + \sigma \sqrt{r_t}dW_t\right) \\
+&amp; + \frac12 \mathcal{B}(t)^2\,r_t\,\sigma^2\,dt \\
+=&amp; \left[ \mathcal{A}'(t) - r_t\,\mathcal{B}'(t) - \mathcal{B}(t)\,\kappa\,(\theta-r_t) + \frac12 \mathcal{B}(t)^2\,r_t\,\sigma^2\right]\,dt \\
+&amp; - \mathcal{B}(t)\,\sigma\,\sqrt{r_t}\,dW_t.
+\end{align*}
+\]</span></p>
+<p>Notice that the growth process for the bond value is an Ito process whose drift is equal to the expression in square brackets. Collecting terms in the drift expression on <span class="math inline">\(r_t\)</span> helps to clarify what is going on:</p>
+<p><span class="math display">\[
+\underbrace{\left[\mathcal{A}'(t)-\mathcal{B}(t)\,\kappa\,\theta\right]}_\text{intercept}
++ \underbrace{\left[-\mathcal{B}'(t)+\mathcal{B}(t)\,\kappa + \frac12 \mathcal{B}(t)^2\,\sigma^2\right]}_\text{slope}\,r_t.
+\]</span></p>
+<p>At any given point in time, <span class="math inline">\(t\)</span>, the drift in the bond value growth rate is a linear function of <span class="math inline">\(r_t\)</span>. The FTAP tells us that under the Q measure this drift must be equal to <span class="math inline">\(r_t\)</span>. This condition can only be satisfied for all values of <span class="math inline">\(t\)</span> if the intercept is equal to zero and the slope is equal to one. Thus, the FTAP implies the following system of differential equation:</p>
+<p><span class="math display">\[
+\begin{align*}
+\mathcal{A}'(t) - \mathcal{B}(t)\,\kappa\,\theta &amp;= 0 \\
+-\mathcal{B}'(t) + \mathcal{B}(t)\,\kappa + \frac12 B(t)^2\,\sigma^2 &amp;= 1
+\end{align*}
+\]</span></p>
+<p>Boundary conditions for these equations arise from the fact that at maturity <span class="math inline">\(P_{T,T} = 1\)</span>, implying that <span class="math inline">\(\mathcal{A}(T)=0\)</span> and <span class="math inline">\(\mathcal{B}(T)=0\)</span>.</p>
+<p>Although solving these equations requires only techniques from ordinary differential equations, the algebra is lengthy and will not be reproduced here. The resulting solutions are</p>
+<p><span class="math display">\[
+\mathcal{B}(t,T) =
+\frac{2\left(e^{\gamma\tau}-1\right)}
+{(\kappa_Q+\gamma)\left(e^{\gamma\tau}-1\right)+2\gamma}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\mathcal{A}(t,T) = -\frac{2\kappa_Q\theta_Q}{\sigma^2}\ln\!\left(
+\frac{2\gamma e^{(\kappa_Q+\gamma)\tau/2}}
+{(\kappa_Q+\gamma)\left(e^{\gamma\tau}-1\right)+2\gamma}
+\right)
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+\gamma = \sqrt{\kappa_Q^2+2\sigma^2}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\tau = T-t.
+\]</span></p>
+<p>As with the Vasicek model, the bond price is an exponential-affine function of the current short rate, but the functions <span class="math inline">\(\mathcal{A}(t,T)\)</span> and <span class="math inline">\(\mathcal{B}(t,T)\)</span> are more complicated due to the state-dependent volatility term in the CIR model.</p>
+<p>Although the CIR model is built upon more realistic assumptions about the short-rate process, the CIR and Vasicek models are structurally quite similar. Unsurprisingly, the two models generate comparable predictions for the term structure of interest rates, as can be seen by comparing <a href="#fig-cir_term_structure" class="quarto-xref">Figure&nbsp;<span>6.8</span></a> with <a href="#fig-Vasicek_term_structure" class="quarto-xref">Figure&nbsp;<span>6.4</span></a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div id="fig-cir_term_structure" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cir_term_structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/cir_term_structure.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cir_term_structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.8: Yield curves implied by the CIR model given different initial short rates (<span class="math inline">\(r_0\)</span>).
+</figcaption>
+</figure>
+</div>
+<p>Differences between the two models become more apparent when one looks at higher moments of the bond return distributions. Recall that under the Vasicek model, the volatility of instantaneous bond returns increases with duration but is otherwise a constant function of model parameters. In contrast, the instantaneous bond return volatility under the CIR model is</p>
+<p><span class="math display">\[
+\sigma^\text{Bond} = \sigma\,\sqrt{r}\,\mathcal{B}(t,T),
+\]</span></p>
+<p>which depends on both the time to maturity and the current interest rate. As shown in <a href="#fig-cir_vol" class="quarto-xref">Figure&nbsp;<span>6.9</span></a>, both models produce similar volatility term structures, but the CIR model generates a higher volatility path when interest rates are high and a lower path when they are low.</p>
+<div id="fig-cir_vol" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-cir_vol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/cir_vol.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-cir_vol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6.9: Term structure of instantaneous bond return volatility under the CIR and Vasicek models.
+</figcaption>
+</figure>
+</div>
+<p>A direct implication of this is that the excess return on bond investments also depends on the current level of interest rates. In the CIR model</p>
+<p><span class="math display">\[
+\mu^\text{Bond} - r = -\mathcal{B}(t,T)\,\lambda\,\sigma\,\sqrt{r}.
+\]</span></p>
+<p>The sign of the excess return depends on investor preferences as captured by <span class="math inline">\(\lambda\)</span>. For a given value of <span class="math inline">\(\lambda\)</span> the magnitude of excess returns depends on both the bond duration and the level of the short rate. All else equal, excess bond returns will be larger in magnitude when interest rates are high.</p>
+<p>The Vasicek and CIR models share the same basic economic interpretation. Both describe interest rates as mean-reverting and imply that the yield curve is determined by the expected evolution of the short rate. The principal innovation of the CIR model is that interest-rate volatility depends on the level of interest rates. As a result, bond prices, bond volatilities, and expected excess returns all become state dependent. This allows the model to capture the empirical observation that interest rates tend to fluctuate more when they are high.</p>
+</section>
+<section id="taking-stock-and-looking-forward" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="taking-stock-and-looking-forward"><span class="header-section-number">6.5</span> Taking stock and looking forward</h2>
+<p>In this chapter we introduced two foundational models of interest rates and bond prices. The Vasicek model provides important insights into bond market economics, but its assumptions are rather restrictive. The CIR model trades additional mathematical complexity for greater realism. Though both models are more than fourty years old, the can still be found in applied work today. More advanced models, such as those developed by <span class="citation" data-cites="HullWhite1990">Hull and White (<a href="#ref-HullWhite1990" role="doc-biblioref">1990</a>)</span>, allow for time varying long-run short rates and additional risk factors while preserving an affine structure. The interested reader may wish to explore these models on their own.</p>
+<p>On the methodological front, this chapter showed how one can use the FTAP to price assets from models of underlying state variables that are not directly traded. In the Vasicek and CIR models, the short rate was a non-traded state variable that determined the price of bonds of varying maturities. Importantly, so long as bonds of multiple different maturities are traded, both models embody complete markets. One can construct a risk-free portfolio consisting of a long position in a bond of one maturity and a short position in a bond of another maturity with weights that change dynamically over time. In the next chapter we will explore asset pricing in the presence of incomplete markets.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-cox1985cir" class="csl-entry" role="listitem">
+Cox, John C., Jonathan E. Ingersoll., and Stephen A. Ross. 1985. <span>“A Theory of the Term Structure of Interest Rates.”</span> <em>Econometrica</em> 53 (2): 385–407. <a href="https://doi.org/10.2307/1911242">https://doi.org/10.2307/1911242</a>.
+</div>
+<div id="ref-HullWhite1990" class="csl-entry" role="listitem">
+Hull, John, and Alan White. 1990. <span>“Pricing Interest-Rate-Derivative Securities.”</span> <em>The Review of Financial Studies</em> 3 (4): 573–92. <a href="https://doi.org/10.1093/rfs/3.4.573">https://doi.org/10.1093/rfs/3.4.573</a>.
+</div>
+<div id="ref-vasicek1977equilibrium" class="csl-entry" role="listitem">
+Vašı́ček, Oldřich. 1977. <span>“An Equilibrium Characterization of the Term Structure.”</span> <em>Journal of Financial Economics</em> 5 (2): 177–88. <a href="https://doi.org/10.1016/0304-405X(77)90016-2">https://doi.org/10.1016/0304-405X(77)90016-2</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>To aid comparisons between the two models, all of the examples shown in this discussion make use of the following parameter assumption: <span class="math inline">\(\kappa_P^\text{Vas.} = \kappa_P^\text{CIR}\)</span>, <span class="math inline">\(\theta_P^\text{Vas.} = \theta_P^\text{CIR}\)</span>, <span class="math inline">\(\theta_Q^\text{Vas.} = \theta_Q^\text{CIR}\)</span>, and <span class="math inline">\(\sigma^\text{Vas.} = \sigma^{CIR}\sqrt{\theta_P^\text{CIR}}\)</span>. This implies that the two models will have the same long-run equilibrium volatility under the P measure, but their volatilities at any point in time will differ from one another, as will <span class="math inline">\(\kappa_Q\)</span>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/05-discounting_cash_flows.html" class="pagination-link" aria-label="Dicsounting Future Cash Flows">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/07-multi_variable_models.html" class="pagination-link" aria-label="Multiple Sources of Uncertainty">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

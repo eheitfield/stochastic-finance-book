@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>4&nbsp; No Arbitrage Pricing and the Risk-Neutral Measure – A Practical Introduction to Stochastic Processes and Financial Modeling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/05-discounting_cash_flows.html" rel="next">
+<link href="../chapters/03-stochastic_calculus.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+    tex: {
+        macros: {
+
+            // --------------------------------------------------------------------
+            // Number systems
+            // --------------------------------------------------------------------
+
+            R: "\\mathbb{R}",                 // Real numbers
+            C: "\\mathbb{C}",                 // Complex numbers
+            N: "\\mathbb{N}",                 // Natural numbers
+            Z: "\\mathbb{Z}",                 // Integers
+            Q: "\\mathbb{Q}",                 // Rational numbers
+
+            // --------------------------------------------------------------------
+            // Probability spaces and measures
+            // --------------------------------------------------------------------
+
+            Prob: "\\mathbb{P}",              // Physical probability measure
+            P: "\\mathbb{P}",                 // Short form for probability measure
+            E: "\\mathbb{E}",                 // Expectation operator
+            F: "\\mathcal{F}",                // Filtration
+            G: "\\mathcal{G}",                // Alternate filtration
+            B: "\\mathcal{B}",                // Borel sigma-algebra
+
+            // --------------------------------------------------------------------
+            // Common probability operators
+            // --------------------------------------------------------------------
+
+            Var: "\\operatorname{Var}",
+            Cov: "\\operatorname{Cov}",
+            Corr: "\\operatorname{Corr}",
+            Covar: "\\operatorname{Cov}",
+            SD: "\\operatorname{SD}",
+            Bias: "\\operatorname{Bias}",
+            MSE: "\\operatorname{MSE}",
+
+            // --------------------------------------------------------------------
+            // Convergence notions
+            // --------------------------------------------------------------------
+
+            eqas: "\\overset{a.s.}{=}",
+            eqms: "\\overset{m.s.}{=}",
+            toas: "\\overset{a.s.}{\\rightarrow}",
+            toms: "\\overset{m.s.}{\\rightarrow}",
+
+            // --------------------------------------------------------------------
+            // Frequently used sets
+            // --------------------------------------------------------------------
+
+            Ft: "\\mathcal{F}_t",
+            Fs: "\\mathcal{F}_s",
+
+            // --------------------------------------------------------------------
+            // Differential notation
+            // --------------------------------------------------------------------
+
+            dd: "\\,\\mathrm{d}",
+            dt: "\\,\\mathrm{d}t",
+            ds: "\\,\\mathrm{d}s",
+            dW: "\\,\\mathrm{d}W",
+            dWt: "\\,\\mathrm{d}W_t",
+            dN: "\\,\\mathrm{d}N",
+            dNt: "\\,\\mathrm{d}N_t",
+
+            // --------------------------------------------------------------------
+            // Common stochastic process notation
+            // --------------------------------------------------------------------
+
+            W: "W_t",                         // Brownian motion
+            Nt: "N_t",                        // Poisson process
+            Xt: "X_t",
+            Yt: "Y_t",
+            St: "S_t",
+            rt: "r_t",
+
+            // --------------------------------------------------------------------
+            // Finance
+            // --------------------------------------------------------------------
+
+            rn: "\\mathbb{Q}",                // Risk-neutral measure
+            drift: "\\mu",
+            vol: "\\sigma",
+            lam: "\\lambda",
+
+            // --------------------------------------------------------------------
+            // Delimiters
+            // --------------------------------------------------------------------
+
+            abs: ["\\left|#1\\right|", 1],
+            norm: ["\\left\\|#1\\right\\|", 1],
+            set: ["\\left\\{#1\\right\\}", 1],
+            paren: ["\\left(#1\\right)", 1],
+            bracket: ["\\left[#1\\right]", 1],
+
+            // --------------------------------------------------------------------
+            // Probability expressions
+            // --------------------------------------------------------------------
+
+            Eof: ["\\mathbb{E}\\left[#1\\right]", 1],
+            CE: ["\\mathbb{E}\\left[#1\\mid#2\\right]", 2],
+            Varof: ["\\operatorname{Var}\\left(#1\\right)", 1],
+            Covof: ["\\operatorname{Cov}\\left(#1,#2\\right)", 2],
+            Probof: ["\\mathbb{P}\\left(#1\\right)", 1],
+
+            // --------------------------------------------------------------------
+            // Calculus
+            // --------------------------------------------------------------------
+
+            pd: ["\\frac{\\partial #1}{\\partial #2}", 2],
+            pdd: ["\\frac{\\partial^2 #1}{(\\partial #2)^2}", 2],
+            diff: ["\\frac{\\mathrm{d}#1}{\\mathrm{d}#2}", 2],
+            diffii: ["\\frac{\\mathrm{d}^2#1}{\\mathrm{d}#2^2}", 2],
+
+            // --------------------------------------------------------------------
+            // Linear algebra
+            // --------------------------------------------------------------------
+
+            transpose: ["#1^{\\mathsf{T}}", 1],
+            inv: ["#1^{-1}", 1],
+
+            // --------------------------------------------------------------------
+            // Optimization operators
+            // --------------------------------------------------------------------
+
+            argmax: "\\operatorname*{arg\\,max}",
+            argmin: "\\operatorname*{arg\\,min}",
+
+            // --------------------------------------------------------------------
+            // Miscellaneous
+            // --------------------------------------------------------------------
+
+            indicator: ["\\mathbf{1}_{\\left\\{#1\\right\\}}", 1],
+            inner: ["\\left\\langle #1,#2\\right\\rangle", 2],
+
+        }
+    }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/04-risk_neutral_expectations.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">No Arbitrage Pricing and the Risk-Neutral Measure</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">A Practical Introduction to Stochastic Processes and Financial Modeling</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-stochastic_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Probability Spaces and Stochastic Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-wiener_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Wiener Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-stochastic_calculus.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Itô Calculus</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-risk_neutral_expectations.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">No Arbitrage Pricing and the Risk-Neutral Measure</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-interest_rate_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Reverting Processes and Interest Rate Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-multi_variable_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-jump_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Jump-Diffusion Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-stochastic_volatility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Stochastic Volatility Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-numerical_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Numerical Methods</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/A1-normal_properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Properties of Normally Distributed Random Variables</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-hedging_portfolio" id="toc-sec-hedging_portfolio" class="nav-link active" data-scroll-target="#sec-hedging_portfolio"><span class="header-section-number">4.1</span> Dynamic hedging and the Black-Scholes model</a></li>
+  <li><a href="#sec-hedging_bs" id="toc-sec-hedging_bs" class="nav-link" data-scroll-target="#sec-hedging_bs"><span class="header-section-number">4.2</span> Valuing put and call options</a></li>
+  <li><a href="#risk-neutral-pricing" id="toc-risk-neutral-pricing" class="nav-link" data-scroll-target="#risk-neutral-pricing"><span class="header-section-number">4.3</span> Risk-neutral pricing</a></li>
+  <li><a href="#sec-q_bs_derivation" id="toc-sec-q_bs_derivation" class="nav-link" data-scroll-target="#sec-q_bs_derivation"><span class="header-section-number">4.4</span> Geometric Brownian motion under the risk neutral measure</a></li>
+  <li><a href="#sec-q_measure_bs" id="toc-sec-q_measure_bs" class="nav-link" data-scroll-target="#sec-q_measure_bs"><span class="header-section-number">4.5</span> Option pricing redux</a></li>
+  <li><a href="#taking-stock-and-looking-forward" id="toc-taking-stock-and-looking-forward" class="nav-link" data-scroll-target="#taking-stock-and-looking-forward"><span class="header-section-number">4.6</span> Taking stock and looking forward</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-risk_neutral_measure" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">No Arbitrage Pricing and the Risk-Neutral Measure</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Having introduced some basic terminology and tools needed for working with stochastic processes, we are now ready to shift gears and show how these tools can be applied to value assets such as stocks, bonds, and derivatives.</p>
+<p>Much of asset pricing boils down to the following question: given a model for the value of a set of assets, how can we determine the value of another asset whose future cash flows depend on them? To make this idea a little more concrete, suppose we have access to a risk-free money-market account, a stock, and derivative with payoffs that tied to the future price of the stock. The money market account pays a known interest rate that reflects the time value of money. Assume we also know the value of the stock today and we have a model that allows us to assign probabilities to realizations of the stock’s future values. How can we use this information to determine the price of the derivative today?</p>
+<p>At first blush, the answer might seem straightforward. We could simply take the average of the net present value of all possible future payoffs of the derivative weighted by the probabilities of the future values of the stock necessary to achieve those outcomes. That is, we could take the expected present value of the derivative payoffs given our probability model. This approach is intuitive and corresponds to the way we usually think about dealing with uncertainty in the physical world, but it ignores something important.</p>
+<p>Most people don’t like risk and expect to be compensated for taking it. Most investors would not be indifferent between an investment that pays off $100 with certainty and another that pays off either $50 or $150 depending on the flip of a fair coin. Risk averse investors would value the certain investment more richly than the uncertain one. Likewise, the value of the derivative in our example will depend on the uncertainty of its future payouts, not just their average level.</p>
+<p>So if we can’t simply use the derivative’s expected present value, how can we price it? As we’ll see in this chapter, there are two equivalent approaches: one based on a hedging portfolio and the other based on reweighing outcome probabilities. Both approaches are founded on the assumption of <strong>no arbitrage</strong>; it should not be possible to construct an investment strategy that produces positive expected net cash flows with no risk of loss. If such a strategy existed, then an investor could take on leverage, deploy the strategy, and produce unbounded wealth. The no arbitrage condition is the finance analogue of the physics notion that you can’t build a perpetual motion device.</p>
+<p>The first approach to pricing derivatives involves constructing a risk-free portfolio whose value depends on that of the derivative and the underlying tradable assets. We can then use the fact that in the absence of arbitrage this risk-free portfolio must pay the same return as a risk-free investment to determine the portfolio’s value, and hence the value of the derivative. As it turns out, this approach is equivalent to taking the expected present value of the derivative using probability weights that have been adjusted to compensate investors for uncertainty.</p>
+<section id="sec-hedging_portfolio" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="sec-hedging_portfolio"><span class="header-section-number">4.1</span> Dynamic hedging and the Black-Scholes model</h2>
+<p>In a now famous pair of research papers <span class="citation" data-cites="black1973pricing">Black and Scholes (<a href="#ref-black1973pricing" role="doc-biblioref">1973</a>)</span> and <span class="citation" data-cites="merton1973theory">Merton (<a href="#ref-merton1973theory" role="doc-biblioref">1973</a>)</span> articulated the hedging portfolio approach to asset pricing. They argued that if one can construct a risk-free portfolio consisting of traded assets and the derivative one is trying to price, then this portfolio must grow in value at a rate equal to the risk-free rate of return. If it paid a higher return investors could borrow from the bank, invest in the portfolio, and earn risk-free profits. Likewise, if it paid less than the risk-free rate, investors could borrow from the bank, short the portfolio, and again earn risk-free profits. In both cases, the no arbitrage condition would be violated. The rate of change in the value of the hypothetical risk-free portfolio is a function of the rate of change in the value of the assets it contains. The no arbitrage condition tells us what this rate of change must be, giving us one equation and one unknown: the value of the derivative. Solving this equation allows one to express the value of the derivative as a function of the values of the traded assets and the risk-free rate of return. Of course, this entire argument hinges on the assumption that one can construct a risk-free portfolio. Black, Scholes, and Merton showed how this can be done.</p>
+<p>The simplest version of the Black-Scholes model involves three assets: a risk-free bank account that pays a risk-free rate of return <span class="math inline">\(r\)</span> over time, a stock that follows the GBM process</p>
+<p><span class="math display">\[
+dS = \mu\,S\,dt + \sigma\,S\,dW,
+\]</span></p>
+<p>and a derivative whose value depends on <span class="math inline">\(S\)</span> and time according to the smooth function</p>
+<p><span class="math display">\[
+V = V(S,t).
+\]</span></p>
+<p>The specific details of <span class="math inline">\(V(S,t)\)</span> depend on the derivative contract we wish to value. We can learn about the change in <span class="math inline">\(V(S,t)\)</span> over time by applying Ito’s Lemma:</p>
+<p><span class="math display">\[
+dV = \left(\pd{V}{t} + \mu\,S\,\pd{V}{S} + \frac12 \sigma^2\,S^2\,\pdd{V}{S}\right)dt + \sigma\,S\,\pd{V}{S}\,dW.
+\]</span></p>
+<p>Now we can construct a portfolio <span class="math inline">\(\Pi\)</span> consisting of a long position in the derivative and a short position in the stock:</p>
+<p><span class="math display">\[
+\Pi = V - \Delta S.
+\]</span></p>
+<p><span class="math inline">\(\Delta\)</span>, the hedge ratio, is a parameter that we are free to choose. Over time we neither add nor remove assets from the portfolio so that any gains or losses in the portfolio are due to changes in the underlying asset values. This implies that</p>
+<p><span class="math display">\[
+\begin{align*}
+d\Pi =&amp; dV - \Delta dS \\
+=&amp; \left(\pd{V}{t} + \mu\,S\,\pd{V}{S} + \frac12 \sigma^2\,S^2\,\pdd{V}{S}\right)dt + \sigma\,S\,\pd{V}{S}\,dW \\
+&amp;- \Delta \left( \mu\,S\,dt + \sigma\,S\,dW \right) \\
+=&amp; \left(\pd{V}{t} + \mu\,S\left(\pd{V}{S}-\Delta\right) + \frac12 \sigma^2\,S^2\,\pdd{V}{S}\right)dt \\
+&amp;+ \sigma\,S\,\left(\pd{V}{S}-\Delta\right)dW.
+\end{align*}
+\]</span></p>
+<p>For arbitrary values of <span class="math inline">\(\Delta\)</span> the change in the portfolio’s value over small time increments involves a drift term and a stochastic term. However, if we choose</p>
+<p><span class="math display">\[
+\Delta = \pd{V}{S}
+\]</span></p>
+<p>something remarkable happens. In this case</p>
+<p><span class="math display">\[
+d\Pi= \left(\pd{V}{t} + \frac12 \sigma^2\,S^2\,\pdd{V}{S}\right)dt
+\]</span></p>
+<p>and the stochastic term completely vanishes! We have chosen exactly the hedge ratio needed to cancel out the effects of the Wiener process embedded in <span class="math inline">\(S\)</span>. Note that for most derivatives the hedge ratio is not constant over time; it must be adjusted dynamically as <span class="math inline">\(S\)</span> evolves. The resulting portfolio is locally risk free, meaning that over small increments of time its value does not depend on the random fluctuations in <span class="math inline">\(S\)</span>.</p>
+<p>Now we can make use of the no arbitrage condition that underpins all asset pricing. Over small increments of time our locally risk-free portfolio must earn the risk-free rate of return, <span class="math inline">\(r\)</span>. No arbitrage implies that</p>
+<p><span class="math display">\[
+\begin{align*}
+d\Pi =&amp; \Pi\,r\,dt\\
+=&amp; \left(V-\pd{V}{S}S\right)\,r\,dt.
+\end{align*}
+\]</span></p>
+<p>We have now derived two expressions for <span class="math inline">\(d\Pi\)</span>: one which grew out of our construction of a locally-risk-free portfolio, and one derived from the fact that such a portfolio must yield the risk-free rate of return. Putting these two expressions together and rearranging terms yields</p>
+<p><span class="math display">\[
+\pd{V}{t} + \frac12 \sigma^2\,S^2\,\pdd{V}{S} + \pd{V}{S}\,S\,r - V\,r = 0.
+\]</span></p>
+<p>This is the celebrated Black-Scholes pricing equation. Before putting it to use, it is worth pausing to reflect on some of its key properties. First, observe that this is a deterministic partial differential equation. Although the stock value, <span class="math inline">\(S\)</span>, follows a stochastic differential equation, over short increments of time the derivative’s value depends only on the current level of <span class="math inline">\(S\)</span>. Second, the result is quite general. We have not yet said anything about the details of the derivative we seek to price beyond that it depends on a smooth function of <span class="math inline">\(S\)</span> and <span class="math inline">\(t\)</span>. This formula can be used to price a wide variety of derivative products. Finally, notice that the stock’s drift term, <span class="math inline">\(\mu\)</span>, does not appear in the Black-Scholes equation. This reflects a deep economic insight: because the derivative can be perfectly hedged, investors require no compensation for bearing stock price risk. Once the risk has been eliminated only the risk-free rate remains.</p>
+</section>
+<section id="sec-hedging_bs" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="sec-hedging_bs"><span class="header-section-number">4.2</span> Valuing put and call options</h2>
+<p>To see how we can apply the Black-Scholes formula in practice, consider a simple European put option that gives the owner the opportunity to sell a stock <span class="math inline">\(S\)</span> at the strike price <span class="math inline">\(K\)</span> on date <span class="math inline">\(T\)</span>. When the contract matures the option holder will purchase the stock and deliver it to the option seller for the strike prices if <span class="math inline">\(S_T &lt; K\)</span>, otherwise she will do nothing. Thus the terminal value of the put option is</p>
+<p><span class="math display">\[
+V_T^{\text{Put}} = \max\left(K-S_T, 0\right).
+\]</span></p>
+<p>This is a boundary condition needed to pin down a solution to the Black-Scholes PDE.</p>
+<p>Solving the PDE, while not excessively difficult, is somewhat tedious. It involves a number of mathematical steps that transform the Black-Scholes formula into the heat equation, a PDE from physics with a well-known solution. As solving such PDEs is not the focus of this book, we simply state the solution here.</p>
+<p><span class="math display">\[
+V_t^{\text{Put}} = K\,e^{-r(T-t)}\,\Phi(-d_2)
+- S_t\,\Phi(-d_1),
+\]</span></p>
+<p>where <span class="math inline">\(\Phi(\cdot)\)</span> is the standard normal cumulative density function,</p>
+<p><span class="math display">\[
+d_1 =
+\frac{\ln\left(\frac{S_t}{K}\right) +
+\left(r+\frac{1}{2}\sigma^2\right)(T-t)}
+{\sigma\,\sqrt{T-t}},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+d_2 =d_1-\sigma\,\sqrt{T-t}.
+\]</span></p>
+<p>A European call option that gives the holder the right to buy the stock for the strike price <span class="math inline">\(K\)</span> at time <span class="math inline">\(T\)</span> can be valued using the same approach. The value of the call option is</p>
+<p><span class="math display">\[
+V_t^{\text{Call}} = S_t\,\Phi(d_1) - K\,e^{-r(T-t)}\,\Phi(d_2).
+\]</span></p>
+<p>While more sophisticated models are used to value stock options today, we can gain a lot of intuition for the economics of equity options by examining these Black-Scholes solutions. <a href="#fig-bs_put_payoff" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> shows how time-to-maturity and the initial stock price affects the value of a put option. The put option performs like an insurance contract against the risk that the value of the stock will fall. Its terminal value moves in the opposite direction as <span class="math inline">\(S_T\)</span> and can never fall below zero. All else equal, a higher strike price implies a higher value for the put option at every point in time because it increases the likelihood and magnitude of potential payouts when the contract matures. Conversely, the put option’s value at time <span class="math inline">\(t\)</span> is a decreasing function of <span class="math inline">\(S_t\)</span> because a higher value for the stock today means that positive terminal payouts are less likely and will tend to be smaller in magnitude if they occur.</p>
+<div id="fig-bs_put_payoff" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bs_put_payoff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/bs_put_payoff.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bs_put_payoff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: Effect of time-to-maturity (<span class="math inline">\(T\)</span>) on the relationship between the current stock price (<span class="math inline">\(S_0\)</span>) and a European put option with a strike price (<span class="math inline">\(K\)</span>) of 100.
+</figcaption>
+</figure>
+</div>
+<p>Changes in the values of <span class="math inline">\(K\)</span> and <span class="math inline">\(S_t\)</span> affect the value of the call option in exactly the opposite way because the call option acts as a hedge against large increases in the stock price. <a href="#fig-bs_put_call" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows the value of a European put and call option as a function of the current stock price. The put option is more valuable when the stock price is low, while the call option is more valuable when the stock price is high. If an investor buys both a put and a call at the strike price <span class="math inline">\(K\)</span>, she is guaranteed a payout equal to the difference between the stock price at maturity and the strike price. This gives rise to the put-call parity condition</p>
+<p><span class="math display">\[
+V_t^{\text{Call}} - V_t^{\text{Put}} = S_t - e^{-r(T-t)}K.
+\]</span></p>
+<p>The two options have equal value when <span class="math inline">\(S_0 = e^{-rT}K\)</span>, the discounted present value of the strike price.</p>
+<div id="fig-bs_put_call" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bs_put_call-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/bs_put_call.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bs_put_call-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.2: Values of European put and call options with strike price <span class="math inline">\(K=100\)</span> as a function of the current stock price (<span class="math inline">\(S_0\)</span>.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="risk-neutral-pricing" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="risk-neutral-pricing"><span class="header-section-number">4.3</span> Risk-neutral pricing</h2>
+<p>The hedging portfolio argument we have developed up to this point provides the theoretical foundation for derivative pricing and demonstrates how no-arbitrage leads to a unique price. In practice, however, relatively few pricing problems are solved by integrating partial differential equation such as the one developed by Black and Scholes. As it turns out, the Black–Scholes equation has an equivalent probabilistic representation that expresses the price of a derivative as the discounted expected value of its future payoff under an appropriately chosen probability measure. This fact is true more broadly, giving rise to a valuation framework that is often more easily extended to complex derivative pricing situations.</p>
+<p>In working through the Black-Scholes hedging portfolio model we learned something remarkable. Once we invoked the no-arbitrage principle, the stock’s drift parameter no longer influenced the price of the derivative. This suggests that the particular value of the stock’s expected return is not fundamental to derivative pricing. If we could reformulate the stock price process so that its expected return were simply the risk-free rate, the pricing problem might become considerably simpler. The First and Second Fundamental Theorems of Asset Pricing show that this is indeed possible and is, in fact, equivalent to the hedging portfolio approach we have already developed.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="First and Second Fundamental Theorems of Asset Pricing">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>First and Second Fundamental Theorems of Asset Pricing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>A market is free of arbitrage if and only if there exists an equivalent martingale measure <span class="math inline">\(Q\)</span> under which discounted asset prices have no expected growth.</p></li>
+<li><p>If a market is free of arbitrage and complete, then the equivalent martingale measure <span class="math inline">\(Q\)</span> is unique.</p></li>
+</ol>
+</div>
+</div>
+<p>The First and Second Theorems are so tightly bound together that they are often referenced collectively with the acronym FTAP. The two theorems are rather dense with terminology, so let’s unpack them in detail.</p>
+<p>The first theorem establishes a connection between the <strong>physical probability measure</strong>, <span class="math inline">\(P\)</span>, that we normally work with and an alternative <strong>risk-neutral probability measure</strong>, <span class="math inline">\(Q\)</span>, that can be used for asset pricing. The risk-neutral measure is “equivalent” to the physical measure in the sense that it assigns positive probability to the same events as the physical measure, though the magnitudes of these probabilities may differ.</p>
+<p>The <span class="math inline">\(Q\)</span> measure has the rather magical property that if we use it to compute the expected present value of an asset at time <span class="math inline">\(t\)</span>, we will get that asset’s current value. For example, the value of the stock in the Black-Scholes model we just derived can be expressed as</p>
+<p><span class="math display">\[
+S_t = \E^Q_t\left[e^{-r(T-t)}S_T\right]
+\]</span></p>
+<p>where <span class="math inline">\(\E^Q\left[\cdot\right]\)</span> denotes an expectation computed under the risk-neutral probability measure. Another, nearly equivalent, way of stating the martingale condition is that under the risk-neutral measure an asset’s expected growth rate at any point in time must equal the risk-free return.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> That is</p>
+<p><span class="math display">\[
+\E_t^Q\left[\frac{dS_t}{S_t}\right] = r\,dt.
+\]</span></p>
+<p>The First Theorem is tremendously useful because it implies that if we know the <span class="math inline">\(Q\)</span> measure, we cannot only compute the value of traded assets whose value we have presumably modeled, we can also compute the value of derivatives of those assets. So, for example,</p>
+<p><span class="math display">\[
+V_t^\text{Put} = \E_t^Q\left[e^{r\,(T-t)}\,V_T^\text{Put}\right].
+\]</span></p>
+<p>The Second Theorem states that if the market is complete then there is only one valid risk-neutral measure. In a <strong>complete market</strong> every contingent claim can be replicated by a portfolio of traded assets. The price of a claim is then uniquely determined by the no-arbitrage condition. In the Black-Scholes model we were able to construct a risk-free hedging portfolio because the market was complete. Had the value of the stock been influenced by additional sources of uncertainty we would not have been able to construct such a portfolio, there would have been multiple possible risk-neutral measures, and the price of the derivative would not have been uniquely determined by the no-arbitrage condition. We will see examples of incomplete markets later in this book.</p>
+<p>With the FTAP in hand we do not need to explicitly construct a hedging portfolio to value a derivative. Instead, derivative pricing can proceed in two stages. First, we determine a <span class="math inline">\(Q\)</span>-measure process that makes the present value of traded assets a martingale. Then, given a derivative’s payoff function, we compute the discounted expected value of the derivative’s future payoffs under the <span class="math inline">\(Q\)</span> measure to determine its price.</p>
+<p>Of course, in practice this strategy may be easier said than done. The FTAP guarantees the existence of a risk-neutral measure, but it does not tell us how to find it. For that, we need Girsanov’s theorem, which provides a very convenient way of moving between equivalent probability measures when we are working with Wiener processes.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Girsanov's Theorem (Similified)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Girsanov’s Theorem (Similified)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose that <span class="math inline">\(W_t^P\)</span> is a Wiener process under the probability measure <span class="math inline">\(P\)</span>. Under suitable regularity conditions, there exists an equivalent probability measure <span class="math inline">\(P'\)</span> such that</p>
+<p><span class="math display">\[
+dW_t^{P'} = dW_t^P + \lambda_t\,dt,
+\]</span></p>
+<p>where <span class="math inline">\(\lambda_t\)</span> is an adapted process.</p>
+<p>Equivalently,</p>
+<p><span class="math display">\[
+dW_t^P = dW_t^{P'} - \lambda_t\,dt.
+\]</span></p>
+<p>In other words, changing the underlying probability measure changes the drift of the Wiener process while preserving its random fluctuations. Although <span class="math inline">\(W_t^P\)</span> and <span class="math inline">\(W_t^{P'}\)</span> describe the same underlying source of randomness, they are Wiener processes with respect to different probability measures.</p>
+</div>
+</div>
+<p>Girsanov’s Theorem allows us to change the drift of a stochastic process by changing the underlying probability measure. For derivative pricing problems involving Wiener processes, we can use Girsanov’s Theorem to select a probability measure <span class="math inline">\(Q\)</span> consistent with the martingale pricing result of the FTAP. Under <span class="math inline">\(Q\)</span>, all traded assets earn the risk-free rate in expectation, which greatly simplifies the derivative pricing problem. In the next section we will illustrate the application of this approach to price derivatives in the Black-Scholes model.</p>
+</section>
+<section id="sec-q_bs_derivation" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="sec-q_bs_derivation"><span class="header-section-number">4.4</span> Geometric Brownian motion under the risk neutral measure</h2>
+<p>In the Black-Scholes model the stock price follows a geometric Brownian motion (GBM) process under the physical measure <span class="math inline">\(P\)</span>:</p>
+<p><span class="math display">\[
+dS_t = \mu\,S_t\,dt + \sigma\,S_t\,dW_t^P.
+\]</span></p>
+<p>Girsanov’s Theorem allows us to change the drift of the Wiener process by changing the underlying probability measure. In particular, we can select a risk-neutral measure <span class="math inline">\(Q\)</span> such that</p>
+<p><span class="math display">\[
+dW_t^Q = dW_t^P + \frac{\mu-r}{\sigma}\,dt.
+\]</span></p>
+<p>The quantity <span class="math inline">\((\mu-r)/{\sigma}\)</span> is called the market price of risk. Substituting <span class="math inline">\(dW_t^Q\)</span> into the physical SDE gives</p>
+<p><span class="math display">\[
+dS_t = r\,S_t\,dt + \sigma\,S_t\,dW_t^Q,
+\]</span></p>
+<p>so under the <span class="math inline">\(Q\)</span> measure the stock price follows a GBM process with drift equal to the risk-free rate. This is exactly what we want.</p>
+<p>We can confirm that the discounted stock price is a local martingale under the <span class="math inline">\(Q\)</span> measure by applying Itô’s Lemma to the discounted stock price process. The discounted value of <span class="math inline">\(S_t\)</span> as of <span class="math inline">\(t=0\)</span> is</p>
+<p><span class="math display">\[
+\tilde S_t = e^{-rt}S_t.
+\]</span></p>
+<p>Observe that</p>
+<p><span class="math display">\[
+\pd{\tilde S_t}{t} = -r\,e^{-rt}\,S_t,
+\]</span></p>
+<p><span class="math display">\[
+\pd{\tilde S_t}{S} = e^{-rt},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\pdd{\tilde S_t}{S} = 0,
+\]</span></p>
+<p>so Itô’s Lemma implies</p>
+<p><span class="math display">\[
+\begin{align*}
+d \tilde S_t &amp;= -r\,e^{-rt)}\,_t\,dt + e^{-rt}\,dS_t + \frac12\,0\,(d S_t)^2 \\
+&amp;= -r\,e^{-rt}\,S_t\,dt + e^{-rt}\left(r\,S_t\,dt + \sigma\,S_t\,dW_t\right) \\
+&amp;= e^{-rt}\,\sigma\,S_t\,dW_t \\
+&amp;= \sigma\,\tilde S_t\,dW_t.
+\end{align*}
+\]</span></p>
+<p>Taking expectations under the <span class="math inline">\(Q\)</span> measure yields</p>
+<p><span class="math display">\[
+\E^Q\left[d \tilde S_t\right] = \E^Q\left[\sigma\,\tilde S_t\,dW_t\right] = 0.
+\]</span></p>
+<p>The discounted stock price has no expected growth under the <span class="math inline">\(Q\)</span> measure, hence it is a local martingale. In fact, it is a true martingale because the discounted stock price is bounded below by zero and has finite expectation. This result is consistent with the First Fundamental Theorem of Asset Pricing, which states that in a market free of arbitrage there exists an equivalent martingale measure under which discounted asset prices have no expected growth. The Second Fundamental Theorem implies that since we are describing a complete market, we need look no further. Having found a particular probability measure that satisfies the First Theorem, we have identified the unique measure needed to price all assets in this market.</p>
+<p>Now that we’ve established that the discounted stock price is a martingale under the <span class="math inline">\(Q\)</span> measure, we can use this result to price derivatives. Suppose we have a derivative with terminal payoff <span class="math inline">\(V_T = V(S_T)\)</span> at time <span class="math inline">\(T\)</span>. The value of the derivative at time <span class="math inline">\(t\)</span> is given by the discounted expected value of its future payoff under the risk-neutral measure:</p>
+<p><span class="math display">\[
+V_t = \E_t^Q\left[e^{-r(T-t)}V_T\right].
+\]</span></p>
+</section>
+<section id="sec-q_measure_bs" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="sec-q_measure_bs"><span class="header-section-number">4.5</span> Option pricing redux</h2>
+<p>Consider again a simple European put option that gives the owner the opportunity to sell the asset <span class="math inline">\(S\)</span> at a the strike price <span class="math inline">\(K\)</span> at date <span class="math inline">\(T\)</span>. As we have seen, we can use the Black-Scholes PDE derived from a hedging portfolio to price this option. In this example, we derive the same result using <span class="math inline">\(Q\)</span>-measure expectations.</p>
+<p>The terminal payoff of the put option is</p>
+<p><span class="math display">\[
+V_T^{\text{Put}} = \max\left(K-S_T, 0\right).
+\]</span></p>
+<p>In <a href="03-stochastic_calculus.html#sec-gbm" class="quarto-xref"><span>Section 3.4</span></a> we showed that when <span class="math inline">\(\{S_t\}\)</span> follows a GBM process under the physical measure , <span class="math inline">\(S_T\)</span> has a lognormal distribution. In <a href="#sec-q_bs_derivation" class="quarto-xref"><span>Section 4.4</span></a> we we that under the risk-neutral measure <span class="math inline">\(\{S_t\}\)</span> also follows a GBM process, albeit with a different drift parameter (<span class="math inline">\(\mu^Q=r\)</span>). Thus, we can conclude that under the <span class="math inline">\(Q\)</span> measure</p>
+<p><span class="math display">\[
+S_T \mid \mathcal{F}_t \sim \text{LogNormal}\left(\ln(S_t) + r\,(T-t) - \frac12\sigma^,(T-t),\; \sigma^,(T-t)\right).
+\]</span></p>
+<p>The FTAP implies that the value of the put option at time <span class="math inline">\(t\)</span> is the discounted expected value of its terminal payoff under the risk-neutral measure:</p>
+<p><span class="math display">\[
+V_t^\text{Put} = \E_t^Q\left[e^{-r(T-t)}V_T^{\text{Put}}\right] = e^{-r(T-t)}\E_t^Q\left[\max\left(K-S_T, 0\right)\right].
+\]</span></p>
+<p>The expected value of the terminal payoff can be expressed as</p>
+<p><span class="math display">\[
+\E_t^Q\left[\max\left(K-S_T,0\right)\right] = F_{S_T|S_t}^Q(K)\,K - \E_t^Q\left[S_T\,1_{S_T&gt;K} \right]
+\]</span></p>
+<p>Where <span class="math inline">\(F_{S_T\mid\mathcal{F}_t}^Q(\cdot)\)</span> is the lognormal CDF for <span class="math inline">\(S_T\)</span> given information available at time <span class="math inline">\(t\)</span>. By <a href="A1-normal_properties.html#thm-lognormal-tail" class="quarto-xref">Theorem&nbsp;<span>A.11</span></a></p>
+<p><span class="math display">\[
+F_{S_T\mit\mathcal{F}_t}^Q(K) = \Phi\left(\frac{\ln(K)-\ln(S_t) - r(T-t) + \frac12\sigma^2(T-t)}{\sigma\sqrt{T-t}}\right) = \Phi(-d_2),
+\]</span></p>
+<p>and by <a href="A1-normal_properties.html#thm-lognormal-truncated-first-moment" class="quarto-xref">Theorem&nbsp;<span>A.12</span></a></p>
+<p><span class="math display">\[
+\begin{align*}
+\E_t^Q\left[S_T\,1_{S_T&gt;K} \right] =&amp; e^{\ln(S_t) + r(T-t)}\;\times \\
+&amp; \Phi\left(-\frac{\ln(S_t) + r(T-t) - \frac12\sigma^2(T-t)-\ln(K)}{\sigma\sqrt{T-t}}\right) \\
+=&amp; S_t\,e^{r(T-t)}\,\Phi(-d_1)
+\end{align*}
+\]</span></p>
+<p>where <span class="math inline">\(d_1\)</span> and <span class="math inline">\(d_2\)</span> are defined as in our previous derivation of the put option value. Putting these results together we have</p>
+<p><span class="math display">\[
+V_t^\text{Put} = e^{-r(T-t)}\Phi(-d_2)\,K - S_t\,\Phi(-d_1)
+\]</span></p>
+<p>which is exactly the same result we derived using the Black-Scholes PDE. A similar sequence of steps can be used to derive the value of a European call option.</p>
+</section>
+<section id="taking-stock-and-looking-forward" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="taking-stock-and-looking-forward"><span class="header-section-number">4.6</span> Taking stock and looking forward</h2>
+<p>In this chapter we have seen that there are two basic algorithms for pricing derivatives under no arbitrage and complete markets. The hedging portfolio algorithm works as follows.</p>
+<ol type="1">
+<li><p>Construct a dynamic portfolio of tradable assets (including the as-yet unpriced derivative asset) that is risk free and therefore must pay a rate of return exactly equal to the risk-free rate. The no arbitrage condition implies a functional relationship between the value of the unpriced derivative, and the prices of other traded assets, and the risk-free rate at all points in time.</p></li>
+<li><p>Solve this dynamic equation to obtain an expression for the value of the derivative over time using boundary conditions determined by the derivative’s payoff function. In practice the dynamic pricing equation may or may not admit a closed-form solution. In the later case the solution may need to be approximated using numerical methods.</p></li>
+</ol>
+<p>Alternatively one can use the <span class="math inline">\(Q\)</span>-measure asset pricing algorithm.</p>
+<ol type="1">
+<li><p>Find a probability measure, <span class="math inline">\(Q\)</span>, that is equivalent to the physical probability measure and ensures that the expected returns on all traded assets are equal to the risk-free rate at all points in time. When working with Wiener processes one will usually invoke Girsanov’s Theorem in deriving the <span class="math inline">\(Q\)</span> measure.</p></li>
+<li><p>Compute the expected net present value of the derivative under the <span class="math inline">\(Q\)</span> measure to obtain an expression for the derivative price. As with the hedging portfolio approach, we may or may not have a closed form expression for this expectation. However, if a closed form expression is not available, it is often relatively straightforward to estimate the expectation using Monte Carlo simulation.</p></li>
+</ol>
+<p>The FTAP implies that both approaches will be the same under no arbitrage and complete markets. The <span class="math inline">\(Q\)</span>-measure pricing approach is particularly useful for valuing derivatives with path-dependent payoffs, such as Asian options, or derivatives that depend on multiple underlying assets. In these cases, numerically solving the hedging portfolio PDE may be extremely difficult while using numerical methods to estimate <span class="math inline">\(Q\)</span>-measure expectations remains tractable. For this reason the <span class="math inline">\(Q\)</span>-measure approach has become more popular for applied work. In the chapters that follow we will generally rely on <span class="math inline">\(Q\)</span>-measure expectations to to value assets, making use of the hedging portfolio approach on occasion to gain additional insights into the models we examine.</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-black1973pricing" class="csl-entry" role="listitem">
+Black, Fischer, and Myron Scholes. 1973. <span>“The Pricing of Options and Corporate Liabilities.”</span> <em>Journal of Political Economy</em> 81 (3): 637–54. <a href="https://doi.org/10.1086/260062">https://doi.org/10.1086/260062</a>.
+</div>
+<div id="ref-merton1973theory" class="csl-entry" role="listitem">
+Merton, Robert C. 1973. <span>“Theory of Rational Option Pricing.”</span> <em>Bell Journal of Economics and Management Science</em> 4 (1): 141–83. <a href="https://doi.org/10.2307/3003143">https://doi.org/10.2307/3003143</a>.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Technically, this condition is slightly weaker than the one implied by the First Fundamental Theorem of Asset Pricing. It implies that the stochastic process is a <strong>local martingale</strong> rather than a martingale. All martingales are local martingales, but not all local martingales are martingales. In practice, however, this distinction is not likely to be important for most of the stochastic processes encountered in applied work.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The version of Girsanov’s theorem presented here is specialized to one-dimensional Wiener processes. More general versions apply to multidimensional diffusion processes and are formulated in terms of Radon–Nikodym derivatives. These extensions are not required for the models considered in this book.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/03-stochastic_calculus.html" class="pagination-link" aria-label="Itô Calculus">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Itô Calculus</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/05-discounting_cash_flows.html" class="pagination-link" aria-label="Dicsounting Future Cash Flows">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

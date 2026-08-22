@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Itô Calculus – A Practical Introduction to Stochastic Processes and Financial Modeling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/04-risk_neutral_expectations.html" rel="next">
+<link href="../chapters/02-wiener_processes.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-27c261d06b905028a18691de25d09dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script>
+window.MathJax = {
+    tex: {
+        macros: {
+
+            // --------------------------------------------------------------------
+            // Number systems
+            // --------------------------------------------------------------------
+
+            R: "\\mathbb{R}",                 // Real numbers
+            C: "\\mathbb{C}",                 // Complex numbers
+            N: "\\mathbb{N}",                 // Natural numbers
+            Z: "\\mathbb{Z}",                 // Integers
+            Q: "\\mathbb{Q}",                 // Rational numbers
+
+            // --------------------------------------------------------------------
+            // Probability spaces and measures
+            // --------------------------------------------------------------------
+
+            Prob: "\\mathbb{P}",              // Physical probability measure
+            P: "\\mathbb{P}",                 // Short form for probability measure
+            E: "\\mathbb{E}",                 // Expectation operator
+            F: "\\mathcal{F}",                // Filtration
+            G: "\\mathcal{G}",                // Alternate filtration
+            B: "\\mathcal{B}",                // Borel sigma-algebra
+
+            // --------------------------------------------------------------------
+            // Common probability operators
+            // --------------------------------------------------------------------
+
+            Var: "\\operatorname{Var}",
+            Cov: "\\operatorname{Cov}",
+            Corr: "\\operatorname{Corr}",
+            Covar: "\\operatorname{Cov}",
+            SD: "\\operatorname{SD}",
+            Bias: "\\operatorname{Bias}",
+            MSE: "\\operatorname{MSE}",
+
+            // --------------------------------------------------------------------
+            // Convergence notions
+            // --------------------------------------------------------------------
+
+            eqas: "\\overset{a.s.}{=}",
+            eqms: "\\overset{m.s.}{=}",
+            toas: "\\overset{a.s.}{\\rightarrow}",
+            toms: "\\overset{m.s.}{\\rightarrow}",
+
+            // --------------------------------------------------------------------
+            // Frequently used sets
+            // --------------------------------------------------------------------
+
+            Ft: "\\mathcal{F}_t",
+            Fs: "\\mathcal{F}_s",
+
+            // --------------------------------------------------------------------
+            // Differential notation
+            // --------------------------------------------------------------------
+
+            dd: "\\,\\mathrm{d}",
+            dt: "\\,\\mathrm{d}t",
+            ds: "\\,\\mathrm{d}s",
+            dW: "\\,\\mathrm{d}W",
+            dWt: "\\,\\mathrm{d}W_t",
+            dN: "\\,\\mathrm{d}N",
+            dNt: "\\,\\mathrm{d}N_t",
+
+            // --------------------------------------------------------------------
+            // Common stochastic process notation
+            // --------------------------------------------------------------------
+
+            W: "W_t",                         // Brownian motion
+            Nt: "N_t",                        // Poisson process
+            Xt: "X_t",
+            Yt: "Y_t",
+            St: "S_t",
+            rt: "r_t",
+
+            // --------------------------------------------------------------------
+            // Finance
+            // --------------------------------------------------------------------
+
+            rn: "\\mathbb{Q}",                // Risk-neutral measure
+            drift: "\\mu",
+            vol: "\\sigma",
+            lam: "\\lambda",
+
+            // --------------------------------------------------------------------
+            // Delimiters
+            // --------------------------------------------------------------------
+
+            abs: ["\\left|#1\\right|", 1],
+            norm: ["\\left\\|#1\\right\\|", 1],
+            set: ["\\left\\{#1\\right\\}", 1],
+            paren: ["\\left(#1\\right)", 1],
+            bracket: ["\\left[#1\\right]", 1],
+
+            // --------------------------------------------------------------------
+            // Probability expressions
+            // --------------------------------------------------------------------
+
+            Eof: ["\\mathbb{E}\\left[#1\\right]", 1],
+            CE: ["\\mathbb{E}\\left[#1\\mid#2\\right]", 2],
+            Varof: ["\\operatorname{Var}\\left(#1\\right)", 1],
+            Covof: ["\\operatorname{Cov}\\left(#1,#2\\right)", 2],
+            Probof: ["\\mathbb{P}\\left(#1\\right)", 1],
+
+            // --------------------------------------------------------------------
+            // Calculus
+            // --------------------------------------------------------------------
+
+            pd: ["\\frac{\\partial #1}{\\partial #2}", 2],
+            pdd: ["\\frac{\\partial^2 #1}{(\\partial #2)^2}", 2],
+            diff: ["\\frac{\\mathrm{d}#1}{\\mathrm{d}#2}", 2],
+            diffii: ["\\frac{\\mathrm{d}^2#1}{\\mathrm{d}#2^2}", 2],
+
+            // --------------------------------------------------------------------
+            // Linear algebra
+            // --------------------------------------------------------------------
+
+            transpose: ["#1^{\\mathsf{T}}", 1],
+            inv: ["#1^{-1}", 1],
+
+            // --------------------------------------------------------------------
+            // Optimization operators
+            // --------------------------------------------------------------------
+
+            argmax: "\\operatorname*{arg\\,max}",
+            argmin: "\\operatorname*{arg\\,min}",
+
+            // --------------------------------------------------------------------
+            // Miscellaneous
+            // --------------------------------------------------------------------
+
+            indicator: ["\\mathbf{1}_{\\left\\{#1\\right\\}}", 1],
+            inner: ["\\left\\langle #1,#2\\right\\rangle", 2],
+
+        }
+    }
+};
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/03-stochastic_calculus.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Itô Calculus</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">A Practical Introduction to Stochastic Processes and Financial Modeling</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/01-stochastic_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Probability Spaces and Stochastic Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/02-wiener_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Wiener Processes</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/03-stochastic_calculus.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Itô Calculus</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/04-risk_neutral_expectations.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">No Arbitrage Pricing and the Risk-Neutral Measure</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/06-interest_rate_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Mean-Reverting Processes and Interest Rate Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/07-multi_variable_models.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/08-jump_processes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Jump-Diffusion Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/09-stochastic_volatility.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Stochastic Volatility Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/10-numerical_methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Numerical Methods</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/A1-normal_properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Properties of Normally Distributed Random Variables</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-differentials" id="toc-sec-differentials" class="nav-link active" data-scroll-target="#sec-differentials"><span class="header-section-number">3.1</span> The algebra of Wiener differentials</a></li>
+  <li><a href="#itos-lemma" id="toc-itos-lemma" class="nav-link" data-scroll-target="#itos-lemma"><span class="header-section-number">3.2</span> Ito’s Lemma</a></li>
+  <li><a href="#the-itô-integral" id="toc-the-itô-integral" class="nav-link" data-scroll-target="#the-itô-integral"><span class="header-section-number">3.3</span> The Itô Integral</a></li>
+  <li><a href="#sec-gbm" id="toc-sec-gbm" class="nav-link" data-scroll-target="#sec-gbm"><span class="header-section-number">3.4</span> Example: Geometric Brownian motion</a></li>
+  <li><a href="#taking-stock-and-looking-forward" id="toc-taking-stock-and-looking-forward" class="nav-link" data-scroll-target="#taking-stock-and-looking-forward"><span class="header-section-number">3.5</span> Taking stock and looking forward</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-stochastic_calculus" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Itô Calculus</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>In the previous chapter we introduced the Wiener process, which serves as the backbone for most applied work in continuous-time finance. We have seen that Wiener processes are too jagged to be differentiable so we cannot bring the usual calculus toolkit to bare on them directly. In this chapter we develop a new type of calculus, called Itô calculus, that provides the tools we need to work with Wiener processes. To illustrate the use of these tools, we conclude this chapter by deriving properties for geometric Brownian motion (GBM), a stochastic process that is particularly well suited to modeling asset prices.</p>
+<section id="sec-differentials" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="sec-differentials"><span class="header-section-number">3.1</span> The algebra of Wiener differentials</h2>
+<p>Derivatives of the traditional sort are not well defined in Itô calculus. Insteade we make extensive use of differential notation, writing expressions such as <span class="math inline">\(dt\)</span>, <span class="math inline">\(dW_t\)</span>, and <span class="math inline">\(dX_t\)</span>. If your previous exposure to calculus emphasized derivatives as limits of difference quotients, this notation may initially feel unfamiliar. Differential notation provides a compact and intuitive way to describe the behavior of a process over an infinitesimally small time interval, and is particularly useful when manipulating differential equations. It is best to think of <span class="math inline">\(dt\)</span> as representing an infinitesimal increment of time and <span class="math inline">\(dW_t\)</span> as the corresponding infinitesimal increment of a Wiener process. Rather than viewing these as ordinary numbers, we will use them as symbolic objects that encode how different quantities scale over small time intervals. The Big-O notation introduced in the previous chapter will guide these manipulations.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Many calculus results are derived or motivated by taking first-order linear approximations of differentiable functions and showing that higher-order terms are negligible for small values of <span class="math inline">\(dt\)</span>. In manipulating differential equations, we typically simply ignore terms that scale at a rate slower than <span class="math inline">\(O(dt)\)</span>. For example, consider the ordinary differential equation</p>
+<p><span class="math display">\[
+dy_t = a + b\,dt.
+\]</span></p>
+<p>Suppose we need to work with <span class="math inline">\((dy_t)^2\)</span>. We could write</p>
+<p><span class="math display">\[
+\begin{align*}
+(dy_t)^2 &amp;= (a + b\,dt)^2 \\
+&amp;= a^2 + 2\,a\,b\,dt + b^2\,dt^2 \\
+&amp;= a^2 + 2\,a\,b\,dt.
+\end{align*}
+\]</span></p>
+<p>Recognizing that <span class="math inline">\(O(dt^2) &lt; O(dt)\)</span>, we set <span class="math inline">\(dt^2 = 0\)</span> and it drops out of the final expression.</p>
+<p>In the previous chapter we learned that for a differentiable function <span class="math inline">\(f(t)\)</span>, <span class="math inline">\(df(t)\)</span> is of order <span class="math inline">\(O(dt)\)</span> while for a Wiener process <span class="math inline">\(dW_t\)</span> is of order <span class="math inline">\(O(\sqrt{t})\)</span>. The steeper scaling of Wiener processes over short time intervals is the fundamental challenge that Itô calculus was designed to overcome.</p>
+<p>The scaling rule for <span class="math inline">\(dW_t\)</span> implies that <span class="math inline">\(dW_t^2\)</span> is of order <span class="math inline">\(O(dt)\)</span>. This is important because it means that if we could somehow differentiate a Wiener process, the scaling of its <em>second</em> derivative would be of the same order of magnitude as the scaling of the <em>first</em> derivative of an ordinary function. In contrast, the scaling rule for a differentiable function implies that <span class="math inline">\((df(x))^2\)</span> is of order <span class="math inline">\(O(dt^2)\)</span>, so its second derivative scales at a much smaller rate than its first derivative. Thus, while we might safely ignore second-order differentials of differentiable functions, this approach won’t work when Wiener processes are involve; they fluctuate so much that one must also account for the effects of second-order terms.</p>
+<p>Revisiting our earlier example, suppose we are now faced with the differential equation</p>
+<p><span class="math display">\[
+dy_t = a + b\,dt + c\,dW_t
+\]</span></p>
+<p>and we need to work with <span class="math inline">\((dy_t)^2\)</span>. We have</p>
+<p><span class="math display">\[
+\begin{align*}
+(dy_t)^2 =&amp; (a + b\,dt + c\,dW_t)^2 \\
+=&amp; a^2 + 2 a\,b\,dt + 2\,a\,c\,dW_t + 2\,b\,c\,dt\,dW_t \\
+&amp; + b^2 dt^2 + c^2\,dW_t^2 \\
+=&amp; a^2 + 2\,a\,b\,dt + 2\,a\,c\,dW_t + 2\,b\,c\,dt\,dW_t + c^2\,dW_t^2.
+\end{align*}
+\]</span></p>
+<p>The term involving <span class="math inline">\(dt^2\)</span> still drops out, but how should we handle the terms involving <span class="math inline">\(dW_t\)</span>, <span class="math inline">\(dt\,dW_t\)</span>, and <span class="math inline">\(dW_t^2\)</span>? Can we use rules like <span class="math inline">\(dt^2 = 0\)</span> for these terms?</p>
+<p>Notice that <span class="math inline">\(dt\,dW_t\)</span> is of order <span class="math inline">\(O(dt^{3/2})\)</span> so, applying the logic that we can ignore terms whose order is less than <span class="math inline">\(dt\)</span>, we can drop this term. What about <span class="math inline">\(dW_t^2\)</span>? We have establised that it is of order <span class="math inline">\(O(dt)\)</span>, so we know we can’t drop it. But can we say more?</p>
+<p>We learned in the last chapter that a Wiener increment <span class="math inline">\(\Delta W_t\)</span> is normally distributed with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(\Delta t\)</span>. <a href="A1-normal_properties.html#thm-noncentral-moments" class="quarto-xref">Theorem&nbsp;<span>A.3</span></a> implies that <span class="math inline">\((\Delta W_t)^2\)</span> has mean <span class="math inline">\(\Delta t\)</span> and variance <span class="math inline">\(2\,(\Delta t)^2\)</span>. Consider what happens <span class="math inline">\((\Delta W_t)^2\)</span> as <span class="math inline">\(\Delta t\)</span> shrinks. Both the mean and the variance drop toward zero, but the variance falls at a much faster rate than the mean.</p>
+<p><span class="math display">\[
+\begin{align*}
+\lim_{\Delta t \to 0}\E\left[\left((\Delta W_t)^2-\Delta t \right)^2\right] =&amp; \lim_{\Delta t \to 0}\Var[(W_t)^2] \\
+=&amp; \lim_{\Delta t \to 0} 2\,(\Delta t)^2 \\
+=&amp; 0
+\end{align*}
+\]</span> so <span class="math inline">\((\Delta W_t)^2 \toms \Delta t\)</span> as <span class="math inline">\(\Delta t \rightarrow 0\)</span>. For very small values of <span class="math inline">\(\Delta t\)</span>, realizations of <span class="math inline">\((\Delta W_t)^2\)</span> are so tightly clustered around the mean <span class="math inline">\(\Delta t\)</span> that, to a first approximation, we can treat <span class="math inline">\((\Delta W_t)^2\)</span> as non-stochastic. We can apply the substitution rule</p>
+<p><span class="math display">\[
+(dW_t)^2 = dt.
+\]</span></p>
+<p>Combining this result with our findings from earlier in this section, <a href="#tbl-ito_rules" class="quarto-xref">Table&nbsp;<span>3.1</span></a> summarizes rules for working with differentials in Itô calculus. The first two rows simply record the scaling behavior of the infinitesimal increments. The remaining rows show how products of differentials behave. Terms whose order is smaller than <span class="math inline">\(O(dt)\)</span> vanish in the limit and are therefore discarded. The only exception is <span class="math inline">\(dW_t^2\)</span>, whose order is exactly <span class="math inline">\(O(dt)\)</span>. Because Wiener processes have quadratic variation equal to elapsed time, this term survives and is replaced by <span class="math inline">\(dt\)</span>. These simple multiplication rules form the algebraic foundation of Itô calculus.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<div id="tbl-ito_rules" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-ito_rules-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3.1: Rules for working with Itô differentials.
+</figcaption>
+<div aria-describedby="tbl-ito_rules-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Differential Expression</th>
+<th style="text-align: left;">Order</th>
+<th style="text-align: left;">Itô Multiplication Rule</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\(dt\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(O(dt)\)</span></td>
+<td style="text-align: left;">Retain</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(dW_t\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(O(\sqrt{dt})\)</span></td>
+<td style="text-align: left;">Retain</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\((dt)^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(O(dt^2)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\((dt)^2 = 0\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><span class="math inline">\(dt\,dW_t\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(O(dt^{3/2})\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(dt\,dW_t = 0\)</span></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><span class="math inline">\((dW_t)^2\)</span></td>
+<td style="text-align: left;"><span class="math inline">\(O(dt)\)</span></td>
+<td style="text-align: left;"><span class="math inline">\((dW_t)^2 = dt\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+</figure>
+</div>
+<p>Applyng all of these rules to our earlier example, we have</p>
+<p><span class="math display">\[
+\begin{align*}
+(dy)^2
+=&amp; (a + b\,dt + c\,dW_t)^2 \\
+=&amp; a^2 + 2\,a\,b\,dt + 2\,a\,c\,dW_t + c^2\,dt \\
+=&amp; a^2 + (2\,a\,b\,dt + c^2)\,dt + 2\,a\,c\,dW_t.
+\end{align*}
+\]</span></p>
+<p>Looking at the final expression, one sees that it is very similar to an ordinary differential equation. Indeed, were it not for the <span class="math inline">\(dW_t\)</span> term we could solve it by simply integrating both sides with respect to time. We will learn how to deal with <span class="math inline">\(dW_t\)</span> later in this chapter, but right now we’re ready to introduce one of the most fundamental and useful results from Itô calculus.</p>
+</section>
+<section id="itos-lemma" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="itos-lemma"><span class="header-section-number">3.2</span> Ito’s Lemma</h2>
+<p>The Chain Rule appears everywhere in standard calculus. Stated in terms of the differential notation used in working with differential equations, it says that given the function described by</p>
+<p><span class="math display">\[
+dX_t = \mu_t\,dt
+\]</span></p>
+<p>and a smooth function <span class="math inline">\(y = f(x)\)</span>,</p>
+<p><span class="math display">\[
+dy_t = f'(X_t)\,\mu_t\,dt.
+\]</span></p>
+<p>We can informally demonstrate the Chain Rule by taking a Taylor series expansion of <span class="math inline">\(f(X_t)\)</span>,</p>
+<p><span class="math display">\[
+\begin{align*}
+f(X_t) =&amp; f'(X_t)\,dX_t + \frac{1}{2}f''(X_t)(dX_t)^2 + \ldots \\
+=&amp; f'(X_t)\,\mu_t\,dt + \frac{1}{2}f''(X_t)\mu_t^2\,dt^2 \ldots ,
+\end{align*}
+\]</span></p>
+<p>and recognizing that all terms beyond the first one can be dropped because they are of order smaller than <span class="math inline">\(O(dt)\)</span>.</p>
+<p>But what if <span class="math inline">\(X_t\)</span> involves a Wiener process? We have seen that Wiener process differentials do not scale in the same way as differentials of smooth functions, so one suspects that there might be complications.</p>
+<p>Suppose</p>
+<p><span class="math display">\[
+dX_t = \mu_t\,dt + \sigma_t\,dW_t.
+\]</span></p>
+<p>We know that the Taylor expansion of <span class="math inline">\(f(X_t)\)</span> will give us a series of terms involving <span class="math inline">\(dX_t\)</span>, <span class="math inline">\((dX_t)^2\)</span>, <span class="math inline">\((dX_t)^3\)</span>, etc. Applying the rules of <a href="#tbl-ito_rules" class="quarto-xref">Table&nbsp;<span>3.1</span></a>, we can see that</p>
+<p><span class="math display">\[
+dX_t = \mu_t,dt + \sigma_t\,dW_t
+\]</span></p>
+<p>is of order <span class="math inline">\(O(\sqrt{dt})\)</span>. While</p>
+<p><span class="math display">\[
+\begin{align*}
+(dX_t)^2 =&amp; (\mu_t dt + \sigma_t dW_t)^2 \\
+=&amp; \mu_t^2\,dt^2 + 2\mu_t\,\sigma_t\,dt\,dW_t + \sigma_t^2\,W_t^2 \\
+=&amp; \sigma_t^2\,dt
+\end{align*}
+\]</span></p>
+<p>is of order <span class="math inline">\(O(dt)\)</span>. And</p>
+<p><span class="math display">\[
+\begin{align*}
+(dX_t)^3 =&amp; (\mu_t\,dt + \sigma_t\,dW_t)^3 \\
+=&amp; \mu_t^3dt^3 + 3\mu_t^2\,\sigma_t\,dt^2\,dW_t + 3\mu_t\,\sigma_t^2\,dt\,dW_t^2 + \sigma_t^3\,W_t^3 \\
+=&amp; 0.
+\end{align*}
+\]</span></p>
+<p>Is of order less than <span class="math inline">\(O(dt)\)</span>. It should be clear that for all <span class="math inline">\(n&gt;3\)</span>, <span class="math inline">\((dX_t)^n\)</span> is also of order less than <span class="math inline">\(O(dt)\)</span>.</p>
+<p>With these results in hand, we can use a Taylor series expansion to derive an expression for <span class="math inline">\(df(X_t)\)</span>.</p>
+<p><span class="math display">\[
+\begin{align*}
+df(X_t) =&amp; f'(X_t)\,dX_t + \frac{1}{2}f''(X_t)(dX_t)^2 + \ldots \\
+=&amp; f'(X_t)\,(\mu_t,dt + \sigma_t\,dW_t) + \frac{1}{2}f''(X_t)\,(\sigma_t^2\,dt) \\
+=&amp; \left(f'(X_t)\,\mu_t,dt + \frac{1}{2}f''(X_t)\,(\sigma_t^2\right)dt + f'(X_t)\,\sigma_t\,dW_t.
+\end{align*}
+\]</span></p>
+<p>This is a slightly simplified version of Ito’s Lemma, the Itô calculus analogue of the Chain Rule. It is straightforward to generalize this result to allow <span class="math inline">\(f\)</span> to depend directly on <span class="math inline">\(t\)</span> as well as <span class="math inline">\(X_t\)</span>. This more general form of Ito’s Lemma can be stated as follows.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Ito's Lemma">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ito’s Lemma
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose the stochastic process <span class="math inline">\(\{X_t\}\)</span> satisfies the stochastic differential equation</p>
+<p><span class="math display">\[
+dX_t = \mu_t\,dt + \sigma_t\,dW_t,
+\]</span></p>
+<p>and let</p>
+<p><span class="math display">\[
+f(t,x)
+\]</span></p>
+<p>be a function that is continuously differentiable in <span class="math inline">\(t\)</span> and twice continuously differentiable in <span class="math inline">\(x\)</span>.</p>
+<p>Then the process</p>
+<p><span class="math display">\[
+Y_t = f(t,X_t)
+\]</span></p>
+<p>satisfies</p>
+<p><span class="math display">\[
+df(t,X_t)
+=
+\frac{\partial f}{\partial t}\,dt
++
+\frac{\partial f}{\partial x}\,dX_t
++
+\frac{1}{2}
+\frac{\partial^2 f}{(\partial x)^2}
+(dX_t)^2,
+\]</span></p>
+<p>or equivalently,</p>
+<p><span class="math display">\[
+df(t,X_t)
+=
+\left(
+\frac{\partial f}{\partial t}
++
+\mu_t
+\frac{\partial f}{\partial x}
++
+\frac{1}{2}
+\sigma_t^2
+\frac{\partial^2 f}{(\partial x)^2}
+\right)
+dt
++
+\sigma_t
+\frac{\partial f}{\partial x}
+\,dW_t.
+\]</span></p>
+</div>
+</div>
+<p>Ito’s Lemma is used as often in stochastic calculus as is the Chain Rule in traditional calculus. It is worth taking a moment to consider why the two rules differ. Ito’s Lemma contains an extra second derivative term, reflecting that in order to construct a linear approximation of <span class="math inline">\(f(t,X_t)\)</span> we must account for the fact that the Wiener process in <span class="math inline">\(X_t\)</span> fluctuates more dramatically over time than a differentiable function.</p>
+<p>The stochastic differential equation</p>
+<p><span class="math display">\[
+dX_t = \mu_t\,dt + \sigma_t\,dW_t,
+\]</span></p>
+<p>defines a broad class of stochastic processes referred to collectively as <strong>Itô processes</strong>. <span class="math inline">\(\mu_t\)</span> is called the drift of the process, and describes its expected instantaneous rate of change. <span class="math inline">\(\sigma_t\)</span> is the volatility of the process, which determines the magnitude of its random fluctuations.</p>
+<p>The Wiener process is one example of an Itô process, of course, but there are many others. The coefficients <span class="math inline">\(\mu_t\)</span> and <span class="math inline">\(\sigma_t\)</span> are quite flexible and could include constants such as <span class="math inline">\(\mu\)</span>, deterministic functions of time such as <span class="math inline">\(\mu(t)\)</span>, stochastic processes that depend on both time and state such as <span class="math inline">\(\mu(t,X_t)\)</span>, or even more general stochastic processes. As a result most of the stochastic processes used in continuous-time finance are members of this class.</p>
+</section>
+<section id="the-itô-integral" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="the-itô-integral"><span class="header-section-number">3.3</span> The Itô Integral</h2>
+<p>In the calculus of deterministic functions we use Riemann integrals of the form</p>
+<p><span class="math display">\[
+\int_0^T f(t)dt = \lim_{n\to\infty} \sum_{i=0}^{n-1} f(t_i)\,\Delta t_i
+\]</span></p>
+<p>to compute the area under a curve by aggregating the areas of small vertical slices over <span class="math inline">\(t\)</span>. Thanks to the Fundamental Theorem of Calculus, the Riemann integral is an indispensable tool for solving differential equations, as it often allows us to infer the trajectory of a path over time from its slope. A generalization of the Riemann integral, the Riemann-Stieltjes integral, of the form</p>
+<p><span class="math display">\[
+\int_0^T f(t)dg(t) = \lim_{n\to\infty} \sum_{i=0}^{n-1} f(t_i)\,\Delta g(t_i),
+\]</span></p>
+<p>weights values of <span class="math inline">\(f(t)\)</span> by increments of an integrator function <span class="math inline">\(g(t)\)</span>. Somewhat less common than the Riemann integrals, Riemann-Stieltjes integrals are widely used in probability and statistics to compute expectations of continuous random variables.</p>
+<p>When working with stochastic processes, we use the Itô Integral.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Itô Integral">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Itô Integral
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(X_t\)</span> be an adapted Itô process and divide the interval <span class="math inline">\([0,T]\)</span> into <span class="math inline">\(n\)</span> subintervals</p>
+<p><span class="math display">\[
+0=t_0&lt;t_1&lt;\cdots&lt;t_n=T
+\]</span></p>
+<p>so that <span class="math inline">\(\Delta W_{t_i} = W_{t_{i+i}}-W_{t_i}\)</span> is the Wiener increment corresponding to subinterval <span class="math inline">\([t_i,t_{i+1}]\)</span>.</p>
+<p>The <strong>Itô integral</strong> is defined as the limit</p>
+<p><span class="math display">\[
+\lim_{n\to\infty} I_n \eqms I = \int_0^T X_t\,dW_t
+\]</span></p>
+<p>where</p>
+<p><span class="math display">\[
+I_n = \sum_{i=0}^{n-1} X_{t_i} \Delta W_{t_i},
+\]</span></p>
+<p>provided that this limit exists.</p>
+</div>
+</div>
+<p>In one hand, the Itô integral looks quite similar to the Riemann and Riemann-Stieltjes integrals we are already familiar with. On the other hand, what the heck! What does it mean to take the integral of a stochastic process with respect to another stochastic process?</p>
+<p>We can ease the transition from deterministic to stochastic integrals and build some intuition by considering a few special cases. Recalling that a deterministic function is simply a relatively uninteresting example of a stochastic process, suppose that <span class="math inline">\(X_t = 1\)</span>. In this case</p>
+<p><span class="math display">\[
+I_n = \left(W_{t_1} - W_{t_0}\right) + \left(W_{t_2} - W_{t_1}\right) + \ldots + \left(W_{T} - W_{t_{n-1}}\right) = W_T
+\]</span></p>
+<p>so</p>
+<p><span class="math display">\[
+\int_0^T dW_t = W_T \sim N(0,T).
+\]</span></p>
+<p>Just as with the Riemann-Stieltjes integral, applying the Itô integral to the constant one simply returns the difference in the integrator evaluated at the limits of integration. But, in this case, the integrator is a Wiener process so the Itô integral evaluates to a random variable.</p>
+<p>In fact, Itô integrals of most of the deterministic functions we are likely to encounter evaluate to normal random variables. To see this, notice that when the integrand is a deterministic function <span class="math inline">\(f(t)\)</span>,</p>
+<p><span class="math display">\[
+I_n = \sum_{i=0}^{n-1}f(t_i)\,\Delta W_{t_i}
+\]</span></p>
+<p>which is just a weighted sum of Wiener increments. The <span class="math inline">\(i\)</span>th term in the series is</p>
+<p><span class="math display">\[
+f(t_i)\,\Delta W_{t_i} \sim N\left(0,f(t_i)^2\,(t_{i+1}-t_i)\right),
+\]</span></p>
+<p>so we are just summing over normal random variables. A sum of normal variables is itself normal, and, since each term has mean zero, we know that the Itô integral must be normally distributed with mean zero. Furthermore, since all non-overlapping Wiener intervals must be independent of one another,</p>
+<p><span class="math display">\[
+\begin{align*}
+\Var\left[I_n\right] =&amp; \Var\left[ \sum_{i=0}^{n-1}f(t_i)\,\Delta W_{t_i}\right] \\
+=&amp;  \sum_{i=0}^{n-1}\Var\left[f(t_i)\,\Delta W_{t_i}\right] \\
+=&amp;  \sum_{i=0}^{n-1}f(t_i)^2\,(t_{i+1}-t_i),
+\end{align*}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\Var[I] = \Var\left[\lim_{n\to\infty} I_n\right] = \lim_{n\to\infty} \Var[I_n] = \int_0^T f(t)^2dt.
+\]</span></p>
+<p>Putting it all together, if <span class="math inline">\(f(t)\)</span> is a deterministic function then</p>
+<p><span class="math display">\[
+\int_0^T f(t)\,dW_t \sim N\left(0,\int_0^T f(t)^2\,dt\right)
+\]</span></p>
+<p>provided the variance integral exists.</p>
+<p>There are two important differences between Itô integrals and the Riemann and Riemann-Stieltjes integrals of traditional calculus. First, as discussed in <a href="02-wiener_processes.html#sec-convergence_concepts" class="quarto-xref"><span>Section 2.3</span></a>, a traditional pathwise approach to integration does not work because the Wiener process is too erratic. For this reason, the Itô integral relies on mean squared rather than almost sure convergence. Second, in moving from deterministic to stochastic integrals, we must address the subtle issue of timing.</p>
+<p>When <span class="math inline">\(X_t\)</span> is an Itô process each term of <span class="math inline">\(I_n\)</span> is the product of two random variables, so we cannot interpret the Itô integral as the weighted sum of Wiener increments. To make the integral tractable, we must be able to treat <span class="math inline">\(X_{t_i}\)</span> as though it were deterministic at the time it interacts with <span class="math inline">\(\Delta W_{t_i}\)</span>. To ensure that this is the case, we impose the condition that <span class="math inline">\(X_{t_i}\)</span> be adapted to the Wiener filtration, meaning that it depends only on information up to time <span class="math inline">\(t_i\)</span>. More succinctly, <span class="math inline">\(X_{t_i}\)</span> must be known as of time <span class="math inline">\(t_i\)</span>. If this is true then <span class="math inline">\(\Delta W_{t_i}\)</span> is independent of <span class="math inline">\(X_{t_i}\)</span> and we can apply much of the same reasoning we have already developed for deterministic integrands. This is why, in contrast to the Riemann and Riemann-Stieltjes integrals, it is critical that the integrand <span class="math inline">\(X_{t}\)</span> be evaluated at the left end of each of the <span class="math inline">\([t_i, t_{i+1}]\)</span> time subintervals.</p>
+<p>When the integrand is an adapted stochastic process the Itô integral still evaluates to a random variable, but not necessarily a normally distributed one. The reason is that each coefficient, <span class="math inline">\(X_{t_i}\)</span>, in <span class="math inline">\(I_n\)</span> is random. Conditional on a realized path <span class="math inline">\(X_t(\omega)\)</span> the integral is normal, but once we average over all possible paths the resulting random variable has a normal mixture distribution. Nonetheless, we can compute the mean and variance of <span class="math inline">\(I\)</span>.</p>
+<p>If <span class="math inline">\(X_i\)</span> is adapted then its conditional expectations at time <span class="math inline">\(t\)</span> is</p>
+<p><span class="math display">\[
+\E_t\left[X_t\right] = X_t.
+\]</span></p>
+<p>Applying the Law of Iterated Expectations yields</p>
+<p><span class="math display">\[
+\begin{align*}
+\E\left[I_n\right] =&amp; \E\left[ \sum_{i=0}^{n-1}X_{t_i}\,\Delta W_{t_i}\right] \\
+=&amp; \E\left[ \sum_{i=0}^{n-1}\E_t\left[X_{t_i}\,\Delta W_{t_i}\right]\right] \\
+=&amp; \E\left[ \sum_{i=0}^{n-1}X_{t_i}\,\E_t\left[\Delta W_{t_i}\right]\right] \\
+=&amp; 0
+\end{align*}
+\]</span></p>
+<p>so <span class="math inline">\(\E\left[I\right] = 0\)</span>. Following similar logic</p>
+<p><span class="math display">\[
+\begin{align*}
+\E\left[I_n^2\right] =&amp; \E\left[ \left(\sum_{i=0}^{n-1}X_{t_i}\,\Delta W_{t_i}\right)^2\right] \\
+=&amp; \E\left[\sum_{i=0}^{n-1}\sum_{j=0}^{n-1} X_{t_i}\,X_{t_j}\,\Delta W_{t_i}\,\Delta W_{t_j} \right] \\
+  =&amp; \E\left[\sum_{i=0}^{n-1}\sum_{j=0}^{n-1} \E_t\left[X_{t_i}\,X_{t_j}\,\Delta W_{t_i}\,\Delta W_{t_j} \right] \right] \\
+  =&amp; \E\left[\sum_{i=0}^{n-1}\sum_{j=0}^{n-1} X_{t_i}\,X_{t_j}\E_t\left[\Delta W_{t_i}\,\Delta W_{t_j} \right] \right] \\
+  =&amp; \E\left[\sum_{i=0}^{n-1} X_{t_i}^2\,\left(t_{i+1}-t_i\right) \right],
+\end{align*}
+\]</span></p>
+<p>and therefore</p>
+<p><span class="math display">\[
+\begin{align*}
+\Var[I] =&amp; \E\left[\left(\lim_{n\to\infty} I_n\right)^2\right] \\
+=&amp; \lim_{n\to\infty} \E\left[I_n^2\right] \\
+=&amp; \lim_{n\to\infty} \E\left[\sum_{i=0}^{n-1} X_{t_i}^2\,\left(t_{i+1}-t_i\right) \right] \\
+=&amp; \E\left[\lim_{n\to\infty} \sum_{i=0}^{n-1} X_{t_i}^2\,\left(t_{i+1}-t_i\right) \right] \\
+=&amp; \E\left[\int_0^T X_{t}^2\,dt \right].
+\end{align*}
+\]</span></p>
+<p>This beautiful result is called the <strong>Itô Isometry</strong>.</p>
+<p>In this section we have derived some powerful tools for working with Itô Integrals. To summarize, when the integrand is a deterministic function <span class="math inline">\(I\)</span> evaluates to a normal random variable with mean zero and a variance we can calculate by integrating over the square of the integrand. When the integrand is a more general adapted Itô process, we may not be able to easily determine the distribution of <span class="math inline">\(I\)</span>, but we are assured that it has zero mean and a variance we can express using the Itô Isometry.</p>
+</section>
+<section id="sec-gbm" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="sec-gbm"><span class="header-section-number">3.4</span> Example: Geometric Brownian motion</h2>
+<p><a href="#fig-nasdaq" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> shows the NASDAQ composite stock index since 1990. This data could not be modeled effectively by a process with a constant linear drift term because equity prices exhibit <em>exponential growth</em>. That is, they typically rise or fall by an amount proportional to their current level. Ignoring uncertainty for the moment, we can model the NASDAQ’s dynamics as a constant <em>growth rate</em></p>
+<p><span class="math display">\[
+\frac{dS_t}{S_t} = \mu.
+\]</span></p>
+<p>This simplest of differential equations is easily solved by recognizing that <span class="math inline">\(d\ln(S)/ds = 1/S\)</span> so we can rewrite the differential equation in terms of <span class="math inline">\(d\ln(S)\)</span> and integrate both sides:</p>
+<p><span class="math display">\[
+\begin{align*}
+\frac{dS_t}{S_t} =&amp; \mu \\
+d \ln(S_t) =&amp; \mu \\
+\int_0^T \ln(S_s)ds =&amp; \int_0^T \mu ds \\
+\ln(S_T) - \ln(S_0) =&amp; \mu\,T + C.
+\end{align*}
+\]</span></p>
+<p>Given an initial value <span class="math inline">\(S_0\)</span> , <span class="math inline">\(C=0\)</span>. Rearranging terms yields the exponential growth curve</p>
+<p><span class="math display">\[
+S_T = S_0 e^{\mu T}
+\]</span></p>
+<p>shown in <a href="#fig-nasdaq" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> by the dashed red line.^[For the fitted curve, <span class="math inline">\(S_0\)</span> is the average level of the NASDAQ index in 1990 and <span class="math inline">\(\mu\)</span> is the average annual growth rate from 1990 to 2026.] This deterministic function can describe the long-run trend in the NASDAQ index but it cannot capture its fluctuations.</p>
+<div id="fig-nasdaq" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-nasdaq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/nasdaq.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-nasdaq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.1: THe NASDAQ composite equity index.
+</figcaption>
+</figure>
+</div>
+<p>To incorporate uncertainty into our model of equity prices, we can add a Wiener process to the dynamic growth equation:</p>
+<p><span class="math display">\[
+\frac{d S_t}{S_t} = d \ln(S_t) = \mu\,t + \sigma\,W_t.
+\]</span></p>
+<p>Solving this SDE involves a set of steps very similar to those we used to solve the exponential growth ODE.</p>
+<p><span class="math display">\[
+\frac{\partial \ln(S)}{\partial t} = 0,
+\]</span></p>
+<p><span class="math display">\[
+\frac{\partial \ln(S)}{\partial S} = \frac{1}{S},
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+\frac{\partial^2 \ln(S)}{(\partial S)^2} = - \frac{1}{S^2}
+\]</span></p>
+<p>so, by Ito’s Lemma,</p>
+<p><span class="math display">\[
+\begin{align*}
+d\ln(S) &amp;= 0\,dt + \frac{1}{S}\,dS + \frac{1}{2}\left(- \frac{1}{S^2}\right)(dS)^2 \\
+&amp;= \frac{1}{S}\,dS - \frac{1}{2S^2}(dS)^2.
+\end{align*}
+\]</span></p>
+<p>The <span class="math inline">\(dS\)</span> term is defined by the dynamic growth equation while the <span class="math inline">\((dS)^2\)</span> term simplifies substantially. Applying the differential rules of <a href="#tbl-ito_rules" class="quarto-xref">Table&nbsp;<span>3.1</span></a> produces</p>
+<p><span class="math display">\[
+\begin{align*}
+(dS)^2 &amp;= (\mu S\,dt + \sigma\,S\,d W)^2 \\
+&amp;= \mu^2\,S^2\,(dt)^2 + 2\,\mu\,\sigma\,S^2\,(dt\,dW) + \sigma^2\,S^2\,(dW)^2 \\
+&amp;= \sigma^2\,S^2\,dt
+\end{align*}.
+\]</span></p>
+<p>Substituting <span class="math inline">\(dS\)</span> and <span class="math inline">\((dS)^2\)</span> into the result from Itô’s Lemma yields</p>
+<p><span class="math display">\[
+\begin{align*}
+d \ln(S) &amp;= \frac{1}{S}(\mu S dt + \sigma S dW) - \frac{1}{2S^2}(\sigma^2 S^2 dt) \\
+&amp;= \left(\mu - \frac{1}{2}\sigma^2\right)dt + \sigma dW.
+\end{align*}
+\]</span></p>
+<p>And integrating both sides gives us</p>
+<p><span class="math display">\[
+\begin{align*}
+\int_0^T d f(S) &amp;= \int_0^T\left(\mu - \frac{1}{2}\sigma^2\right)dt + \int_0^T\sigma dW_t \\
+\ln(S_T) - \ln(S_0) &amp;= \left(\mu - \frac{1}{2}\sigma^2\right)T + \sigma W_T \\
+\ln(S_T) &amp;= \ln(S_0) + \left(\mu - \frac{1}{2}\sigma^2\right)T + \sigma W_T.
+\end{align*}
+\]</span></p>
+<p>This constitutes a <strong>pathwise solution</strong> to the SDE. We have expressed <span class="math inline">\(S_T\)</span> as a function of the initial condition, <span class="math inline">\(S_0\)</span>, and the underlying sources of randomness. Often this is sufficient for simulation and theoretical analysis. For example, we could simulate GBM growth rate paths by plugging simulated realizations of <span class="math inline">\(W_T\)</span> into the equation above. Often we can go a step father, however. The <strong>transition distribution</strong> of a stochastic process describes the probability distribution of its future value given its current level. Knowing a processe’s transition distribution can make simulation easier and more robust, and can enable us to derive stronger or more general theoretical results.</p>
+<p>In the case of GBM, deriving the transition distribution from the pathwise solution is straightforward. The only stochastic element in the pathwise solution is the Wiener process, <span class="math inline">\(W_T\)</span>, which we know has a normal distribution with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(T\)</span>. Thus</p>
+<p><span class="math display">\[
+\ln(S_T) \sim N\left(\ln(S_0) + \mu - \frac{1}{2}\sigma^2, \sigma^2 T\right)
+\]</span></p>
+<p>and <span class="math inline">\(S_T\)</span> itself has a lognormal distribution. This transition distribution provides an analytic expression for the probability density of <span class="math inline">\(S_t\)</span> at any point in time, as well as all its moments. In <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.6</span></a> we will show how this transition solution can be used to value options on <span class="math inline">\(S_t\)</span>.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Geometric Brownian Motion">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Geometric Brownian Motion
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A <strong>geometric Brownian motion (GBM)</strong> is an Itô process whose drift and diffusion are both proportional to the current value of the process. It satisfies the stochastic differential equation</p>
+<p><span class="math display">\[
+dS_t = \mu S_t\,dt + \sigma S_t\,dW_t,
+\]</span></p>
+<p>where <span class="math inline">\(\mu\)</span> is the drift parameter, <span class="math inline">\(\sigma\)</span> is the volatility parameter, and <span class="math inline">\(W_t\)</span> is a standard Wiener process.</p>
+<p>The solution to this stochastic differential equation is</p>
+<p><span class="math display">\[
+S_t=S_0
+\exp\!\left[
+\left(\mu-\frac{1}{2}\sigma^2\right)t
++
+\sigma W_t
+\right].
+\]</span></p>
+<p>Consequently, the conditional distribution of the process at time <span class="math inline">\(t\)</span> is</p>
+<p><span class="math display">\[
+\ln(S_t)\mid S_0
+\sim
+N\!\left(
+\ln(S_0)
++
+\left(\mu-\frac{1}{2}\sigma^2\right)t,\,
+\sigma^2 t
+\right),
+\]</span></p>
+<p>or equivalently,</p>
+<p><span class="math display">\[
+S_t\mid S_0
+\sim
+\operatorname{Lognormal}\!\left(
+\ln(S_0)
++
+\left(\mu-\frac{1}{2}\sigma^2\right)t,\,
+\sigma^2 t
+\right).
+\]</span></p>
+</div>
+</div>
+<p><a href="#fig-gbm_paths_nasdaq" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> shows geometric Bownian motion process paths calibrated to the same growth rate and volatility as the NASDAQ index. For comparison we have overlaid a deterministic exponential growth curve using the same growth rate parameter. Note the similarity between these paths and the realized path of the NASDAQ in <a href="#fig-nasdaq" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>. The lognormal distribution is skewed to the right and its variance increases in proportion to its mean, as can be seen in the density plots of GBM process shown in <a href="#fig-gbm_dist_nasdaq" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>.</p>
+<div id="fig-gbm_paths_nasdaq" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gbm_paths_nasdaq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/gbm_paths_nasdaq.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gbm_paths_nasdaq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.2: Five realizations of a geometric Brownian motion process.
+</figcaption>
+</figure>
+</div>
+<div id="fig-gbm_dist_nasdaq" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-gbm_dist_nasdaq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/gbm_dist_nasdaq.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-gbm_dist_nasdaq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3.3: Probability densities of 10,000 geometric Brownian motion process simulations over time.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="taking-stock-and-looking-forward" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="taking-stock-and-looking-forward"><span class="header-section-number">3.5</span> Taking stock and looking forward</h2>
+<p>In this chapter we took a whirlwind tour of the tools of Ito calculus and showed how they can be used to model the random evolution of assets whose values tend to fluctuate in proportion to their level. From this simple example, it should be apparent that Wiener processes provide a more flexible basis for describing uncertainty over time than might have initially been apparent. By transforming Wiener processes in various ways we can describe a broad range of different types of random processes, with features appropriate to the particular application at hand. In the next chapter we will apply some the math we’ve learned to determine the market value of financial derivatives using the most famous continuous-time asset pricing model of all time.</p>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Technically, the differential notation used in Itô calculus derives from the Itô integral, so a bottom-up development of Itô calculus would present the integral first. However, following the order of material in most traditional calculus expositions, we present differentials first, without formally defining them.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The observant reader will notice that throughout this chapter the symbol “=” is used in two different ways. When writing equations involving stochastic differentials, expressions such as <span class="math inline">\(dW_t^2 = dt\)</span> should not be interpreted as ordinary algebraic identities. Rather, they are convenient shorthand for the limiting behavior of Wiener increments described by quadratic variation. Once these rules have been established, they may be manipulated algebraically when working with stochastic differential equations.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/02-wiener_processes.html" class="pagination-link" aria-label="Wiener Processes">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Wiener Processes</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/04-risk_neutral_expectations.html" class="pagination-link" aria-label="No Arbitrage Pricing and the Risk-Neutral Measure">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">No Arbitrage Pricing and the Risk-Neutral Measure</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
