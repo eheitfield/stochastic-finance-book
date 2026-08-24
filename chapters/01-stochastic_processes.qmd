@@ -32,13 +32,11 @@ Importantly, and perhaps surprisingly, a probability measure need not reflect th
 
 Taken together, the triple $(\Omega, \mathcal{F}, P)$ forms a probability space. In a nutshell, the sample space $\Omega$ tells you what *can* happen, the sigma-algebra $\mathcal{F}$ tells you what collections of outcomes you're allowed to ask about, and the probability measure $P$ tells you how likely those collections are to occur.
 
+## Stochastic processes: random functions that evolve over time
+
 Typically, in applied work, we find it more convenient to work with numerical quantities that depend on outcomes in $\Omega$, rather than those outcomes directly. A **random variable** is a function, $x:\Omega \rightarrow \R$, that maps elements of the sample space to the real line.[^01-stochastic_processes-1] The cumulative distribution functions we commonly interact with assign probabilities to ranges of outputs of random variables. In the background the probability space determines how these probabilities are determined.
 
 [^01-stochastic_processes-1]: Formally, a random variable must be measurable, meaning that for every interval (or, more generally, every Borel subset) of the real line, the set of outcomes that map into that interval belongs to $\mathcal{F}$. This ensures that probabilities of events involving the random variable are well defined.
-
-## Stochastic processes: random functions that evolve over time
-
-Most of the time in applied work you will not be working directly with probability spaces, but you will absolutely be working with stochastic processes. These are the building blocks we use to construct all continuous-time finance models.
 
 A **stochastic process** is a collection of random variables indexed by time. Formally, a stochastic process is a family
 

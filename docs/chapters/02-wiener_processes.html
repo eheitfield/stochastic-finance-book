@@ -310,7 +310,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Discounting Future Cash Flows</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -399,11 +399,11 @@ window.Quarto = {
 </header>
 
 
-<p>In this chapter we introduce the remarkable Wiener process, the most important stochastic process in continuous-time finance. We begin by showing how the Wiener process can be motivated as the continuous time analogue of normal random variables, which are ubiquitous in probability and statistics. We then give a formal definition for the Wiener process and enumerate some of its key properties. Finallly we show how some of the process’s unique features thwart attempts to analyze it using standard methods from calculus, necessitating the development of new methods discussed in the next chapter.</p>
+<p>In this chapter we introduce the remarkable Wiener process, the most important stochastic process in continuous-time finance. We begin by showing how the Wiener process can be motivated as the continuous time analogue of normal random variables, which are ubiquitous in probability and statistics. We then give a formal definition for the Wiener process and enumerate some of its key properties. Finally we show how some of the process’s unique features thwart attempts to analyze it using standard methods from calculus, necessitating the development of new methods discussed in the next chapter.</p>
 <section id="from-random-walks-to-wiener-processes" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="from-random-walks-to-wiener-processes"><span class="header-section-number">2.1</span> From random walks to Wiener processes</h2>
 <p>Anyone with a passing exposure to probability and statistics will recognize the normal (a.k.a. Gaussian) distribution as the key distribution underpinning much of what we know about sequences of random events. It plays this role because of the Central Limit Theorem (CLT), which shows that the distribution of the average of a sequence of almost any independent and identically distributed (i.i.d.) random variables will converge to the normal distribution as the number of elements in the sequence becomes large. Happily, the normal distribution also has some very convenient mathematical properties, several of which are enumerated in the Appendix. Most notably, it is easy to prove that the sum of normal random variables is itself a normal random variable.</p>
-<p>Given its importance in probability and statistics, it is natural to ask how we might construct an continuous-time analogue to the standard normal distribution. Suppose we wish to construct a random path from time <span class="math inline">\(0\)</span> to time <span class="math inline">\(T\)</span>. We can do this by first subdividing the interval <span class="math inline">\([0,T]\)</span>]into <span class="math inline">\(n\)</span> equally-sized increments of length <span class="math inline">\(T/n\)</span> so that <span class="math inline">\(n_t = \left\lfloor t\,N\,/T\right\rfloor\)</span> is the index of the largest time step smaller than <span class="math inline">\(t\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Now let</p>
+<p>Given its importance in probability and statistics, it is natural to ask how we might construct an continuous-time analogue to the standard normal distribution. Suppose we wish to construct a random path from time <span class="math inline">\(0\)</span> to time <span class="math inline">\(T\)</span>. We can do this by first subdividing the interval <span class="math inline">\([0,T]\)</span> into <span class="math inline">\(n\)</span> equally-sized increments of length <span class="math inline">\(T/n\)</span> so that <span class="math inline">\(n_t = \left\lfloor t\,N/T\right\rfloor\)</span> is the index of the largest time step smaller than <span class="math inline">\(t\)</span>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Now let</p>
 <p><span class="math display">\[
 S_t^n = \frac{1}{n_t}\sum_{i=1}^{n_t}X_i t,
 \]</span></p>
@@ -438,7 +438,7 @@ Figure&nbsp;2.2: Five realizations of a Wiener process.
 <p><span class="math display">\[
 W_t \sim N(0,t).
 \]</span></p>
-<p>Confirming this result, <a href="#fig-wiener_dist" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> compares a histogram of 10,000 simulated paths at <span class="math inline">\(t=1\)</span> with a standard normal probability density function.</p>
+<p>Confirming this result, <a href="#fig-wiener_dist" class="quarto-xref">Figure&nbsp;<span>2.3</span></a> compares a histogram of 10,000 simulated paths for different values of <span class="math inline">\(t\)</span>. Notice how the distribution of <span class="math inline">\(W_t\)</span> spreads out as <span class="math inline">\(t\)</span> grows and its variance increases.</p>
 <div id="fig-wiener_dist" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-wiener_dist-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -541,7 +541,7 @@ f'(t)
 \Delta f(t) = O(\Delta t).
 \]</span></p>
 <p><span class="math inline">\(O(\sqrt{\Delta t}) &gt; O(\Delta t)\)</span> for small values of <span class="math inline">\(\Delta t\)</span>, meaning that <span class="math inline">\(W_t\)</span> fluctuates by more than is consistent with differentiability. Although a rigorous proof that <span class="math inline">\(W_t\)</span> is not differentiable requires more advanced probability theory, this simple scaling argument strongly suggests that Wiener sample paths are too irregular to possess ordinary derivatives. We can make this argument for any value of <span class="math inline">\(t\)</span>, so <span class="math inline">\(W_t\)</span> is unlikely to be differentiable at any point in its domain.</p>
-<p>This is the sense in which the Wiener process is special, and quite different from many other stochastic processes we are likely to encounter. It is continuous but nowhere differentiable. It’s fractal character makes it too jagged to work with using traditional calculus methods. Fortuantely, as we will soon see, Wiener processes are not totally intractable. We just need to apply some new rules when working with them.</p>
+<p>This is the sense in which the Wiener process is special, and quite different from many other stochastic processes we are likely to encounter. It is continuous but nowhere differentiable. It’s fractal character makes it too jagged to work with using traditional calculus methods. Fortunately, as we will soon see, Wiener processes are not totally intractable. We just need to apply some new rules when working with them.</p>
 </section>
 <section id="sec-convergence_concepts" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="sec-convergence_concepts"><span class="header-section-number">2.3</span> Foundations for a new type of calculus</h2>
@@ -560,7 +560,7 @@ f'(t)
 <p><span class="math display">\[
 \lim_{h\to 0} \E\left[(X_n-X)^2\right] = 0.
 \]</span></p>
-<p>Shorthand notation for mean squared convergence is <span class="math inline">\(X_n \toms X\)</span> or <span class="math inline">\(\lim_{n\to\infty}X_n \eqasms X\)</span>.. A process that converges almost surely also converges in mean square, but the opposite is not true. Mean-square convergence permits individual paths to fluctuate no matter how large <span class="math inline">\(n\)</span> grows without ever settling to a particular value. Instead, it simply requires that the size of the discrepancy, averaged across all paths, diminishes quickly as <span class="math inline">\(n\rightarrow\infty\)</span>. Because they demand less, definitions of objects like integrals based on mean-square convergence criteria can be applied to a broader range of stochastic processes, including wiener processes.</p>
+<p>Shorthand notation for mean squared convergence is <span class="math inline">\(X_n \toms X\)</span> or <span class="math inline">\(\lim_{n\to\infty}X_n \eqasm X\)</span>.. A process that converges almost surely also converges in mean square, but the opposite is not true. Mean-square convergence permits individual paths to fluctuate no matter how large <span class="math inline">\(n\)</span> grows without ever settling to a particular value. Instead, it simply requires that the size of the discrepancy, averaged across all paths, diminishes quickly as <span class="math inline">\(n\rightarrow\infty\)</span>. Because they demand less, definitions of objects like integrals based on mean-square convergence criteria can be applied to a broader range of stochastic processes, including Wiener processes.</p>
 <p>Individual Wiener paths are too irregular for ordinary calculus — they can’t be differentiated, and sums built along a single path don’t settle down to a limit. Mean-square convergence sidesteps this by changing what we ask for: instead of requiring convergence on each path separately, we only require that the mean squared discrepancy shrinks to zero. A quantity can fail to converge on any single path, and yet still converge in this aggregate, population-level sense. This allows us to build a rigorous integral against a process whose paths, examined one at a time, are too wild to integrate against at all.</p>
 </section>
 <section id="taking-stock-and-looking-forward" class="level2" data-number="2.4">

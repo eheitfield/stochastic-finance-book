@@ -330,7 +330,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Discounting Future Cash Flows</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -516,7 +516,7 @@ Figure&nbsp;4.1: Effect of time-to-maturity (<span class="math inline">\(T\)</sp
 </figcaption>
 </figure>
 </div>
-<p>Changes in the values of <span class="math inline">\(K\)</span> and <span class="math inline">\(S_t\)</span> affect the value of the call option in exactly the opposite way because the call option acts as a hedge against large increases in the stock price. <a href="#fig-bs_put_call" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows the value of a European put and call option as a function of the current stock price. The put option is more valuable when the stock price is low, while the call option is more valuable when the stock price is high. If an investor buys both a put and a call at the strike price <span class="math inline">\(K\)</span>, she is guaranteed a payout equal to the difference between the stock price at maturity and the strike price. This gives rise to the put-call parity condition</p>
+<p>Changes in the values of <span class="math inline">\(K\)</span> and <span class="math inline">\(S_t\)</span> affect the value of the call option in exactly the opposite way because the call option acts as a hedge against large increases in the stock price. <a href="#fig-bs_put_call" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows the value of a European put and call option as functions of the current stock price. The put option is more valuable when the stock price is low, while the call option is more valuable when the stock price is high. If an investor buys both a put and a call at the strike price <span class="math inline">\(K\)</span>, she is guaranteed a payout equal to the difference between the stock price at maturity and the strike price. This gives rise to the put-call parity condition</p>
 <p><span class="math display">\[
 V_t^{\text{Call}} - V_t^{\text{Put}} = S_t - e^{-r(T-t)}K.
 \]</span></p>
@@ -683,8 +683,8 @@ V_t^\text{Put} = e^{-r(T-t)}\Phi(-d_2)\,K - S_t\,\Phi(-d_1)
 <h2 data-number="4.6" class="anchored" data-anchor-id="taking-stock-and-looking-forward"><span class="header-section-number">4.6</span> Taking stock and looking forward</h2>
 <p>In this chapter we have seen that there are two basic algorithms for pricing derivatives under no arbitrage and complete markets. The hedging portfolio algorithm works as follows.</p>
 <ol type="1">
-<li><p>Construct a dynamic portfolio of tradable assets (including the as-yet unpriced derivative asset) that is risk free and therefore must pay a rate of return exactly equal to the risk-free rate. The no arbitrage condition implies a functional relationship between the value of the unpriced derivative, and the prices of other traded assets, and the risk-free rate at all points in time.</p></li>
-<li><p>Solve this dynamic equation to obtain an expression for the value of the derivative over time using boundary conditions determined by the derivative’s payoff function. In practice the dynamic pricing equation may or may not admit a closed-form solution. In the later case the solution may need to be approximated using numerical methods.</p></li>
+<li><p>Construct a dynamic portfolio of tradable assets (including the as-yet unpriced derivative asset) that is risk free and therefore must pay a rate of return exactly equal to the risk-free rate. The no arbitrage condition implies a functional relationship between the value of the unpriced derivative, and the prices of other traded assets at all points in time.</p></li>
+<li><p>Solve this dynamic equation to obtain an expression for the value of the derivative over time using boundary conditions determined by the derivative’s payoff function. In practice, the dynamic pricing equation may or may not admit a closed-form solution. In the later case the solution may need to be approximated using numerical methods.</p></li>
 </ol>
 <p>Alternatively one can use the <span class="math inline">\(Q\)</span>-measure asset pricing algorithm.</p>
 <ol type="1">
@@ -1119,8 +1119,8 @@ Merton, Robert C. 1973. <span>“Theory of Rational Option Pricing.”</span> <e
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/05-discounting_cash_flows.html" class="pagination-link" aria-label="Dicsounting Future Cash Flows">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/05-discounting_cash_flows.html" class="pagination-link" aria-label="Discounting Future Cash Flows">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Discounting Future Cash Flows</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

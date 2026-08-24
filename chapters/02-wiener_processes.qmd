@@ -6,7 +6,7 @@ In this chapter we introduce the remarkable Wiener process, the most important s
 
 Anyone with a passing exposure to probability and statistics will recognize the normal (a.k.a. Gaussian) distribution as the key distribution underpinning much of what we know about sequences of random events. It plays this role because of the Central Limit Theorem (CLT), which shows that the distribution of the average of a sequence of almost any independent and identically distributed (i.i.d.) random variables will converge to the normal distribution as the number of elements in the sequence becomes large. Happily, the normal distribution also has some very convenient mathematical properties, several of which are enumerated in the Appendix. Most notably, it is easy to prove that the sum of normal random variables is itself a normal random variable.
 
-Given its importance in probability and statistics, it is natural to ask how we might construct an continuous-time analogue to the standard normal distribution. Suppose we wish to construct a random path from time $0$ to time $T$. We can do this by first subdividing the interval $[0,T]$\]into $n$ equally-sized increments of length $T/n$ so that $n_t = \left\lfloor t\,N\,/T\right\rfloor$ is the index of the largest time step smaller than $t$.[^02-wiener_processes-1] Now let
+Given its importance in probability and statistics, it is natural to ask how we might construct an continuous-time analogue to the standard normal distribution. Suppose we wish to construct a random path from time $0$ to time $T$. We can do this by first subdividing the interval $[0,T]$ into $n$ equally-sized increments of length $T/n$ so that $n_t = \left\lfloor t\,N/T\right\rfloor$ is the index of the largest time step smaller than $t$.[^02-wiener_processes-1] Now let
 
 [^02-wiener_processes-1]: $\lfloor r \rfloor$ is the "floor" operator. It tells us the largest integer smaller than the real number $r$.
 
@@ -36,7 +36,7 @@ $$
 W_t \sim N(0,t).
 $$
 
-Confirming this result, @fig-wiener_dist compares a histogram of 10,000 simulated paths at $t=1$ with a standard normal probability density function.
+Confirming this result, @fig-wiener_dist compares a histogram of 10,000 simulated paths for different values of $t$.  Notice how the distribution of $W_t$ spreads out as $t$ grows and its variance increases.
 
 ![Probability densities of 10,000 Wiener process simulations over time.](/figures/wiener_dist.svg){#fig-wiener_dist}
 
@@ -178,7 +178,7 @@ $$
 \lim_{h\to 0} \E\left[(X_n-X)^2\right] = 0.
 $$
 
-Shorthand notation for mean squared convergence is $X_n \toms X$ or $\lim_{n\to\infty}X_n \eqasms X$.. A process that converges almost surely also converges in mean square, but the opposite is not true. Mean-square convergence permits individual paths to fluctuate no matter how large $n$ grows without ever settling to a particular value. Instead, it simply requires that the size of the discrepancy, averaged across all paths, diminishes quickly as $n\rightarrow\infty$. Because they demand less, definitions of objects like integrals based on mean-square convergence criteria can be applied to a broader range of stochastic processes, including wiener processes.
+Shorthand notation for mean squared convergence is $X_n \toms X$ or $\lim_{n\to\infty}X_n \eqasm X$.. A process that converges almost surely also converges in mean square, but the opposite is not true. Mean-square convergence permits individual paths to fluctuate no matter how large $n$ grows without ever settling to a particular value. Instead, it simply requires that the size of the discrepancy, averaged across all paths, diminishes quickly as $n\rightarrow\infty$. Because they demand less, definitions of objects like integrals based on mean-square convergence criteria can be applied to a broader range of stochastic processes, including Wiener processes.
 
 Individual Wiener paths are too irregular for ordinary calculus — they can’t be differentiated, and sums built along a single path don’t settle down to a limit. Mean-square convergence sidesteps this by changing what we ask for: instead of requiring convergence on each path separately, we only require that the mean squared discrepancy shrinks to zero. A quantity can fail to converge on any single path, and yet still converge in this aggregate, population-level sense. This allows us to build a rigorous integral against a process whose paths, examined one at a time, are too wild to integrate against at all.
 

@@ -75,9 +75,9 @@ $$
 
 where
 
--   $\theta$ is the **long-run mean** of the process,
--   $\kappa > 0$ is the **speed of mean reversion**,
--   $\sigma > 0$ is the **diffusion coefficient**, and
+-   $\theta$ is the long-run mean of the process,
+-   $\kappa > 0$ is the speed of mean reversion,
+-   $\sigma > 0$ is the diffusion coefficient, and
 -   $W_t$ is a Wiener process.
 
 The Ornstein--Uhlenbeck process has the following conditional distribution:
@@ -118,7 +118,7 @@ The Ornstein–Uhlenbeck process provides the mathematical foundation for severa
 
 ## Vasicek's model and the valuation of real bonds
 
-As discussed in the previous chapter, in continuous-time finance the **short rate** is the instantaneous interest rate at which an investor can borrow or lend money. The short rate is a non-traded state variable that is not directly observable in the market, though in practice it is well proxied by very short-term overnight risk-free rates such as the effective federal funds rate or the secured overnight financing rate (SOFR). @vasicek1977equilibrium models the short rate $r_t$ as a mean-reverting Ornstein-Uhlenbeck process under the physical measure:
+As discussed in the previous chapter, in continuous-time finance the short rate is the instantaneous interest rate at which an investor can borrow or lend money without risk. The short rate is a non-traded state variable that is not directly observable in the market, though in practice it is well proxied by very short-term overnight risk-free rates such as the effective federal funds rate or the secured overnight financing rate (SOFR). @vasicek1977equilibrium models the short rate $r_t$ as a mean-reverting Ornstein-Uhlenbeck process under the physical measure:
 
 $$
 dr_t = \kappa\,(\theta_P - r_t)\,dt + \sigma\,dW_t^P.
@@ -150,7 +150,7 @@ Notice that under this change of measure the long-run equilibrium interest rate 
 
 At this point you may be wondering about the Fundamental Theorem of Asset Pricing and whether it allows us to say more about $\theta_Q$. After all, in our earlier discussion of risk-neutral asset valuation we saw that the FTAP implies that the expected rate of return on traded assets under the $Q$-measure must equal the risk-free rate. Importantly, the short rate is not a traded asset and so its change over time is not directly constrained by the FTAP.
 
-So if the short rate is a non-traded asset, what is it good for? While the FTAP does not allow us to pin down the risk premium associated with non-traded state variables like the short rate, it can be used to value other assets that depend on those variables. In particular, we can use the short rate to value real bonds that pay a known payment with certainty at maturity.
+So if the short rate is a non-traded asset, what is it good for? While the FTAP does not allow us to pin down the risk premium associated with non-traded state variables like the short rate, it can be used to value other assets that depend on those variables. In particular, as we saw in the last chapter, we can use the short rate to value real bonds that pay a known payment with certainty at maturity.
 
 Consider again a risk-free, zero-coupon bond that pays \$1 at date $T$. To trim notation a bit, we will only derive the value of a bond at date $t=0$. Once we've done this, the generalization to arbitrary values of $t$ should be obvious. Recall from @sec-yield_curve that the bond's value is given by
 $$
@@ -231,13 +231,13 @@ The functions $\mathcal{A}(t,T)$ and $\mathcal{B}(t,T)$ depend only on the model
 
 The Vasicek model captures important features of the real-world bond market. By describing the short rate as a mean-reverting process it can produce both upward and downward sloping yield curves, depending on the relationship between the current short rate and the $Q$-measure long-run equilibrium short rate $\theta_Q$. For most values of $r_0$ the yield curve shifts monotonically from the current short rate towards the $Q$-measure equilibrium short rate plus a convexity adjustment that reflects the nonlinear relationship between bond prices and yields. When $r_0$ is close to $\theta_Q$ the yield curve may be non-monotonic, but for plausible values of $\kappa$ and $\sigma$ this range of values is quite small. @fig-Vasicek_term_structure shows the yield curves implied by the Vasicek model for different values of the initial short rate, $r_0$. When $r_0 < \theta_Q$, the yield curve is upward sloping, reflecting the expectation that interest rates will rise over time. When $r_0 > \theta_Q$, the yield curve is downward sloping.
 
-![Yield curves implied by the Vasicek model given different initial short rates ($r_0$).](../figures/vasicek_term_structure.svg){#fig-Vasicek_term_structure}
+![Yield curves implied by the Vasicek model given different initial short rates.](../figures/vasicek_term_structure.svg){#fig-Vasicek_term_structure}
 
-We can gain insights into the Vasicek model's predictions for bond price dynamics by differentiating $B_{t,T}$ using Ito's Lemma.
+We can gain insights into the Vasicek model's predictions for bond price dynamics by differentiating $P_{t,T}$ using Ito's Lemma.
 
 $$
 \begin{align*}
-dP =& \pd{B}{t}\,dt + \pd{P}{r}\,dr_t + \frac12\pdd{P}{r}\,(dr)^2 \\
+dP =& \pd{P}{t}\,dt + \pd{P}{r}\,dr_t + \frac12\pdd{P}{r}\,(dr)^2 \\
 dP =& P\,(\mathcal{A}_t-\mathcal{B}_t\,r)\,dt - P\,\mathcal{B}\,dr + \frac12 P\,\mathcal{B}^2\,(dr)^2 \\
 \frac{dP}{P} =& (\mathcal{A}_t-\mathcal{B}_t\,r)\,dt - \mathcal{B}\,dr + \frac12 \mathcal{B}^2\,(dr)^2 
 \end{align*}
@@ -303,7 +303,7 @@ The bond's instantaneous excess return over the risk-free short rate at any poin
 
 A consequence of the Vasicek model's constant short-rate volatility assumption is that the volatility of bond returns is also constant. However, as shown in @fig-bond_vol bond return volatility tends to be higher during periods of high interest rates. The model of @cox1985cir preserves much of the structure of the Vasicek model but allows the short rate volatility to grow in proportion to the short rate itself. Not only does this allow for a more accurate description of bond volatility, it also ensures, realistically, that the modeled short rate will not become negative.
 
-![10-year Treasury note yield annual average yield versus price volatilty, 1961 to 2025.](../figures/bond_vol.svg){#fig-bond_vol}
+![10-year Treasury note average annual yield versus average price volatility, 1961 to 2025.](../figures/bond_vol.svg){#fig-bond_vol}
 
 The CIR process used to model the short rate is described by the SDE
 

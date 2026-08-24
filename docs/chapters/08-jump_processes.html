@@ -330,7 +330,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Discounting Future Cash Flows</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -583,22 +583,27 @@ f(X_{t^-},t)
 <p>The <span class="citation" data-cites="merton1976jump">Merton (<a href="#ref-merton1976jump" role="doc-biblioref">1976</a>)</span> jump-diffusion model extends the GBM equity price mode we first encountered in <a href="03-stochastic_calculus.html#sec-gbm" class="quarto-xref"><span>Section 3.4</span></a> to allow for discontinuous jumps in the value of an asset. Under the basic GBM model <span class="math inline">\(S_t\)</span>, follows the SDE</p>
 <p><span class="math display">\[
 \frac{dS_t}{S_t} = d\ln(S_t) = \mu\,dt + \sigma\,dW_t.
-\]</span> Now suppose we maintain this assumption at most points in time, but introduce a separate jump process that causes <span class="math inline">\(S_t\)</span> to shift in discontinuous jumps at random times. Jumps arrive according to a Poisson process, <span class="math inline">\(\{N_t\}\)</span>. We assume that the jumps in value are multiplicative so that when jumps arrive they scale <span class="math inline">\(S_t\)</span> up or down by a random amount in proportion to its current level. The <span class="math inline">\(i\text{th}\)</span> such shift is described by the random variable <span class="math inline">\(Y_i\)</span>. If this jump arrives at time <span class="math inline">\(t\)</span> then</p>
+\]</span></p>
+<p>Now suppose we maintain this assumption at most points in time, but introduce a separate jump process that causes <span class="math inline">\(S_t\)</span> to shift in discontinuous jumps at random times. Jumps arrive according to a Poisson process, <span class="math inline">\(\{N_t\}\)</span>. We assume that the jumps in value are multiplicative so that when jumps arrive they scale <span class="math inline">\(S_t\)</span> up or down by a random amount in proportion to its current level. The <span class="math inline">\(i\text{th}\)</span> such shift is described by the random variable <span class="math inline">\(Y_i\)</span>. If this jump arrives at time <span class="math inline">\(t\)</span> then</p>
 <p><span class="math display">\[
 S_t = Y_i\,S_{t^-}.
-\]</span> In this case</p>
+\]</span></p>
+<p>In this case</p>
 <p><span class="math display">\[
 \Delta S_t = Y_t\,S_{t^-}-S_{t^-} = (Y_t-1)\,S_{t^-}
 \]</span> If no jump occurs over the interval <span class="math inline">\([t, t+dt]\)</span> then <span class="math inline">\(S_t\)</span> follows a GBM process. If a jump occurs in the interval then it follows a GBM process but also shifts by the amount <span class="math inline">\((Y_t-1)\,S_{t^-}\)</span>. Whether or not a jump occurs is determined by <span class="math inline">\(dN_t\)</span>, so the SDE for <span class="math inline">\(S_t\)</span> becomes</p>
 <p><span class="math display">\[
 dS_t = S_{t^-}\,\mu\,dt + S_{t^-}\,\sigma\,dW_t + (Y_t-1)\,S_{t^-}\,dN_t
-\]</span> or, equivalently, <span class="math display">\[
+\]</span></p>
+<p>or, equivalently,</p>
+<p><span class="math display">\[
 \frac{dS_t}{S_{t^-}} = d\ln(S_t) = \mu\,dt + \sigma\,dW_t + (Y_t-1)\,dN_t.
 \]</span></p>
 <p>Thus, the price growth dynamics are determined by the GBM process we have already seen plus a compound Poisson process where <span class="math inline">\(Z_i = Y_i-1\)</span>. To ensure that the multiplicative jump sizes are strictly positive, we assume that</p>
 <p><span class="math display">\[
 \ln(Y_i) \sim N(\alpha\,,\,\delta^2).
-\]</span> This setup described a jump-diffusion process where the Ito process component is geometric Brownian motion and the jump component is a compound Poisson process with jump sizes that are shifted lognormal random variables.</p>
+\]</span></p>
+<p>This setup described a jump-diffusion process where the Ito process component is geometric Brownian motion and the jump component is a compound Poisson process with jump sizes that are shifted lognormal random variables.</p>
 <p>At this point it should come as no surprise that the solution to this SDE lies in applying Ito’s Lemma. The extended version of Ito’s Lemma for jump diffusion processes implies that</p>
 <p><span class="math display">\[
 d\ln{S_t} = \left(\mu - \frac12 \sigma^2\right)\,dt + \sigma\,dW_t + \ln(Y_t.)\,dN_t.
@@ -645,7 +650,7 @@ Figure&nbsp;8.5: Simulated daily returns from a Merton jump-diffusion process.
 <section id="sec-mjp_pricing" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="sec-mjp_pricing"><span class="header-section-number">8.4</span> Options pricing in the presence of jumps</h2>
 <p>The Merton jump-diffusion model differs in a fundamental way from the models we have seen up to this point. Unlike the basic Black-Scholes GBM pricing framework, which assumes a single source of uncertainty that can be hedged using tradable assets, the Merton model describes an incomplete market. There are multiple sources of uncertainty – the diffusion process, the jump process, and the jump sizes – that cannot all be hedged in a portfolio consisting of a single traded asset and a derivative. More fundamentally, since the jump process is not predictable in the sense described in <a href="01-stochastic_processes.html#sec-martingales" class="quarto-xref"><span>Section 1.5</span></a>, the jump risk could not be fully hedged even if more traded assets were available. As a result, the Second Fundamental Theorem of Asset Pricing does not hold.</p>
-<p>Although the market is incomplete, the no-arbitrage condition is satisfied so we can make use of the First Fundemental Theorem of Asset Pricing and derive a risk-neutral measure that makes the discounted stock price a martingale. There are, in fact, many such measures, and therein lies a practical problem. In order to select a single risk-neutral pricing measure we will need to impose additional assumptions on the relationship between the <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> measures.</p>
+<p>Although the market is incomplete, the no-arbitrage condition is satisfied so we can make use of the First Fundamental Theorem of Asset Pricing and derive a risk-neutral measure that makes the discounted stock price a martingale. There are, in fact, many such measures, and therein lies a practical problem. In order to select a single risk-neutral pricing measure we will need to impose additional assumptions on the relationship between the <span class="math inline">\(P\)</span> and <span class="math inline">\(Q\)</span> measures.</p>
 <p>The instantaneous expected return on <span class="math inline">\(S_t\)</span> is</p>
 <p><span class="math display">\[
 \begin{align*}
@@ -672,7 +677,7 @@ Figure&nbsp;8.5: Simulated daily returns from a Merton jump-diffusion process.
 \end{align*}
 \]</span></p>
 <p>This is simply the risk premium adjustment to the diffusion component of the model. The jump component has no effect on excess return.</p>
-<p>Having derived a risk neutral measure that satisfies the martingale condition, we can now use this measure to value options on our jumpy asset. We will price the same European put option described in <a href="04-risk_neutral_expectations.html#sec-hedging_bs" class="quarto-xref"><span>Section 4.2</span></a> and <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.6</span></a>. Recall that at expiry the option payoff is</p>
+<p>Having derived a risk neutral measure that satisfies the martingale condition, we can now use this measure to value options on our jumpy asset. We will price the same European put option described in <a href="04-risk_neutral_expectations.html#sec-hedging_bs" class="quarto-xref"><span>Section 4.2</span></a> and <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.5</span></a>. Recall that at expiry the option payoff is</p>
 <p><span class="math display">\[
 V_T^{\text{Put}} = \max\left(K-S_T, 0\right).
 \]</span> The FTAP ensures that under the <span class="math inline">\(Q\)</span>-measure the expected present value of the option is a martingale, so</p>
@@ -693,7 +698,7 @@ m = \ln(S_t) + \alpha\,(N_T-N_t) + \left(r-k\,\eta - \frac12 \sigma^2\right)(T-t
 \]</span></p>
 <p>and <span class="math display">\[
 v = \sigma^2\,(T-t) + \delta^2\,(N_T-N_t).
-\]</span> We computed the expected present value of the put option when <span class="math inline">\(S_T\)</span> has a lognormal distribution in <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.6</span></a>. We can use identical steps to compute the expected present value of the option conditional on <span class="math inline">\(N_T\)</span>.</p>
+\]</span> We computed the expected present value of the put option when <span class="math inline">\(S_T\)</span> has a lognormal distribution in <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.5</span></a>. We can use identical steps to compute the expected present value of the option conditional on <span class="math inline">\(N_T\)</span>.</p>
 <p><span class="math display">\[
 \E_t^Q\left[e^{-r\,(T-t)}V_T^\text{Put} \mid N_T\right] = e^{-r(T-t)}\Phi(-d_2(N_T))-S_t\Phi(-d_1(N_T))
 \]</span> where</p>
@@ -710,7 +715,7 @@ d_2(N_t) = d_1(N_t)-\sqrt{\sigma^2\,(T-t) + \delta^2\,(N_T-N_t)}.
 <p><span class="math display">\[
 V_t^\text{Put} = \sum_{n=0}^\infty \left(e^{-r(T-t)}\Phi(-d_2(N_t+n))-S_t\Phi(-d_1(N_t+n))\right)p(n\,;\,\eta).
 \]</span></p>
-<p>Calculating <span class="math inline">\(V_t^\text{Put}\)</span> is simply a matter of taking a series of weighted functions of standard normal CDFs. The first term in this series, where <span class="math inline">\(n=0\)</span>, is exactly the pricing formula we derived for a geometric Brownian motion stock price process in <a href="04-risk_neutral_expectations.html#sec-q_bs_derivation" class="quarto-xref"><span>Section 4.5</span></a> with a drift term adjusted for expected jumps. The additional terms represents the contributions from paths that experience one, two, three, or more jumps.</p>
+<p>Calculating <span class="math inline">\(V_t^\text{Put}\)</span> is simply a matter of taking a series of weighted functions of standard normal CDFs. The first term in this series, where <span class="math inline">\(n=0\)</span>, is exactly the pricing formula we derived for a geometric Brownian motion stock price process in <a href="04-risk_neutral_expectations.html#sec-q_bs_derivation" class="quarto-xref"><span>Section 4.4</span></a> with a drift term adjusted for expected jumps. The additional terms represents the contributions from paths that experience one, two, three, or more jumps.</p>
 <p>We saw in <a href="#sec-merton_jd" class="quarto-xref"><span>Section 8.3</span></a> that incorporating jumps into the stock price process generated much more frequent extreme moves in stock prices than would be predicted by a GBM process with comparable volatility. Put another way, jumps give the distribution of returns “thick” of “fat” tails. Statisticians call this property <em>excess kurtosis</em>. A consequence of this is that the Merton jump diffusion model generates higher prices for deep “out-of-the-money” options and lower prices for deep “in-the-money” options. For example, as shown in <a href="#fig-mjd_vs_bs_put_payoff" class="quarto-xref">Figure&nbsp;<span>8.6</span></a>, relative to the Black-Scholes GBM model, the Merton jump-diffusion model places a higher value on puts for which the stock price is far above the strike price and somewhat lower value on puts for which the stack price is well below the strike price.</p>
 <div id="fig-mjd_vs_bs_put_payoff" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">

@@ -330,7 +330,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Discounting Future Cash Flows</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -492,9 +492,9 @@ dX_t = \kappa(\theta - X_t)\,dt + \sigma\,dW_t,
 \]</span></p>
 <p>where</p>
 <ul>
-<li><span class="math inline">\(\theta\)</span> is the <strong>long-run mean</strong> of the process,</li>
-<li><span class="math inline">\(\kappa &gt; 0\)</span> is the <strong>speed of mean reversion</strong>,</li>
-<li><span class="math inline">\(\sigma &gt; 0\)</span> is the <strong>diffusion coefficient</strong>, and</li>
+<li><span class="math inline">\(\theta\)</span> is the long-run mean of the process,</li>
+<li><span class="math inline">\(\kappa &gt; 0\)</span> is the speed of mean reversion,</li>
+<li><span class="math inline">\(\sigma &gt; 0\)</span> is the diffusion coefficient, and</li>
 <li><span class="math inline">\(W_t\)</span> is a Wiener process.</li>
 </ul>
 <p>The Ornstein–Uhlenbeck process has the following conditional distribution:</p>
@@ -547,7 +547,7 @@ Figure&nbsp;6.3: Probability densities of 10,000 Ornstein-Uhlenbeck process simu
 </section>
 <section id="vasiceks-model-and-the-valuation-of-real-bonds" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="vasiceks-model-and-the-valuation-of-real-bonds"><span class="header-section-number">6.2</span> Vasicek’s model and the valuation of real bonds</h2>
-<p>As discussed in the previous chapter, in continuous-time finance the <strong>short rate</strong> is the instantaneous interest rate at which an investor can borrow or lend money. The short rate is a non-traded state variable that is not directly observable in the market, though in practice it is well proxied by very short-term overnight risk-free rates such as the effective federal funds rate or the secured overnight financing rate (SOFR). <span class="citation" data-cites="vasicek1977equilibrium">Vašı́ček (<a href="#ref-vasicek1977equilibrium" role="doc-biblioref">1977</a>)</span> models the short rate <span class="math inline">\(r_t\)</span> as a mean-reverting Ornstein-Uhlenbeck process under the physical measure:</p>
+<p>As discussed in the previous chapter, in continuous-time finance the short rate is the instantaneous interest rate at which an investor can borrow or lend money without risk. The short rate is a non-traded state variable that is not directly observable in the market, though in practice it is well proxied by very short-term overnight risk-free rates such as the effective federal funds rate or the secured overnight financing rate (SOFR). <span class="citation" data-cites="vasicek1977equilibrium">Vašı́ček (<a href="#ref-vasicek1977equilibrium" role="doc-biblioref">1977</a>)</span> models the short rate <span class="math inline">\(r_t\)</span> as a mean-reverting Ornstein-Uhlenbeck process under the physical measure:</p>
 <p><span class="math display">\[
 dr_t = \kappa\,(\theta_P - r_t)\,dt + \sigma\,dW_t^P.
 \]</span></p>
@@ -569,7 +569,7 @@ dr_t &amp;= \kappa\,(\theta_P - r_t)\,dt + \sigma\,dW_t^P \\
 \]</span></p>
 <p>Notice that under this change of measure the long-run equilibrium interest rate shifts but the mean-reversion and volatility parameters remain the same. We can use what we already know about the O-U process to describe the short rate process under the <span class="math inline">\(Q\)</span>-measure; all we have to do is change the value of <span class="math inline">\(\theta\)</span>.</p>
 <p>At this point you may be wondering about the Fundamental Theorem of Asset Pricing and whether it allows us to say more about <span class="math inline">\(\theta_Q\)</span>. After all, in our earlier discussion of risk-neutral asset valuation we saw that the FTAP implies that the expected rate of return on traded assets under the <span class="math inline">\(Q\)</span>-measure must equal the risk-free rate. Importantly, the short rate is not a traded asset and so its change over time is not directly constrained by the FTAP.</p>
-<p>So if the short rate is a non-traded asset, what is it good for? While the FTAP does not allow us to pin down the risk premium associated with non-traded state variables like the short rate, it can be used to value other assets that depend on those variables. In particular, we can use the short rate to value real bonds that pay a known payment with certainty at maturity.</p>
+<p>So if the short rate is a non-traded asset, what is it good for? While the FTAP does not allow us to pin down the risk premium associated with non-traded state variables like the short rate, it can be used to value other assets that depend on those variables. In particular, as we saw in the last chapter, we can use the short rate to value real bonds that pay a known payment with certainty at maturity.</p>
 <p>Consider again a risk-free, zero-coupon bond that pays $1 at date <span class="math inline">\(T\)</span>. To trim notation a bit, we will only derive the value of a bond at date <span class="math inline">\(t=0\)</span>. Once we’ve done this, the generalization to arbitrary values of <span class="math inline">\(t\)</span> should be obvious. Recall from <a href="05-discounting_cash_flows.html#sec-yield_curve" class="quarto-xref"><span>Section 5.2</span></a> that the bond’s value is given by <span class="math display">\[
 P_{0,T}=\E_0^Q\left[e^{-\int_0^T r_s\,ds}\right].
 \]</span></p>
@@ -633,14 +633,14 @@ P_{t,T} = \exp(\mathcal{A}(t,T)-\mathcal{B}(t,T)\,r_t),
 <img src="../figures/vasicek_term_structure.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-Vasicek_term_structure-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.4: Yield curves implied by the Vasicek model given different initial short rates (<span class="math inline">\(r_0\)</span>).
+Figure&nbsp;6.4: Yield curves implied by the Vasicek model given different initial short rates.
 </figcaption>
 </figure>
 </div>
-<p>We can gain insights into the Vasicek model’s predictions for bond price dynamics by differentiating <span class="math inline">\(B_{t,T}\)</span> using Ito’s Lemma.</p>
+<p>We can gain insights into the Vasicek model’s predictions for bond price dynamics by differentiating <span class="math inline">\(P_{t,T}\)</span> using Ito’s Lemma.</p>
 <p><span class="math display">\[
 \begin{align*}
-dP =&amp; \pd{B}{t}\,dt + \pd{P}{r}\,dr_t + \frac12\pdd{P}{r}\,(dr)^2 \\
+dP =&amp; \pd{P}{t}\,dt + \pd{P}{r}\,dr_t + \frac12\pdd{P}{r}\,(dr)^2 \\
 dP =&amp; P\,(\mathcal{A}_t-\mathcal{B}_t\,r)\,dt - P\,\mathcal{B}\,dr + \frac12 P\,\mathcal{B}^2\,(dr)^2 \\
 \frac{dP}{P} =&amp; (\mathcal{A}_t-\mathcal{B}_t\,r)\,dt - \mathcal{B}\,dr + \frac12 \mathcal{B}^2\,(dr)^2
 \end{align*}
@@ -692,7 +692,7 @@ dr = \kappa\,\left(\theta_P-r\right)\,dt + \sigma\,dW^P
 <img src="../figures/bond_vol.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bond_vol-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6.5: 10-year Treasury note yield annual average yield versus price volatilty, 1961 to 2025.
+Figure&nbsp;6.5: 10-year Treasury note average annual yield versus average price volatility, 1961 to 2025.
 </figcaption>
 </figure>
 </div>
@@ -1001,7 +1001,7 @@ Figure&nbsp;6.9: Term structure of instantaneous bond return volatility under th
 </section>
 <section id="taking-stock-and-looking-forward" class="level2" data-number="6.5">
 <h2 data-number="6.5" class="anchored" data-anchor-id="taking-stock-and-looking-forward"><span class="header-section-number">6.5</span> Taking stock and looking forward</h2>
-<p>In this chapter we introduced two foundational models of interest rates and bond prices. The Vasicek model provides important insights into bond market economics, but its assumptions are rather restrictive. The CIR model trades additional mathematical complexity for greater realism. Though both models are more than fourty years old, the can still be found in applied work today. More advanced models, such as those developed by <span class="citation" data-cites="HullWhite1990">Hull and White (<a href="#ref-HullWhite1990" role="doc-biblioref">1990</a>)</span>, allow for time varying long-run short rates and additional risk factors while preserving an affine structure. The interested reader may wish to explore these models on their own.</p>
+<p>In this chapter we introduced two foundational models of interest rates and bond prices. The Vasicek model provides important insights into bond market economics, but its assumptions are rather restrictive. The CIR model trades additional mathematical complexity for greater realism. Though both models are more than forty years old, the can still be found in applied work today. More advanced models, such as those developed by <span class="citation" data-cites="HullWhite1990">Hull and White (<a href="#ref-HullWhite1990" role="doc-biblioref">1990</a>)</span>, allow for time varying long-run short rates and additional risk factors while preserving an affine structure. The interested reader may wish to explore these models on their own.</p>
 <p>On the methodological front, this chapter showed how one can use the FTAP to price assets from models of underlying state variables that are not directly traded. In the Vasicek and CIR models, the short rate was a non-traded state variable that determined the price of bonds of varying maturities. Importantly, so long as bonds of multiple different maturities are traded, both models embody complete markets. One can construct a risk-free portfolio consisting of a long position in a bond of one maturity and a short position in a bond of another maturity with weights that change dynamically over time. In the next chapter we will explore asset pricing in the presence of incomplete markets.</p>
 
 
@@ -1427,8 +1427,8 @@ Vašı́ček, Oldřich. 1977. <span>“An Equilibrium Characterization of the Te
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/05-discounting_cash_flows.html" class="pagination-link" aria-label="Dicsounting Future Cash Flows">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span>
+      <a href="../chapters/05-discounting_cash_flows.html" class="pagination-link" aria-label="Discounting Future Cash Flows">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Discounting Future Cash Flows</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

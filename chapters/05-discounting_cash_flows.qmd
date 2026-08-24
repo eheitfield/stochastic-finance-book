@@ -1,6 +1,6 @@
-# Dicsounting Future Cash Flows
+# Discounting Future Cash Flows
 
-The Fundamental Theorem of Asset Pricing places discounted future payoffs at the center of asset valuation. In the previous chapter, and in many of the models to come, we assume that a risk-free asset grows a constant, deterministic interest rate $r$.  This assumption simplifies the math of discounting future cash flows, enabling to focus on other important model features.  But it not particularly realistic over anything but a very short time horizon.  @fig-effr shows the effective federal funds rate, a overnight interest rate managed by the Federal Reserve, from 1970 to 2026.  While it was low and stable for nearly a decade following the global financial crisis in 2008, it has fluctuated over a considerable range at other times.  In this chapter we show how future cash flows can be discounted when the instantaneous short rate is a stochastic process $\{r_t\}$ that evolves over time.
+The Fundamental Theorem of Asset Pricing places discounted future payoffs at the center of asset valuation. In the previous chapter, and in many of the models to come, we assume that a risk-free asset grows at a constant, deterministic interest rate $r$.  This assumption simplifies the math of cash-flow discounting, enabling us to focus on other important model features.  But it not particularly realistic over anything but a very short time horizon.  @fig-effr shows the effective federal funds rate, an overnight interest rate managed by the Federal Reserve.  While it was low and stable for nearly a decade following the global financial crisis of 2008, it has fluctuated over a considerable range at other times.  In this chapter we show how future cash flows can be discounted when the instantaneous risk-free rate of return is a stochastic process that evolves over time.
 
 ![The Effective Federal Funds Rate from 1960 to 2026.](../figures/effr.svg){#fig-effr}
 
@@ -10,9 +10,9 @@ The Fundamental Theorem of Asset Pricing places discounted future payoffs at the
 Given a constant risk-free interest rate $r$, the present value at time $t$ of a certain payout $X_T$ in the future is
 
 $$
-V_t = e^{-r(T-t)}X_T = D_{t,T}\,X_T
+V_t = D_{t,T}\,X_T
 $$
-where the function $D_{t,T}$ is called the **discount factor**. This simple discounting formula, which we have already used repeatedly, is a direct consequence of the no arbitrage condition.  $V_0$ dollars invested at a constant, continuously-compounding interest rate evolves according to the geometric growth rule $V_t = e^{rt}$. In the absence of arbitrage, a guaranteed payment $X_T$ at time $T$ must be equal in value to an investment in the risk-free account that is allowed to grow until time $T$, so $V_0e^{rT}=X_T$.  A little division yields the discount formula.
+where the function $D_{t,T} = e^{-r(T-t)}$ is called the **discount factor**. This simple discounting formula, which we have already used repeatedly, is a direct consequence of the no arbitrage condition.  $V_0$ dollars invested at a constant, continuously-compounding interest rate evolves according to the geometric growth rule $V_t = e^{rt}$. In the absence of arbitrage, a guaranteed payment $X_T$ at time $T$ must be equal in value to an investment in the risk-free account that is allowed to grow until time $T$, so $V_0e^{rT}=X_T$.  A little division yields the discount formula.
 
 When $X_T$ is uncertain, we can appeal to the FTAP to obtain
 
@@ -20,7 +20,7 @@ $$
 V_t = \E_t^Q[D_{t,T}\,X_T] = D_{t,T}\E_t^Q[X_T].
 $$
 
-Now suppose the instantaneous rate of growth of money deposited in a risk-free account -- the **short rate** -- evolve over time according to the deterministic function $r_t$.  If our account contains $V_t$ at time $t$ then over a short interval we will receive $r_t\,dt$ in interest.  If we invest $V_0$ dollars in the risk-free account and immediately reinvest all interest received so that it compounds, then the value in our account at time $T$ will be approximately equal to
+Now suppose the instantaneous rate of growth of money deposited in a risk-free account -- the **short rate** -- evolves over time according to the deterministic function $r_t$.  If our account contains $V_t$ at time $t$ then over a short interval we will receive $V_t r_t dt$ in interest.  If we invest $V_0$ dollars in the risk-free account and immediately reinvest all interest received so that it compounds, then the value in our account at time $T$ will be approximately equal to
 
 $$
 V_T \approx V_0\,\prod_{i=0}^{n-1} (1+r_{t_i}\Delta t),
@@ -31,7 +31,7 @@ $$
 \ln\left(\frac{V_T}{V_0}\right) \approx \sum_{i=0}^{n-1}\ln(1+r_{t_i}\Delta t) \approx \sum_{i=0}^{n-1}r_{t_i}\Delta t.
 $$
 
-The exact formula for $V_T$ derives from the limit
+The exact formula for $V_T$ is obtained by taking the limit
 
 $$
 \ln\left(\frac{V_T}{V_0}\right) = \lim_{n\to\infty}\sum_{i=0}^{n-1}r_{t_i}\Delta t = \int_0^Tr_t\,dt.
@@ -55,7 +55,7 @@ $$
 
 The discount factor has changed to reflect variation over time in the short rate, but the basic discounting approach is the same as before.
 
-But what if we don't know the short-rate path in advance?  Then, of course, $\{r_t\}$ is a random process, and so is the discount factor $\{D_{t,T}\}$.  The pricing formula for an uncertain payout $X_T$ becomes
+But what if we don't know the short-rate path in advance?  Then, of course, $\{r_t\}$ is a random process, and so is the discount factor $\{D_{t,T}\}$.  The pricing formula for an uncertain payout $X_T$ is
 
 $$
 V_t = \E_t^Q\left[D_{t,T}X_t\right].
@@ -63,9 +63,9 @@ $$
 
 Thus, generalizing from a known, deterministic short rate $r$ to a stochastic short rate process $\{r_t\}$ requires two changes to our basic discounting approach.  First, we must use a discount factor that reflects the shape of the short-rate path from $t$ to $T$.  Second, and more substantively, the discount factor is itself a random process. We cannot take $D_{t,T}$ outside of the expectations operator.  
 
-One implication of the result above is that the discounted value of a future payout $X_T$ is a random variable, even if $X_T$ is known in advance.  Even if one invests in very safe assets, such as U.S. Treasury securities, with certain future case flows, one still bares economic risk because of uncertainty about the future path of interest rates.
+One implication of this is that the discounted value of a future payout $X_T$ is a random variable, even if $X_T$ is known in advance.  Even if one invests in very safe assets, such as U.S. Treasury securities, with certain future case flows, one still bares economic risk because of uncertainty about the future path of interest rates.
 
-## Real bonds and the term structure of interest rates {#sec-yield_curve}
+## Zero-coupon bonds and the term structure of interest rates {#sec-yield_curve}
 
 Consider a risk-free, zero-coupon bond that provides a certain payment of exactly one dollar at date $T$. Its value at date $t$ is
 
@@ -97,16 +97,16 @@ Taking logs and rearranging terms produces the explicit expression
 $$
 y_{t,T} = - \frac{\ln(P_{t,T})}{T-t}.
 $$
-When you read about the *yield curve* in the financial press, you are reading about the relationship between time to maturity $(T-t)$ and the prices of risk-free bonds.^[In practice, published yields are usually computed from the traded prices coupon-paying Treasury securities rather than directly from zero-coupon bond prices.]  As shown in @fig-yield_curve_ex, the yield curve may be upward- or downward-sloped or non-monotonic, depending on the $Q$-measure expected short-rate path at the time it is computed.
+When you read about the *yield curve* in the financial press, you are reading about the relationship between time to maturity $(T-t)$ and the prices of risk-free bonds.^[Typically, published yields are computed from the traded prices of coupon-paying Treasury securities rather than directly from zero-coupon bond prices.]  As shown in @fig-yield_curve_ex, the yield curve may be upward- or downward-sloped or non-monotonic, depending on the $Q$-measure expected short-rate path at the time it is computed.
 
 ![U.S. Treasury yield curves for selected dates.](../figures/yield_curve_ex.svg){#fig-yield_curve_ex}
 
-Consider two alternative one-dollar investments made at time $t$. In the first case, we invest one dollar in a zero coupon bond maturing at date $T$ with price ($P_{t,T}$) and then immediately reinvest the proceeds in a new bond that matures at $T+\Delta T$ with a time-$T$ price of $F(T,T+\Delta T)$.  In the second case, we invest one dollar directly in a bond that matures at $T+\Delta T$ whose price is $P(t,T+\Delta T)$.  Because both investments have a value of one dollar today, and both investments are risk free, they must have the same value at $T+\Delta T$.  Thus
+Consider two alternative one-dollar investments made at time $t$. In the first case, we invest one dollar in a zero coupon bond maturing at date $T$ with price ($P_{t,T}$) and then immediately reinvest the proceeds in a new bond that matures at $T+\Delta T$ with a time-$T$ price of $F_{T,T+\Delta T}$.  In the second case, we invest one dollar directly in a bond that matures at $T+\Delta T$ whose price is $P_{t,T+\Delta T}$.  Because both investments have a value of one dollar today, and both investments are risk free, they must have the same value at $T+\Delta T$.  Thus
 
 $$
 P_{t,T}\,F_{T,T+\Delta T} = P_{t,T+\Delta T}.
 $$
-The formula for the zero-coupon bond yield implies
+The formula for the zero yield implies
 
 $$
 \begin{align*}
@@ -114,19 +114,19 @@ y_{T,T+\Delta T} =& -\frac{ln(F_{T,T+\Delta T)}}{\Delta T} \\
 =& -\frac{\ln(P_{t,T+\Delta T})-\ln(P_{t,T})}{\Delta T}.
 \end{align*}
 $$
-This is the forward rate of interest for borrowing from $T$ to $T+\Delta$ implied by date-$t$ bond prices.  Taking the limit as $\Delta T \to 0$ gives us the time-$t$ **instantaneous forward rate**:
+This is the forward rate of interest for borrowing from $T$ to $T+\Delta$ implied by date-$t$ bond prices.  Taking the limit as $\Delta T \to 0$ gives us the time-$t$ **instantaneous forward rate**
 $$
 f_{t,T} = - \frac{\partial \ln(P_{t,T})}{\partial T}.
 $$
-$f_{t,T}, it is the market rate at date $t$ for guaranteed short-term funding at date $T$. In principle, one could lock in this rate using a portfolio of risk free-bonds, though in practice this is more commonly done using interest rate futures.
+$f_{t,T}$ is the market rate at date $t$ for guaranteed short-term funding at date $T$. In principle, one could lock in this rate using a long-short portfolio of risk-free bonds, though in practice this is more commonly done using interest rate futures.
 
 Notice that
 $$
 y_{t,T} = \frac{1}{T-t}\int_t^T f_{t,s} ds
 $$
-so we can think of the zero yield from as an average of instantaneous forward rates.
+so we can think of the zero yield as an average of instantaneous forward rates.
 
-One might imagine that the instantaneous forward rate is simply the $Q$-measure expected short rate $\E_t^Q[r_T]$.  After all, they can both be interpreted as kinds of market-price-implied forecasts of future short-term interest rates.  In fact, while the two quantities are related, they are not the same. Through a series of straightforward substitutions, one can show that
+One might imagine that the instantaneous forward rate is simply the $Q$-measure expected short rate $\E_t^Q[r_T]$.  After all, they can both be interpreted as kinds of market-price-implied forecasts of future short-term interest rates.  In fact, while the two quantities are related, they are not the same. Through a series of straightforward substitutions one can show that
 
 $$
 f_{t,T} = \E_t^Q[r_T] + \frac{\Cov_t^Q[r_T,\,D_{t,T}]}{P_{t,T}}.
@@ -134,11 +134,11 @@ $$
 
 Though the specific relationship is model dependent, future short rates and stochastic discount factors are usually negatively correlated, so typically $f_{t,T} > \E_t^Q[r_T]$.  The difference between the expected future short rate and the forward rate reflects the interaction between uncertainty about the path of future interest rates and the nonlinear relationship between interest rates and discount factors.^[Readers interested in exploring this relationship more deeply are encouraged to investigate the literature on "t-forward measures."  This literature shows that it is possible to reweight $Q$-measure probabilities by stochastic discount factors and thereby construct an alternative pricing measure under which forward rates are equal to expected short rates.] These interactions are also important for understanding how bond prices respond to changes in interest rates, the topic of the next section.
 
-## Application: Two views of duration and convexity
+## Two views of duration and convexity
 
 In trading and risk management applications it is often necessary to know how a bond's value will be affected by changes in the prevailing interest rate environment.  And, because one must often draw comparisons among many different bonds with different terms and payout structures, it is helpful to have common metrics with which to compare interest rate sensitivities. In this section we will take a closer look at the two most popular such metrics: Macaulay duration and convexity.
 
-The first task in measuring a bond's sensitivity to changes in interest rates is to answer the question, "which interest rates?"  As we have just seen, a time-varying short rate path implies an entire term structure of interest rates, and it is entirely possible that rates at different points on the term structure may move differently. In practice, duration and convexity are most commonly defined with respect to a parallel shift in the entire risk-free yield curve. If, at time $t$, the yield curve is perturbed by an amount $\Delta y$, then each discount factor $D_{t,T}$ is shifted to $D_{t,T}d^{\Delta y(T-t)}$, so $\frac{\partial}{\partial y} D_{t,T} = -D_{t,T}(T-t)$.
+The first task in measuring a bond's sensitivity to changes in interest rates is to answer the question, "which interest rates?"  As we have just seen, a time-varying short-rate path implies an entire term structure of interest rates, and it is entirely possible that rates at different points on the term structure may move differently. In practice, duration and convexity are most commonly defined with respect to a parallel shift in the entire risk-free yield curve. If, at time $t$, the yield curve is perturbed by an amount $\Delta y$, then each discount factor $D_{t,T}$ is shifted to $D_{t,T}e^{-\Delta y(T-t)}$, so $\frac{\partial}{\partial y} D_{t,T} = -D_{t,T}(T-t)$.
 
 If $B_t$ is the price of a bond at time $t$, the bond's **duration** is
 
@@ -153,19 +153,19 @@ $$
 \mathcal{C} = \frac{1}{B_t}\frac{\partial^2 B_t}{(\partial y)^2}.
 $$
 
-Convexity measures the curvature of a bond’s price-yield relationship and captures the second-order effect of small change in yield on the bond’s price.
+Convexity measures the curvature of a bond’s price-yield relationship and captures the second-order effect of a small change in yield on the bond’s price.
 
-Taken together, duration and convexity describe a second order approximation of the percentage change in the bond price given a $\Delta y$ shift in the yield curve:
+Taken together, duration and convexity describe a second-order approximation of the percentage change in the bond price given a $\Delta y$ shift in the yield curve:
 
 $$
 \frac{\Delta B_t}{B_t} \approx -\mathcal{D}\Delta y + \frac12 \mathcal{D}(\Delta y)^2
 $$
 
-@fig-d_and_c shows an example of how a bond's price might change for a given parallel shift in the yield curve.  A second-order approximation of this change will can be expected to perform better for small values of $\Delta y$ than a simple linear approximation that reflects only the effect of duration, but there is no guarantee that this will be true for larger yield curve shifts.
+@fig-d_and_c shows an example of how a bond's price might change for a given parallel shift in the yield curve.  A second-order approximation of this change can be expected to perform better for small values of $\Delta y$ than a simple linear approximation that reflects only the effect of duration, but there is no guarantee that this will be true for larger yield curve shifts.
 
 ![The effect of a parallel shift in the yield curve on the price of a coupon bond.](../figures/d_and_c.svg){#fig-d_and_c}
 
-Suppose a bond pays a certain stream of future cash flows described by the function $c_t$ so that the amount it pays over a small interval of time is $c_t\,dt$  Our standard valuation formula implies that its price at time $t$ is
+Suppose a bond pays a certain stream of future cash flows described by the function $c_t$ so that the amount it pays over a small interval of time is $c_t\,dt$.  Our standard valuation formula implies that its price at time $t$ is
 
 $$
 B_t = \E_t^Q\left[\int_t^TD_{t,s}\,c_s\,ds\right] = \int_t^T P_{t,s}\,c_s\,dt.
@@ -184,7 +184,7 @@ $$
 
 where $w(s) = \frac{P_{t,s}c_s}{B_t}$.  
 
-Notice that $\int_t^T w(s) ds = 1$ so we can think of $w(s)$ as a weighting function.  If we impose the assumption that $c_t \geq 0$ for all $t$, as is true for most bonds, then $w(s)ds$ is the share of the bond's current value contributed by cash flows that arrive in a short time interval near $s$. In fact, $w(s)$ a valid probability density function, and bond duration and convexity can be interpreted as moments. 
+Notice that $\int_t^T w(s) ds = 1$ so we can think of $w(s)$ as a weighting function.  If we impose the assumption that $c_t \geq 0$ for all $t$, as is true for most bonds, then $w(s)ds$ is the share of the bond's current value contributed by cash flows that arrive in a short time interval near $s$. In fact, $w(s)$ is a valid probability density function, and bond duration and convexity can be interpreted as moments. 
 
 $$
 \mathcal{D} = \E^{w}[s-t]
@@ -197,21 +197,21 @@ $$
 $$
 describes the dispersion of cash flow arrival times.
 
-We can generalize the present value weighting measure $w(s)$ to include discrete payoffs as well.  When the cash flows are continuously distributed, this measure has a density $\w(s)$. When the cash flows occur at discrete dates, it consists of point masses. In either case, it defines a probability distribution over the timing of a bond’s cash flows. So our interpretation of duration and convexity as moments can be applied to bonds that with either continuous or discrete cash flows, or a mix of the two.
+We can generalize the present value weighting measure $w(s)$ to include discrete payoffs as well.  When the cash flows are continuously distributed, this measure has a density $w(s)$. When the cash flows occur at discrete dates, it consists of point masses. In either case, it defines a probability distribution over the timing of a bond’s cash flows. So our interpretation of duration and convexity as moments can be applied to bonds with either continuous or discrete cash flows, or a mix of the two.
 
-The moment interpretation of duration and convexity becomes a little more complicated when applied to assets like swaps or portfolios of long and short bond positions that have both positive and negative cash flows.  In this case we can separate $c_t$ into positive and negative cash flow components so that $c_t = c_t^+ - c_t^-$.  Each component can be viewed a separate positive cash flow asset with its own present value $B_t^.$, duration $\mathcal{D}^.$, and convexity $\mathcal{C}^.$.  The duration of the net position is
+The moment interpretation of duration and convexity becomes a little more complicated when applied to assets like swaps or portfolios of long and short bond positions that have both positive and negative cash flows.  In this case we can separate $c_t$ into positive and negative cash flow components so that $c_t = c_t^+ - c_t^-$.  Each component can be viewed a separate positive cash flow asset with its own present value $B_t^\cdot$, duration $\mathcal{D}^\cdot$, and convexity $\mathcal{C}^\cdot$.  The duration of the net position is
 
 $$
-\mathcal{D} = \frac{B_t^+\mathcal{D}^+ - B_t^-\mathcal{D}^+}{B_t^+ - B_t^-}
+\mathcal{D} = \frac{B_t^+\mathcal{D}^+ - B_t^-\mathcal{D}^-}{B_t^+ - B_t^-}
 $$
 and its convexity is
 
 $$
-\mathcal{C} = \frac{B_t^+\mathcal{C}^+ - B_t^-\mathcal{C}^+}{B_t^+ - B_t^-}.
+\mathcal{C} = \frac{B_t^+\mathcal{C}^+ - B_t^-\mathcal{C}^-}{B_t^+ - B_t^-}.
 $$
-These are not moments of the net cash flow, but instead are differences of the moments of the positive and negative cash flow components weighted by each component's contribution to the present value of the net position.
+The duration and convexity are moments of the positive and negative cash flow components weighted by each component's contribution to the present value of the net position.
 
-## Application: The economic difference between futures and forwards
+## The economic difference between futures and forwards
  
 Futures and forwards are derivative contracts designed to allow market participants to lock in the price they will pay for an asset in the future, or to express a view on the change in the value of that asset over time.  Despite their similarity, the market structure for trading and clearing these contracts differ markedly.  Forward contracts are bespoke, bilateral arrangements between a pair of counterparties, while futures contracts are standardized, exchange traded, and centrally cleared.  Abstracting from these differences, forwards and futures also differ in terms of the timing of contract payment streams.  As we will show in this note, these timing difference mean that the economic interpretation of forwards and futures priced are not the same.
  
@@ -248,7 +248,9 @@ Comparing $K_t$ and $F_t$, we see that when the future path of interest rates is
 
 ## Taking stock and looking forward
 
-In this chapter we have shown how time-varying short interest rates complicates the valuation of both known and unknown future cash flows.  This additional complexity brings with it new economic insights.  We have seen that when interest rates are uncertain, even assets with certain future cash flows entail risks because their present value may change over time as interest rates move.  This is not merely an academic risk mattering only to quant nerds; investors ignore it at their peril. For example, in 2023 Silicon Valley Bank famously failed, in part, because it lost money on "safe" U.S. Treasury securities whose market values were marked down when interest rates unexpectedly rose. The situation become even more nuanced when future payoffs are uncertain.  In this case an asset's current value depends not only on its risk neutral expected payout, but also on the correlation between future payouts and future interest rates.  Assets that generate higher payouts when interest rates are low command a premium relative to risk-neutral expectations. This correlation effect can be undone by marking assets to market and transferring payments between buyers and sellers over time, as is done with futures contracts.  
+In this chapter we have shown how time-varying short interest rates complicates the valuation of both known and unknown future cash flows.  This additional complexity brings with it new economic insights.  We have seen that when interest rates are uncertain, even assets with certain future cash flows entail risks because their present value may change over time as interest rates move.  This is not merely an academic risk mattering only to quant nerds; investors ignore it at their peril. For example, in 2023 Silicon Valley Bank famously failed, in part, because it lost money on "safe" U.S. Treasury securities whose market values were marked down when interest rates unexpectedly rose. 
+
+The situation become even more nuanced when future payoffs are uncertain.  In this case an asset's current value depends not only on its risk neutral expected payout, but also on the correlation between future payouts and future interest rates.  Assets that generate higher payouts when interest rates are low command a premium relative to their risk-neutral expectations. This correlation effect can be undone by marking assets to market and transferring payments between buyers and sellers over time, as is done with futures contracts.  
 
 Whether certain or uncertain, we cannot value future cash flows without knowing something about the time path of future interest rates.  In the next chapter we introduce two classic models of interest rates and show how they can be used to value bonds with certain cash flows.  In later chapters we will model uncertain cash flows and uncertain interest rates together.
 

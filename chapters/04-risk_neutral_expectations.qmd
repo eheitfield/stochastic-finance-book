@@ -125,7 +125,7 @@ While more sophisticated models are used to value stock options today, we can ga
 
 ![Effect of time-to-maturity ($T$) on the relationship between the current stock price ($S_0$) and a European put option with a strike price ($K$) of 100.](../figures/bs_put_payoff.svg){#fig-bs_put_payoff}
 
-Changes in the values of $K$ and $S_t$ affect the value of the call option in exactly the opposite way because the call option acts as a hedge against large increases in the stock price. @fig-bs_put_call shows the value of a European put and call option as a function of the current stock price. The put option is more valuable when the stock price is low, while the call option is more valuable when the stock price is high. If an investor buys both a put and a call at the strike price $K$, she is guaranteed a payout equal to the difference between the stock price at maturity and the strike price. This gives rise to the put-call parity condition 
+Changes in the values of $K$ and $S_t$ affect the value of the call option in exactly the opposite way because the call option acts as a hedge against large increases in the stock price. @fig-bs_put_call shows the value of a European put and call option as functions of the current stock price. The put option is more valuable when the stock price is low, while the call option is more valuable when the stock price is high. If an investor buys both a put and a call at the strike price $K$, she is guaranteed a payout equal to the difference between the stock price at maturity and the strike price. This gives rise to the put-call parity condition 
 
 $$
 V_t^{\text{Call}} - V_t^{\text{Put}} = S_t - e^{-r(T-t)}K.
@@ -325,9 +325,9 @@ which is exactly the same result we derived using the Black-Scholes PDE. A simil
 
 In this chapter we have seen that there are two basic algorithms for pricing derivatives under no arbitrage and complete markets. The hedging portfolio algorithm works as follows.
 
-1.  Construct a dynamic portfolio of tradable assets (including the as-yet unpriced derivative asset) that is risk free and therefore must pay a rate of return exactly equal to the risk-free rate. The no arbitrage condition implies a functional relationship between the value of the unpriced derivative, and the prices of other traded assets, and the risk-free rate at all points in time.
+1.  Construct a dynamic portfolio of tradable assets (including the as-yet unpriced derivative asset) that is risk free and therefore must pay a rate of return exactly equal to the risk-free rate. The no arbitrage condition implies a functional relationship between the value of the unpriced derivative, and the prices of other traded assets at all points in time.
 
-2.  Solve this dynamic equation to obtain an expression for the value of the derivative over time using boundary conditions determined by the derivative's payoff function. In practice the dynamic pricing equation may or may not admit a closed-form solution. In the later case the solution may need to be approximated using numerical methods.
+2.  Solve this dynamic equation to obtain an expression for the value of the derivative over time using boundary conditions determined by the derivative's payoff function. In practice, the dynamic pricing equation may or may not admit a closed-form solution. In the later case the solution may need to be approximated using numerical methods.
 
 Alternatively one can use the $Q$-measure asset pricing algorithm.
 

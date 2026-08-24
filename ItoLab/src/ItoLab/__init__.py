@@ -16,23 +16,24 @@ Typical usage::
     )
 """
 
-from .SamplePaths import SamplePaths
-from .StochasticProcess import StochasticProcess
-from .Wiener import Wiener
-from .PoissonProcess import PoissonProcess
-from .DeterministicFn import DeterministicFn
-from .GeometricBrownianMotion import GeometricBrownianMotion
-from .CoxIngersollRoss import CoxIngersollRoss
-from .OrnsteinUhlenbeck import OrnsteinUhlenbeck
+from .bs_option_value import bs_option_value
+from .cir_bond_value import cir_bond_value
 from .CompensatedPoissonProcess import CompensatedPoissonProcess
 from .CompoundPoissonProcess import CompoundPoissonProcess
-from .JumpType import JumpType
-from .MertonJumpProcess import MertonJumpProcess
-from .vasicek_bond_value import vasicek_bond_value
-from .cir_bond_value import cir_bond_value
-from .bs_option_value import bs_option_value
+from .CoxIngersollRoss import CoxIngersollRoss
+from .DeterministicFn import DeterministicFn
+from .GeometricBrownianMotion import GeometricBrownianMotion
 from .ito_integral import ito_integral
+from .JumpType import JumpType
 from .merton_option_value import merton_option_value
+from .MertonJumpProcess import MertonJumpProcess
+from .OrnsteinUhlenbeck import OrnsteinUhlenbeck
+from .PoissonProcess import PoissonProcess
+from .SamplePaths import SamplePaths
+from .StochasticProcess import StochasticProcess
+from .vasicek_bond_value import vasicek_bond_value
+from .Wiener import Wiener
+from .MultivariateStochasticProcess import MultivariateStochasticProcess
 
 __all__ = {
     "SamplePaths",
@@ -47,6 +48,7 @@ __all__ = {
     "CompoundPoissonProcess",
     "JumpType",
     "MertonJumpProcess",
+    "MultivariateStochasticProcess",
     "vasicek_bond_value",
     "cir_bond_value",
     "bs_option_value",

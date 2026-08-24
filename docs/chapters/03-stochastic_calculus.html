@@ -310,7 +310,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/05-discounting_cash_flows.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Dicsounting Future Cash Flows</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Discounting Future Cash Flows</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -403,7 +403,7 @@ window.Quarto = {
 <p>In the previous chapter we introduced the Wiener process, which serves as the backbone for most applied work in continuous-time finance. We have seen that Wiener processes are too jagged to be differentiable so we cannot bring the usual calculus toolkit to bare on them directly. In this chapter we develop a new type of calculus, called Itô calculus, that provides the tools we need to work with Wiener processes. To illustrate the use of these tools, we conclude this chapter by deriving properties for geometric Brownian motion (GBM), a stochastic process that is particularly well suited to modeling asset prices.</p>
 <section id="sec-differentials" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="sec-differentials"><span class="header-section-number">3.1</span> The algebra of Wiener differentials</h2>
-<p>Derivatives of the traditional sort are not well defined in Itô calculus. Insteade we make extensive use of differential notation, writing expressions such as <span class="math inline">\(dt\)</span>, <span class="math inline">\(dW_t\)</span>, and <span class="math inline">\(dX_t\)</span>. If your previous exposure to calculus emphasized derivatives as limits of difference quotients, this notation may initially feel unfamiliar. Differential notation provides a compact and intuitive way to describe the behavior of a process over an infinitesimally small time interval, and is particularly useful when manipulating differential equations. It is best to think of <span class="math inline">\(dt\)</span> as representing an infinitesimal increment of time and <span class="math inline">\(dW_t\)</span> as the corresponding infinitesimal increment of a Wiener process. Rather than viewing these as ordinary numbers, we will use them as symbolic objects that encode how different quantities scale over small time intervals. The Big-O notation introduced in the previous chapter will guide these manipulations.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Derivatives of the traditional sort are not well defined in Itô calculus. Instead we make extensive use of differential notation, writing expressions such as <span class="math inline">\(dt\)</span>, <span class="math inline">\(dW_t\)</span>, and <span class="math inline">\(dX_t\)</span>. If your previous exposure to calculus emphasized derivatives as limits of difference quotients, this notation may initially feel unfamiliar. Differential notation provides a compact and intuitive way to describe the behavior of a process over an infinitesimally small time interval, and is particularly useful when manipulating differential equations. It is best to think of <span class="math inline">\(dt\)</span> as representing an infinitesimal increment of time and <span class="math inline">\(dW_t\)</span> as the corresponding infinitesimal increment of a Wiener process. Rather than viewing these as ordinary numbers, we will use them as symbolic objects that encode how different quantities scale over small time intervals. The Big-O notation introduced in the previous chapter will guide these manipulations.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <p>Many calculus results are derived or motivated by taking first-order linear approximations of differentiable functions and showing that higher-order terms are negligible for small values of <span class="math inline">\(dt\)</span>. In manipulating differential equations, we typically simply ignore terms that scale at a rate slower than <span class="math inline">\(O(dt)\)</span>. For example, consider the ordinary differential equation</p>
 <p><span class="math display">\[
 dy_t = a + b\,dt.
@@ -418,7 +418,7 @@ dy_t = a + b\,dt.
 \]</span></p>
 <p>Recognizing that <span class="math inline">\(O(dt^2) &lt; O(dt)\)</span>, we set <span class="math inline">\(dt^2 = 0\)</span> and it drops out of the final expression.</p>
 <p>In the previous chapter we learned that for a differentiable function <span class="math inline">\(f(t)\)</span>, <span class="math inline">\(df(t)\)</span> is of order <span class="math inline">\(O(dt)\)</span> while for a Wiener process <span class="math inline">\(dW_t\)</span> is of order <span class="math inline">\(O(\sqrt{t})\)</span>. The steeper scaling of Wiener processes over short time intervals is the fundamental challenge that Itô calculus was designed to overcome.</p>
-<p>The scaling rule for <span class="math inline">\(dW_t\)</span> implies that <span class="math inline">\(dW_t^2\)</span> is of order <span class="math inline">\(O(dt)\)</span>. This is important because it means that if we could somehow differentiate a Wiener process, the scaling of its <em>second</em> derivative would be of the same order of magnitude as the scaling of the <em>first</em> derivative of an ordinary function. In contrast, the scaling rule for a differentiable function implies that <span class="math inline">\((df(x))^2\)</span> is of order <span class="math inline">\(O(dt^2)\)</span>, so its second derivative scales at a much smaller rate than its first derivative. Thus, while we might safely ignore second-order differentials of differentiable functions, this approach won’t work when Wiener processes are involve; they fluctuate so much that one must also account for the effects of second-order terms.</p>
+<p>The scaling rule for <span class="math inline">\(dW_t\)</span> implies that <span class="math inline">\((dW_t)^2\)</span> is of order <span class="math inline">\(O(dt)\)</span>. This is important because it means that if we could somehow differentiate a Wiener process, the scaling of its <em>second</em> derivative would be of the same order of magnitude as the scaling of the <em>first</em> derivative of an ordinary function. In contrast, the scaling rule for a differentiable function implies that <span class="math inline">\((df(x))^2\)</span> is of order <span class="math inline">\(O(dt^2)\)</span>, so its second derivative scales at a much smaller rate than its first derivative. Thus, while we might safely ignore second-order differentials of differentiable functions, this approach won’t work when Wiener processes are involve; they fluctuate so much that one must also account for the effects of second-order terms.</p>
 <p>Revisiting our earlier example, suppose we are now faced with the differential equation</p>
 <p><span class="math display">\[
 dy_t = a + b\,dt + c\,dW_t
@@ -428,12 +428,12 @@ dy_t = a + b\,dt + c\,dW_t
 \begin{align*}
 (dy_t)^2 =&amp; (a + b\,dt + c\,dW_t)^2 \\
 =&amp; a^2 + 2 a\,b\,dt + 2\,a\,c\,dW_t + 2\,b\,c\,dt\,dW_t \\
-&amp; + b^2 dt^2 + c^2\,dW_t^2 \\
-=&amp; a^2 + 2\,a\,b\,dt + 2\,a\,c\,dW_t + 2\,b\,c\,dt\,dW_t + c^2\,dW_t^2.
+&amp; + b^2 dt^2 + c^2\,(dW_t)^2 \\
+=&amp; a^2 + 2\,a\,b\,dt + 2\,a\,c\,dW_t + 2\,b\,c\,dt\,dW_t + c^2\,(dW_t)^2.
 \end{align*}
 \]</span></p>
-<p>The term involving <span class="math inline">\(dt^2\)</span> still drops out, but how should we handle the terms involving <span class="math inline">\(dW_t\)</span>, <span class="math inline">\(dt\,dW_t\)</span>, and <span class="math inline">\(dW_t^2\)</span>? Can we use rules like <span class="math inline">\(dt^2 = 0\)</span> for these terms?</p>
-<p>Notice that <span class="math inline">\(dt\,dW_t\)</span> is of order <span class="math inline">\(O(dt^{3/2})\)</span> so, applying the logic that we can ignore terms whose order is less than <span class="math inline">\(dt\)</span>, we can drop this term. What about <span class="math inline">\(dW_t^2\)</span>? We have establised that it is of order <span class="math inline">\(O(dt)\)</span>, so we know we can’t drop it. But can we say more?</p>
+<p>The term involving <span class="math inline">\(dt^2\)</span> still drops out, but how should we handle the terms involving <span class="math inline">\(dW_t\)</span>, <span class="math inline">\(dt\,dW_t\)</span>, and <span class="math inline">\((dW_t)^2\)</span>? Can we use rules like <span class="math inline">\(dt^2 = 0\)</span> for these terms?</p>
+<p>Notice that <span class="math inline">\(dt\,dW_t\)</span> is of order <span class="math inline">\(O(dt^{3/2})\)</span> so, applying the logic that we can ignore terms whose order is less than <span class="math inline">\(dt\)</span>, we can drop this term. What about <span class="math inline">\((dW_t)^2\)</span>? We have established that it is of order <span class="math inline">\(O(dt)\)</span>, so we know we can’t drop it. But can we say more?</p>
 <p>We learned in the last chapter that a Wiener increment <span class="math inline">\(\Delta W_t\)</span> is normally distributed with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(\Delta t\)</span>. <a href="A1-normal_properties.html#thm-noncentral-moments" class="quarto-xref">Theorem&nbsp;<span>A.3</span></a> implies that <span class="math inline">\((\Delta W_t)^2\)</span> has mean <span class="math inline">\(\Delta t\)</span> and variance <span class="math inline">\(2\,(\Delta t)^2\)</span>. Consider what happens <span class="math inline">\((\Delta W_t)^2\)</span> as <span class="math inline">\(\Delta t\)</span> shrinks. Both the mean and the variance drop toward zero, but the variance falls at a much faster rate than the mean.</p>
 <p><span class="math display">\[
 \begin{align*}
@@ -441,7 +441,8 @@ dy_t = a + b\,dt + c\,dW_t
 =&amp; \lim_{\Delta t \to 0} 2\,(\Delta t)^2 \\
 =&amp; 0
 \end{align*}
-\]</span> so <span class="math inline">\((\Delta W_t)^2 \toms \Delta t\)</span> as <span class="math inline">\(\Delta t \rightarrow 0\)</span>. For very small values of <span class="math inline">\(\Delta t\)</span>, realizations of <span class="math inline">\((\Delta W_t)^2\)</span> are so tightly clustered around the mean <span class="math inline">\(\Delta t\)</span> that, to a first approximation, we can treat <span class="math inline">\((\Delta W_t)^2\)</span> as non-stochastic. We can apply the substitution rule</p>
+\]</span></p>
+<p>so <span class="math inline">\((\Delta W_t)^2 \toms \Delta t\)</span> as <span class="math inline">\(\Delta t \rightarrow 0\)</span>. For very small values of <span class="math inline">\(\Delta t\)</span>, realizations of <span class="math inline">\((\Delta W_t)^2\)</span> are so tightly clustered around the mean <span class="math inline">\(\Delta t\)</span> that, to a first approximation, we can treat <span class="math inline">\((\Delta W_t)^2\)</span> as non-stochastic. We can apply the substitution rule</p>
 <p><span class="math display">\[
 (dW_t)^2 = dt.
 \]</span></p>
@@ -491,7 +492,7 @@ Table&nbsp;3.1: Rules for working with Itô differentials.
 </div>
 </figure>
 </div>
-<p>Applyng all of these rules to our earlier example, we have</p>
+<p>Applying all of these rules to our earlier example, we have</p>
 <p><span class="math display">\[
 \begin{align*}
 (dy)^2
@@ -630,7 +631,7 @@ dX_t = \mu_t\,dt + \sigma_t\,dW_t,
 <p><span class="math display">\[
 \int_0^T f(t)dg(t) = \lim_{n\to\infty} \sum_{i=0}^{n-1} f(t_i)\,\Delta g(t_i),
 \]</span></p>
-<p>weights values of <span class="math inline">\(f(t)\)</span> by increments of an integrator function <span class="math inline">\(g(t)\)</span>. Somewhat less common than the Riemann integrals, Riemann-Stieltjes integrals are widely used in probability and statistics to compute expectations of continuous random variables.</p>
+<p>weights values of <span class="math inline">\(f(t)\)</span> by increments of an integrator function <span class="math inline">\(g(t)\)</span>. Somewhat less common than Riemann integrals, Riemann-Stieltjes integrals are widely used in probability and statistics to compute expectations of continuous random variables.</p>
 <p>When working with stochastic processes, we use the Itô Integral.</p>
 <div class="callout callout-style-default callout-note no-icon callout-titled" title="Itô Integral">
 <div class="callout-header d-flex align-content-center">
@@ -751,7 +752,7 @@ d \ln(S_t) =&amp; \mu \\
 <p><span class="math display">\[
 S_T = S_0 e^{\mu T}
 \]</span></p>
-<p>shown in <a href="#fig-nasdaq" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> by the dashed red line.^[For the fitted curve, <span class="math inline">\(S_0\)</span> is the average level of the NASDAQ index in 1990 and <span class="math inline">\(\mu\)</span> is the average annual growth rate from 1990 to 2026.] This deterministic function can describe the long-run trend in the NASDAQ index but it cannot capture its fluctuations.</p>
+<p>shown in <a href="#fig-nasdaq" class="quarto-xref">Figure&nbsp;<span>3.1</span></a> by the dashed red line.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> This deterministic function can describe the long-run trend in the NASDAQ index but it cannot capture its fluctuations.</p>
 <div id="fig-nasdaq" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-nasdaq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -807,12 +808,12 @@ d \ln(S) &amp;= \frac{1}{S}(\mu S dt + \sigma S dW) - \frac{1}{2S^2}(\sigma^2 S^
 \ln(S_T) &amp;= \ln(S_0) + \left(\mu - \frac{1}{2}\sigma^2\right)T + \sigma W_T.
 \end{align*}
 \]</span></p>
-<p>This constitutes a <strong>pathwise solution</strong> to the SDE. We have expressed <span class="math inline">\(S_T\)</span> as a function of the initial condition, <span class="math inline">\(S_0\)</span>, and the underlying sources of randomness. Often this is sufficient for simulation and theoretical analysis. For example, we could simulate GBM growth rate paths by plugging simulated realizations of <span class="math inline">\(W_T\)</span> into the equation above. Often we can go a step father, however. The <strong>transition distribution</strong> of a stochastic process describes the probability distribution of its future value given its current level. Knowing a processe’s transition distribution can make simulation easier and more robust, and can enable us to derive stronger or more general theoretical results.</p>
+<p>This constitutes a <strong>pathwise solution</strong> to the SDE. We have expressed <span class="math inline">\(S_T\)</span> as a function of the initial condition, <span class="math inline">\(S_0\)</span>, and the underlying sources of randomness. This is typically sufficient for simulation and theoretical analysis. For example, we could simulate GBM growth rate paths by plugging simulated realizations of <span class="math inline">\(W_T\)</span> into the equation above. Often we can go a step father, however. The <strong>transition distribution</strong> of a stochastic process describes the probability distribution of its future value given its current level. Knowing a process’s transition distribution can make simulation easier and more robust, and can enable us to derive stronger or more general theoretical results.</p>
 <p>In the case of GBM, deriving the transition distribution from the pathwise solution is straightforward. The only stochastic element in the pathwise solution is the Wiener process, <span class="math inline">\(W_T\)</span>, which we know has a normal distribution with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(T\)</span>. Thus</p>
 <p><span class="math display">\[
 \ln(S_T) \sim N\left(\ln(S_0) + \mu - \frac{1}{2}\sigma^2, \sigma^2 T\right)
 \]</span></p>
-<p>and <span class="math inline">\(S_T\)</span> itself has a lognormal distribution. This transition distribution provides an analytic expression for the probability density of <span class="math inline">\(S_t\)</span> at any point in time, as well as all its moments. In <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.6</span></a> we will show how this transition solution can be used to value options on <span class="math inline">\(S_t\)</span>.</p>
+<p>and <span class="math inline">\(S_T\)</span> itself has a lognormal distribution. This transition distribution provides an analytic expression for the probability density of <span class="math inline">\(S_t\)</span> at any point in time, as well as all its moments. In <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.5</span></a> we will show how this transition solution can be used to value options on <span class="math inline">\(S_t\)</span>.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled" title="Geometric Brownian Motion">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -861,7 +862,7 @@ S_t\mid S_0
 \]</span></p>
 </div>
 </div>
-<p><a href="#fig-gbm_paths_nasdaq" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> shows geometric Bownian motion process paths calibrated to the same growth rate and volatility as the NASDAQ index. For comparison we have overlaid a deterministic exponential growth curve using the same growth rate parameter. Note the similarity between these paths and the realized path of the NASDAQ in <a href="#fig-nasdaq" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>. The lognormal distribution is skewed to the right and its variance increases in proportion to its mean, as can be seen in the density plots of GBM process shown in <a href="#fig-gbm_dist_nasdaq" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>.</p>
+<p><a href="#fig-gbm_paths_nasdaq" class="quarto-xref">Figure&nbsp;<span>3.2</span></a> shows geometric Brownian motion process paths calibrated to the same growth rate and volatility as the NASDAQ index. For comparison we have overlaid a deterministic exponential growth curve using the same growth rate parameter. Note the similarity between these paths and the realized path of the NASDAQ in <a href="#fig-nasdaq" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>. The lognormal distribution is skewed to the right and its variance increases in proportion to its mean, as can be seen in the density plots of GBM process shown in <a href="#fig-gbm_dist_nasdaq" class="quarto-xref">Figure&nbsp;<span>3.3</span></a>.</p>
 <div id="fig-gbm_paths_nasdaq" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-gbm_paths_nasdaq-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -893,7 +894,8 @@ Figure&nbsp;3.3: Probability densities of 10,000 geometric Brownian motion proce
 <hr>
 <ol>
 <li id="fn1"><p>Technically, the differential notation used in Itô calculus derives from the Itô integral, so a bottom-up development of Itô calculus would present the integral first. However, following the order of material in most traditional calculus expositions, we present differentials first, without formally defining them.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>The observant reader will notice that throughout this chapter the symbol “=” is used in two different ways. When writing equations involving stochastic differentials, expressions such as <span class="math inline">\(dW_t^2 = dt\)</span> should not be interpreted as ordinary algebraic identities. Rather, they are convenient shorthand for the limiting behavior of Wiener increments described by quadratic variation. Once these rules have been established, they may be manipulated algebraically when working with stochastic differential equations.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The observant reader will notice that throughout this chapter the symbol “=” is used in two different ways. When writing equations involving stochastic differentials, expressions such as <span class="math inline">\((dW_t)^2 = dt\)</span> should not be interpreted as ordinary algebraic identities. Rather, they are convenient shorthand for the limiting behavior of Wiener increments. Once these rules have been established, they may be manipulated algebraically when working with stochastic differential equations.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>For the fitted curve, <span class="math inline">\(S_0\)</span> is the average level of the NASDAQ index in 1990 and <span class="math inline">\(\mu\)</span> is the average annual growth rate from 1990 to 2026.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

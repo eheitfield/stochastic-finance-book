@@ -28,7 +28,7 @@ Recognizing that $O(dt^2) < O(dt)$, we set $dt^2 = 0$ and it drops out of the fi
 
 In the previous chapter we learned that for a differentiable function $f(t)$, $df(t)$ is of order $O(dt)$ while for a Wiener process $dW_t$ is of order $O(\sqrt{t})$. The steeper scaling of Wiener processes over short time intervals is the fundamental challenge that Itô calculus was designed to overcome.
 
-The scaling rule for $dW_t$ implies that $dW_t^2$ is of order $O(dt)$. This is important because it means that if we could somehow differentiate a Wiener process, the scaling of its *second* derivative would be of the same order of magnitude as the scaling of the *first* derivative of an ordinary function. In contrast, the scaling rule for a differentiable function implies that $(df(x))^2$ is of order $O(dt^2)$, so its second derivative scales at a much smaller rate than its first derivative. Thus, while we might safely ignore second-order differentials of differentiable functions, this approach won't work when Wiener processes are involve; they fluctuate so much that one must also account for the effects of second-order terms.
+The scaling rule for $dW_t$ implies that $(dW_t)^2$ is of order $O(dt)$. This is important because it means that if we could somehow differentiate a Wiener process, the scaling of its *second* derivative would be of the same order of magnitude as the scaling of the *first* derivative of an ordinary function. In contrast, the scaling rule for a differentiable function implies that $(df(x))^2$ is of order $O(dt^2)$, so its second derivative scales at a much smaller rate than its first derivative. Thus, while we might safely ignore second-order differentials of differentiable functions, this approach won't work when Wiener processes are involve; they fluctuate so much that one must also account for the effects of second-order terms.
 
 Revisiting our earlier example, suppose we are now faced with the differential equation
 
@@ -42,14 +42,14 @@ $$
 \begin{align*}
 (dy_t)^2 =& (a + b\,dt + c\,dW_t)^2 \\
 =& a^2 + 2 a\,b\,dt + 2\,a\,c\,dW_t + 2\,b\,c\,dt\,dW_t \\
-& + b^2 dt^2 + c^2\,dW_t^2 \\
-=& a^2 + 2\,a\,b\,dt + 2\,a\,c\,dW_t + 2\,b\,c\,dt\,dW_t + c^2\,dW_t^2.
+& + b^2 dt^2 + c^2\,(dW_t)^2 \\
+=& a^2 + 2\,a\,b\,dt + 2\,a\,c\,dW_t + 2\,b\,c\,dt\,dW_t + c^2\,(dW_t)^2.
 \end{align*}
 $$
 
-The term involving $dt^2$ still drops out, but how should we handle the terms involving $dW_t$, $dt\,dW_t$, and $dW_t^2$? Can we use rules like $dt^2 = 0$ for these terms?
+The term involving $dt^2$ still drops out, but how should we handle the terms involving $dW_t$, $dt\,dW_t$, and $(dW_t)^2$? Can we use rules like $dt^2 = 0$ for these terms?
 
-Notice that $dt\,dW_t$ is of order $O(dt^{3/2})$ so, applying the logic that we can ignore terms whose order is less than $dt$, we can drop this term. What about $dW_t^2$? We have established that it is of order $O(dt)$, so we know we can't drop it. But can we say more?
+Notice that $dt\,dW_t$ is of order $O(dt^{3/2})$ so, applying the logic that we can ignore terms whose order is less than $dt$, we can drop this term. What about $(dW_t)^2$? We have established that it is of order $O(dt)$, so we know we can't drop it. But can we say more?
 
 We learned in the last chapter that a Wiener increment $\Delta W_t$ is normally distributed with mean $0$ and variance $\Delta t$. @thm-noncentral-moments implies that $(\Delta W_t)^2$ has mean $\Delta t$ and variance $2\,(\Delta t)^2$. Consider what happens $(\Delta W_t)^2$ as $\Delta t$ shrinks. Both the mean and the variance drop toward zero, but the variance falls at a much faster rate than the mean.
 
@@ -59,7 +59,9 @@ $$
 =& \lim_{\Delta t \to 0} 2\,(\Delta t)^2 \\
 =& 0
 \end{align*}
-$$ so $(\Delta W_t)^2 \toms \Delta t$ as $\Delta t \rightarrow 0$. For very small values of $\Delta t$, realizations of $(\Delta W_t)^2$ are so tightly clustered around the mean $\Delta t$ that, to a first approximation, we can treat $(\Delta W_t)^2$ as non-stochastic. We can apply the substitution rule
+$$ 
+
+so $(\Delta W_t)^2 \toms \Delta t$ as $\Delta t \rightarrow 0$. For very small values of $\Delta t$, realizations of $(\Delta W_t)^2$ are so tightly clustered around the mean $\Delta t$ that, to a first approximation, we can treat $(\Delta W_t)^2$ as non-stochastic. We can apply the substitution rule
 
 $$
 (dW_t)^2 = dt.
@@ -67,7 +69,7 @@ $$
 
 Combining this result with our findings from earlier in this section, @tbl-ito_rules summarizes rules for working with differentials in Itô calculus. The first two rows simply record the scaling behavior of the infinitesimal increments. The remaining rows show how products of differentials behave. Terms whose order is smaller than $O(dt)$ vanish in the limit and are therefore discarded. The only exception is $dW_t^2$, whose order is exactly $O(dt)$. Because Wiener processes have quadratic variation equal to elapsed time, this term survives and is replaced by $dt$. These simple multiplication rules form the algebraic foundation of Itô calculus.[^03-stochastic_calculus-2]
 
-[^03-stochastic_calculus-2]: The observant reader will notice that throughout this chapter the symbol “=” is used in two different ways. When writing equations involving stochastic differentials, expressions such as $dW_t^2 = dt$ should not be interpreted as ordinary algebraic identities. Rather, they are convenient shorthand for the limiting behavior of Wiener increments described by quadratic variation. Once these rules have been established, they may be manipulated algebraically when working with stochastic differential equations.
+[^03-stochastic_calculus-2]: The observant reader will notice that throughout this chapter the symbol “=” is used in two different ways. When writing equations involving stochastic differentials, expressions such as $(dW_t)^2 = dt$ should not be interpreted as ordinary algebraic identities. Rather, they are convenient shorthand for the limiting behavior of Wiener increments. Once these rules have been established, they may be manipulated algebraically when working with stochastic differential equations.
 
 | Differential Expression | Order          | Itô Multiplication Rule |
 |:------------------------|:---------------|:------------------------|
@@ -79,7 +81,7 @@ Combining this result with our findings from earlier in this section, @tbl-ito_r
 
 : Rules for working with Itô differentials. {#tbl-ito_rules}
 
-Applyng all of these rules to our earlier example, we have
+Applying all of these rules to our earlier example, we have
 
 $$
 \begin{align*}
@@ -249,7 +251,7 @@ $$
 \int_0^T f(t)dg(t) = \lim_{n\to\infty} \sum_{i=0}^{n-1} f(t_i)\,\Delta g(t_i),
 $$
 
-weights values of $f(t)$ by increments of an integrator function $g(t)$. Somewhat less common than the Riemann integrals, Riemann-Stieltjes integrals are widely used in probability and statistics to compute expectations of continuous random variables.
+weights values of $f(t)$ by increments of an integrator function $g(t)$. Somewhat less common than Riemann integrals, Riemann-Stieltjes integrals are widely used in probability and statistics to compute expectations of continuous random variables.
 
 When working with stochastic processes, we use the Itô Integral.
 
@@ -405,7 +407,7 @@ $$
 S_T = S_0 e^{\mu T}
 $$
 
-shown in @fig-nasdaq by the dashed red line.\^\[For the fitted curve, $S_0$ is the average level of the NASDAQ index in 1990 and $\mu$ is the average annual growth rate from 1990 to 2026.\] This deterministic function can describe the long-run trend in the NASDAQ index but it cannot capture its fluctuations.
+shown in @fig-nasdaq by the dashed red line.^[For the fitted curve, $S_0$ is the average level of the NASDAQ index in 1990 and $\mu$ is the average annual growth rate from 1990 to 2026.] This deterministic function can describe the long-run trend in the NASDAQ index but it cannot capture its fluctuations.
 
 ![THe NASDAQ composite equity index.](../figures/nasdaq.svg){#fig-nasdaq}
 
@@ -469,7 +471,7 @@ $$
 \end{align*}
 $$
 
-This constitutes a **pathwise solution** to the SDE. We have expressed $S_T$ as a function of the initial condition, $S_0$, and the underlying sources of randomness. Often this is sufficient for simulation and theoretical analysis. For example, we could simulate GBM growth rate paths by plugging simulated realizations of $W_T$ into the equation above. Often we can go a step father, however. The **transition distribution** of a stochastic process describes the probability distribution of its future value given its current level. Knowing a process's transition distribution can make simulation easier and more robust, and can enable us to derive stronger or more general theoretical results.
+This constitutes a **pathwise solution** to the SDE. We have expressed $S_T$ as a function of the initial condition, $S_0$, and the underlying sources of randomness.  This is typically sufficient for simulation and theoretical analysis. For example, we could simulate GBM growth rate paths by plugging simulated realizations of $W_T$ into the equation above. Often we can go a step father, however. The **transition distribution** of a stochastic process describes the probability distribution of its future value given its current level. Knowing a process's transition distribution can make simulation easier and more robust, and can enable us to derive stronger or more general theoretical results.
 
 In the case of GBM, deriving the transition distribution from the pathwise solution is straightforward. The only stochastic element in the pathwise solution is the Wiener process, $W_T$, which we know has a normal distribution with mean $0$ and variance $T$. Thus
 
