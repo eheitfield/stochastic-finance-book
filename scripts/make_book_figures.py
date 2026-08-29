@@ -743,6 +743,37 @@ def figure_mjd_vs_bs_put_payoff() -> None:
     plt.close(fig)
 
 
+def figure_biv_wiener(seed: Optional[int] = None) -> None:
+    rho = 0.75
+    n_paths = 20
+    bw0 = CorrelatedWienerProcess(corr=0.0).generate_multi_paths(
+        n_paths=n_paths, max_T=10.0, seed=seed
+    )
+    bw1 = CorrelatedWienerProcess(corr=rho).generate_multi_paths(
+        n_paths=n_paths, max_T=10.0, seed=seed + 20
+    )
+
+    def plot_paths(bw, ax):
+        for p in range(n_paths):
+            ax.axhline(y=0, color="black", linewidth=0.5)
+            ax.axvline(x=0, color="black", linewidth=0.5)
+            ax.plot(bw[0].paths[p, :], bw[1].paths[p, :], color="steelblue", alpha=0.5)
+            ax.set_ylim(-8, 8)
+            ax.set_xlim(-8, 8)
+            ax.set_aspect("equal")
+
+    fig, axs = plt.subplots(nrows=2, figsize=(4, 8))
+
+    plot_paths(bw0, axs[0])
+    axs[0].set_title(r"$\rho=0.0$")
+    plot_paths(bw1, axs[1])
+    axs[1].set_title(rf"$\rho={{{rho:.2}}}$")
+
+    fig.tight_layout()
+    fig.savefig(FIGURE_DIR / "biv_wiener.svg")
+    plt.close(fig)
+
+
 # =============================================================================
 # Plot helper functions
 # =============================================================================
@@ -856,6 +887,46 @@ def ridge_plot(
     return fig, axs
 
 
+def figure_bs_option_path(seed: Optional[int] = None) -> None:
+    s0 = 90
+    r = 0.05
+    mu = 0.08
+    sigma = 0.20
+    k = 100
+    max_T = 1.0
+    n_inc = 1000
+
+    s_path = ito.GeometricBrownianMotion(s0=s0, mu=mu, sigma=sigma).generate_paths(
+        n_paths=1, n_inc=n_inc, max_T=max_T, seed=seed
+    )
+    v_put = []
+    v_call = []
+    for i in range(n_inc):
+        ttm = max_T - s_path.times[i]
+        v_s = s_path.paths[0, i]
+        v_put.append(
+            ito.bs_option_value(S=v_s, K=k, T=ttm, r=r, sigma=sigma, option="put")
+        )
+        v_call.append(
+            ito.bs_option_value(S=v_s, K=k, T=ttm, r=r, sigma=sigma, option="call")
+        )
+
+    fig, axs = plt.subplots(nrows=2, sharex=True, figsize=(8, 8))
+    axs[0].plot(s_path.times, s_path.paths.T)
+    axs[0].set_title("Stock Price")
+    axs[0].axhline(y=k, label="Strike Price", color="salmon", linestyle="--")
+    axs[0].legend()
+    axs[1].plot(s_path.times, v_put, label="Put")
+    axs[1].plot(s_path.times, v_call, label="Call")
+    axs[1].set_title("Option Value")
+    axs[1].legend()
+    axs[1].set_xlabel("t")
+
+    fig.tight_layout()
+    fig.savefig(FIGURE_DIR / "bs_option_path.svg")
+    plt.close(fig)
+
+
 # =============================================================================
 # Figure orchestration
 # =============================================================================
@@ -879,11 +950,11 @@ def all_figures() -> None:
     # Chapter 4
     figure_bs_put_payoff()
     figure_bs_put_call()
-    # Chapter 4a
+    # Chapter 5
     figure_effr()
     figure_yield_curve_ex()
     figure_d_and_c()
-    # Chapter 5
+    # Chapter 6
     figure_ust10()
     figure_ou_paths(MASTER_SEED + 80)
     figure_ou_dist(MASTER_SEED + 90)
@@ -894,7 +965,8 @@ def all_figures() -> None:
     figure_cir_dist(MASTER_SEED + 95)
     figure_cir_term_structure()
     figure_cir_vol()
-    # Chapter 6
+    figure_biv_wiener(MASTER_SEED + 250)
+    # Chapter 8
     figure_nas_daily_ret()
     figure_cpp_paths(seed=MASTER_SEED + 150)
     figure_gbm_daily_return(seed=MASTER_SEED + 210)
@@ -904,7 +976,7 @@ def all_figures() -> None:
 
 
 def test_figures() -> None:
-    figure_d_and_c()
+    figure_bs_option_path(seed=MASTER_SEED + 250)
 
 
 def main() -> None:

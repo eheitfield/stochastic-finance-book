@@ -391,7 +391,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#sec-hedging_portfolio" id="toc-sec-hedging_portfolio" class="nav-link active" data-scroll-target="#sec-hedging_portfolio"><span class="header-section-number">4.1</span> Dynamic hedging and the Black-Scholes model</a></li>
-  <li><a href="#sec-hedging_bs" id="toc-sec-hedging_bs" class="nav-link" data-scroll-target="#sec-hedging_bs"><span class="header-section-number">4.2</span> Valuing put and call options</a></li>
+  <li><a href="#sec-hedging_bs" id="toc-sec-hedging_bs" class="nav-link" data-scroll-target="#sec-hedging_bs"><span class="header-section-number">4.2</span> Valuing equity options</a></li>
   <li><a href="#risk-neutral-pricing" id="toc-risk-neutral-pricing" class="nav-link" data-scroll-target="#risk-neutral-pricing"><span class="header-section-number">4.3</span> Risk-neutral pricing</a></li>
   <li><a href="#sec-q_bs_derivation" id="toc-sec-q_bs_derivation" class="nav-link" data-scroll-target="#sec-q_bs_derivation"><span class="header-section-number">4.4</span> Geometric Brownian motion under the risk neutral measure</a></li>
   <li><a href="#sec-q_measure_bs" id="toc-sec-q_measure_bs" class="nav-link" data-scroll-target="#sec-q_measure_bs"><span class="header-section-number">4.5</span> Option pricing redux</a></li>
@@ -476,11 +476,17 @@ d\Pi =&amp; \Pi\,r\,dt\\
 <p><span class="math display">\[
 \pd{V}{t} + \frac12 \sigma^2\,S^2\,\pdd{V}{S} + \pd{V}{S}\,S\,r - V\,r = 0.
 \]</span></p>
-<p>This is the celebrated Black-Scholes pricing equation. Before putting it to use, it is worth pausing to reflect on some of its key properties. First, observe that this is a deterministic partial differential equation. Although the stock value, <span class="math inline">\(S\)</span>, follows a stochastic differential equation, over short increments of time the derivative’s value depends only on the current level of <span class="math inline">\(S\)</span>. Second, the result is quite general. We have not yet said anything about the details of the derivative we seek to price beyond that it depends on a smooth function of <span class="math inline">\(S\)</span> and <span class="math inline">\(t\)</span>. This formula can be used to price a wide variety of derivative products. Finally, notice that the stock’s drift term, <span class="math inline">\(\mu\)</span>, does not appear in the Black-Scholes equation. This reflects a deep economic insight: because the derivative can be perfectly hedged, investors require no compensation for bearing stock price risk. Once the risk has been eliminated only the risk-free rate remains.</p>
+<p>This is the celebrated Black-Scholes pricing equation. Before putting it to use, it is worth pausing to reflect on some of its key properties. First, observe that this is a deterministic partial differential equation. Although the stock value <span class="math inline">\(S\)</span> is a stochastic process, over short increments of time the derivative’s value depends only on the current level of <span class="math inline">\(S\)</span>. Second, the result is quite general. We have not yet said anything about the details of the derivative we seek to price beyond that it depends on a smooth function of <span class="math inline">\(S\)</span> and <span class="math inline">\(t\)</span>. This formula can be used to price a wide variety of derivative products. Finally, notice that the stock’s drift term <span class="math inline">\(\mu\)</span> does not appear in the Black-Scholes equation. This reflects a deep economic insight: because the derivative can be perfectly hedged, investors require no compensation for bearing stock price risk. Once the risk has been eliminated only the risk-free rate remains.</p>
 </section>
 <section id="sec-hedging_bs" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="sec-hedging_bs"><span class="header-section-number">4.2</span> Valuing put and call options</h2>
-<p>To see how we can apply the Black-Scholes formula in practice, consider a simple European put option that gives the owner the opportunity to sell a stock <span class="math inline">\(S\)</span> at the strike price <span class="math inline">\(K\)</span> on date <span class="math inline">\(T\)</span>. When the contract matures the option holder will purchase the stock and deliver it to the option seller for the strike prices if <span class="math inline">\(S_T &lt; K\)</span>, otherwise she will do nothing. Thus the terminal value of the put option is</p>
+<h2 data-number="4.2" class="anchored" data-anchor-id="sec-hedging_bs"><span class="header-section-number">4.2</span> Valuing equity options</h2>
+<p>The Black-Scholes formula became famous as a tool for pricing and analyzing options contracts that allow the holder to take specified actions depending on the price of a reference asset. We can rewrite the Black-Scholes PDE a follows:</p>
+<p><span class="math display">\[
+Vr = S\,\Delta\,r + \Theta + \frac12 \sigma^2\,S^2\,\Gamma
+\]</span></p>
+<p>where <span class="math inline">\(\Delta = \partial V/\partial S\)</span>, <span class="math inline">\(\Theta = \partial V/\partial t\)</span>, , and <span class="math inline">\(\Gamma = \partial^2 V/(\partial S)^2\)</span>. The partial derivative terms – <span class="math inline">\(\Delta\)</span>, <span class="math inline">\(\Theta\)</span>, and <span class="math inline">\(\Gamma\)</span> – are the three most common “greeks” used by options traders and risk managers to summarize and compare different options contracts.</p>
+<p>Holding <span class="math inline">\(S\)</span> constant, over a small increment of time a tradable option must generate a return equal to the risk-free rate <span class="math inline">\(r\)</span>. The equation above shows how this payout can be decomposed into three components. The first component, <span class="math inline">\(S\,\Delta\,r\)</span>, captures the cost associated with maintaining the risk-free portfolio’s dynamic hedge. <span class="math inline">\(\Delta\)</span> measures the local sensitivity of the options’s value to a change in the value of the reference asset. By definition, options that are “long” with respect to the reference asset have positive <span class="math inline">\(\Delta\)</span> and “short” options have negative <span class="math inline">\(\Delta\)</span>. The second component, <span class="math inline">\(\Theta\)</span>, is the time decay of the option contract. <span class="math inline">\(\Theta\)</span> is negative for options because the economic value of holding an option is higher the longer the option is a available.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The last term, <span class="math inline">\(\frac12\sigma^2\Gamma\)</span>, is a convexity adjustment reflecting the fact that nonlinear derivatives such as options are sensitive to the volatility of the reference asset. For options <span class="math inline">\(\Gamma\)</span> is usually positive. Having an option to take action based on the price of a reference asset is not particularly useful if the price never changes.</p>
+<p>To see how we can apply the Black-Scholes formula in practice, consider a simple European put option that gives the owner the opportunity to sell a stock valued at <span class="math inline">\(S\)</span> at the strike price <span class="math inline">\(K\)</span> on date <span class="math inline">\(T\)</span>. When the contract matures the option holder will purchase the stock and deliver it to the option seller for the strike prices if <span class="math inline">\(S_T &lt; K\)</span>, otherwise she will do nothing. Thus, the terminal value of the put option is</p>
 <p><span class="math display">\[
 V_T^{\text{Put}} = \max\left(K-S_T, 0\right).
 \]</span></p>
@@ -505,18 +511,29 @@ d_2 =d_1-\sigma\,\sqrt{T-t}.
 <p><span class="math display">\[
 V_t^{\text{Call}} = S_t\,\Phi(d_1) - K\,e^{-r(T-t)}\,\Phi(d_2).
 \]</span></p>
-<p>While more sophisticated models are used to value stock options today, we can gain a lot of intuition for the economics of equity options by examining these Black-Scholes solutions. <a href="#fig-bs_put_payoff" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> shows how time-to-maturity and the initial stock price affects the value of a put option. The put option performs like an insurance contract against the risk that the value of the stock will fall. Its terminal value moves in the opposite direction as <span class="math inline">\(S_T\)</span> and can never fall below zero. All else equal, a higher strike price implies a higher value for the put option at every point in time because it increases the likelihood and magnitude of potential payouts when the contract matures. Conversely, the put option’s value at time <span class="math inline">\(t\)</span> is a decreasing function of <span class="math inline">\(S_t\)</span> because a higher value for the stock today means that positive terminal payouts are less likely and will tend to be smaller in magnitude if they occur.</p>
+<p><a href="#fig-bs_option_path" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> shows the relationship between a simulated stock price and the value of put and call options on that stock over time.</p>
+<div id="fig-bs_option_path" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-bs_option_path-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/bs_option_path.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bs_option_path-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4.1: Simulation of the price of a stock and the values of put and call options on the stock.
+</figcaption>
+</figure>
+</div>
+<p>While more sophisticated models are used to value stock options today, we can gain a lot of intuition for the economics of equity options by examining these Black-Scholes solutions. <a href="#fig-bs_put_payoff" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows how time-to-maturity and the initial stock price affects the value of a put option. The put option performs like an insurance contract against the risk that the value of the stock will fall. Its terminal value moves in the opposite direction as <span class="math inline">\(S_T\)</span> and can never fall below zero. All else equal, a higher strike price implies a higher value for the put option at every point in time because it increases the likelihood and magnitude of potential payouts when the contract matures. Conversely, the put option’s value at time <span class="math inline">\(t\)</span> is a decreasing function of <span class="math inline">\(S_t\)</span> because a higher value for the stock today means that positive terminal payouts are less likely and will tend to be smaller in magnitude if they occur.</p>
 <div id="fig-bs_put_payoff" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bs_put_payoff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../figures/bs_put_payoff.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bs_put_payoff-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.1: Effect of time-to-maturity (<span class="math inline">\(T\)</span>) on the relationship between the current stock price (<span class="math inline">\(S_0\)</span>) and a European put option with a strike price (<span class="math inline">\(K\)</span>) of 100.
+Figure&nbsp;4.2: Effect of time-to-maturity (<span class="math inline">\(T\)</span>) on the relationship between the current stock price (<span class="math inline">\(S_0\)</span>) and a European put option with a strike price (<span class="math inline">\(K\)</span>) of 100.
 </figcaption>
 </figure>
 </div>
-<p>Changes in the values of <span class="math inline">\(K\)</span> and <span class="math inline">\(S_t\)</span> affect the value of the call option in exactly the opposite way because the call option acts as a hedge against large increases in the stock price. <a href="#fig-bs_put_call" class="quarto-xref">Figure&nbsp;<span>4.2</span></a> shows the value of a European put and call option as functions of the current stock price. The put option is more valuable when the stock price is low, while the call option is more valuable when the stock price is high. If an investor buys both a put and a call at the strike price <span class="math inline">\(K\)</span>, she is guaranteed a payout equal to the difference between the stock price at maturity and the strike price. This gives rise to the put-call parity condition</p>
+<p>Changes in the values of <span class="math inline">\(K\)</span> and <span class="math inline">\(S_t\)</span> affect the value of the call option in exactly the opposite way because the call option acts as a hedge against large increases in the stock price. <a href="#fig-bs_put_call" class="quarto-xref">Figure&nbsp;<span>4.3</span></a> shows the value of a European put and call option as functions of the current stock price. The put option is more valuable when the stock price is low, while the call option is more valuable when the stock price is high. If an investor buys both a put and a call at the strike price <span class="math inline">\(K\)</span>, she is guaranteed a payout equal to the difference between the stock price at maturity and the strike price. This gives rise to the put-call parity condition</p>
 <p><span class="math display">\[
 V_t^{\text{Call}} - V_t^{\text{Put}} = S_t - e^{-r(T-t)}K.
 \]</span></p>
@@ -527,7 +544,7 @@ V_t^{\text{Call}} - V_t^{\text{Put}} = S_t - e^{-r(T-t)}K.
 <img src="../figures/bs_put_call.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-bs_put_call-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4.2: Values of European put and call options with strike price <span class="math inline">\(K=100\)</span> as a function of the current stock price (<span class="math inline">\(S_0\)</span>.
+Figure&nbsp;4.3: Values of European put and call options with strike price <span class="math inline">\(K=100\)</span> as a function of the current stock price (<span class="math inline">\(S_0\)</span>.
 </figcaption>
 </figure>
 </div>
@@ -558,7 +575,7 @@ Figure&nbsp;4.2: Values of European put and call options with strike price <span
 <p><span class="math display">\[
 S_t = \E^Q_t\left[e^{-r(T-t)}S_T\right]
 \]</span></p>
-<p>where <span class="math inline">\(\E^Q\left[\cdot\right]\)</span> denotes an expectation computed under the risk-neutral probability measure. Another, nearly equivalent, way of stating the martingale condition is that under the risk-neutral measure an asset’s expected growth rate at any point in time must equal the risk-free return.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> That is</p>
+<p>where <span class="math inline">\(\E^Q\left[\cdot\right]\)</span> denotes an expectation computed under the risk-neutral probability measure. Another, nearly equivalent, way of stating the martingale condition is that under the risk-neutral measure an asset’s expected growth rate at any point in time must equal the risk-free return.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> That is</p>
 <p><span class="math display">\[
 \E_t^Q\left[\frac{dS_t}{S_t}\right] = r\,dt.
 \]</span></p>
@@ -568,7 +585,7 @@ V_t^\text{Put} = \E_t^Q\left[e^{r\,(T-t)}\,V_T^\text{Put}\right].
 \]</span></p>
 <p>The Second Theorem states that if the market is complete then there is only one valid risk-neutral measure. In a <strong>complete market</strong> every contingent claim can be replicated by a portfolio of traded assets. The price of a claim is then uniquely determined by the no-arbitrage condition. In the Black-Scholes model we were able to construct a risk-free hedging portfolio because the market was complete. Had the value of the stock been influenced by additional sources of uncertainty we would not have been able to construct such a portfolio, there would have been multiple possible risk-neutral measures, and the price of the derivative would not have been uniquely determined by the no-arbitrage condition. We will see examples of incomplete markets later in this book.</p>
 <p>With the FTAP in hand we do not need to explicitly construct a hedging portfolio to value a derivative. Instead, derivative pricing can proceed in two stages. First, we determine a <span class="math inline">\(Q\)</span>-measure process that makes the present value of traded assets a martingale. Then, given a derivative’s payoff function, we compute the discounted expected value of the derivative’s future payoffs under the <span class="math inline">\(Q\)</span> measure to determine its price.</p>
-<p>Of course, in practice this strategy may be easier said than done. The FTAP guarantees the existence of a risk-neutral measure, but it does not tell us how to find it. For that, we need Girsanov’s theorem, which provides a very convenient way of moving between equivalent probability measures when we are working with Wiener processes.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Of course, in practice this strategy may be easier said than done. The FTAP guarantees the existence of a risk-neutral measure, but it does not tell us how to find it. For that, we need Girsanov’s theorem, which provides a very convenient way of moving between equivalent probability measures when we are working with Wiener processes.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <div class="callout callout-style-default callout-note no-icon callout-titled" title="Girsanov's Theorem (Similified)">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -644,36 +661,41 @@ V_t = \E_t^Q\left[e^{-r(T-t)}V_T\right].
 </section>
 <section id="sec-q_measure_bs" class="level2" data-number="4.5">
 <h2 data-number="4.5" class="anchored" data-anchor-id="sec-q_measure_bs"><span class="header-section-number">4.5</span> Option pricing redux</h2>
-<p>Consider again a simple European put option that gives the owner the opportunity to sell the asset <span class="math inline">\(S\)</span> at a the strike price <span class="math inline">\(K\)</span> at date <span class="math inline">\(T\)</span>. As we have seen, we can use the Black-Scholes PDE derived from a hedging portfolio to price this option. In this example, we derive the same result using <span class="math inline">\(Q\)</span>-measure expectations.</p>
+<p>Consider again a simple European put option that gives the owner the opportunity to sell the asset <span class="math inline">\(S\)</span> at a the strike price <span class="math inline">\(K\)</span> at date <span class="math inline">\(T\)</span>. In <a href="#sec-hedging_bs" class="quarto-xref"><span>Section 4.2</span></a> we used teh Black-Scholes PDE derived from a hedging portfolio to price this option. The same result can be obtained using the FTAP and <span class="math inline">\(Q\)</span>-measure expectations.</p>
 <p>The terminal payoff of the put option is</p>
 <p><span class="math display">\[
 V_T^{\text{Put}} = \max\left(K-S_T, 0\right).
-\]</span></p>
-<p>In <a href="03-stochastic_calculus.html#sec-gbm" class="quarto-xref"><span>Section 3.4</span></a> we showed that when <span class="math inline">\(\{S_t\}\)</span> follows a GBM process under the physical measure , <span class="math inline">\(S_T\)</span> has a lognormal distribution. In <a href="#sec-q_bs_derivation" class="quarto-xref"><span>Section 4.4</span></a> we we that under the risk-neutral measure <span class="math inline">\(\{S_t\}\)</span> also follows a GBM process, albeit with a different drift parameter (<span class="math inline">\(\mu^Q=r\)</span>). Thus, we can conclude that under the <span class="math inline">\(Q\)</span> measure</p>
+\]</span> The FTAP implies that the value of the option at time <span class="math inline">\(t\)</span> is</p>
+<p><span class="math display">\[
+\begin{align*}
+V_t^\text{Put} =&amp; \E_t^Q\left[e^{-r(T-t)}V_T^{\text{Put}}\right] \\
+=&amp; e^{-r(T-t)}\E_t^Q\left[\max\left(K-S_T, 0\right)\right] \\
+=&amp; e^{-r(T-t)}\E_t^Q\left[\left(K-S_T\right)1_{S_T&lt;K}\right] \\
+=&amp; e^{-r(T-t)}\left(\E_t^Q\left[1_{S_T&lt;K}\right]K-\E_t^Q\left[S_T1_{S_T&lt;K}\right]\right) \\
+=&amp; e^{-r(T-t)}F_t^Q(K)\,K - e^{-r(T-t)}\E_t^Q\left[S_T\,1_{S_T&lt;K} \right],
+\end{align*}
+\]</span> where <span class="math inline">\(F_t^Q(s)\)</span> is the cumulative distribution function of <span class="math inline">\(S_T\)</span> given information available at <span class="math inline">\(t\)</span> and <span class="math inline">\(1_x\)</span> is notation for an indicator function that is equal to one if the condition <span class="math inline">\(x\)</span> is true and zero otherwise. Evidently, if we can write down expressions for <span class="math inline">\(F_{S_T|S_t}^Q(K)\)</span> and <span class="math inline">\(\E_t^Q\left[S_T\,1_{S_T&lt;K} \right]\)</span> we will have a closed-form expression for the option value.</p>
+<p>In <a href="03-stochastic_calculus.html#sec-gbm" class="quarto-xref"><span>Section 3.4</span></a> we showed that when <span class="math inline">\(\{S_t\}\)</span> follows a GBM process under the physical measure <span class="math inline">\(S_T\)</span> has a lognormal distribution. In <a href="#sec-q_bs_derivation" class="quarto-xref"><span>Section 4.4</span></a> we saw that under the risk-neutral measure <span class="math inline">\(\{S_t\}\)</span> also follows a GBM process, albeit with a different drift parameter (<span class="math inline">\(\mu^Q=r\)</span>). Thus, we can conclude that under the <span class="math inline">\(Q\)</span> measure</p>
 <p><span class="math display">\[
 S_T \mid \mathcal{F}_t \sim \text{LogNormal}\left(\ln(S_t) + r\,(T-t) - \frac12\sigma^,(T-t),\; \sigma^,(T-t)\right).
 \]</span></p>
-<p>The FTAP implies that the value of the put option at time <span class="math inline">\(t\)</span> is the discounted expected value of its terminal payoff under the risk-neutral measure:</p>
-<p><span class="math display">\[
-V_t^\text{Put} = \E_t^Q\left[e^{-r(T-t)}V_T^{\text{Put}}\right] = e^{-r(T-t)}\E_t^Q\left[\max\left(K-S_T, 0\right)\right].
-\]</span></p>
-<p>The expected value of the terminal payoff can be expressed as</p>
-<p><span class="math display">\[
-\E_t^Q\left[\max\left(K-S_T,0\right)\right] = F_{S_T|S_t}^Q(K)\,K - \E_t^Q\left[S_T\,1_{S_T&gt;K} \right]
-\]</span></p>
-<p>Where <span class="math inline">\(F_{S_T\mid\mathcal{F}_t}^Q(\cdot)\)</span> is the lognormal CDF for <span class="math inline">\(S_T\)</span> given information available at time <span class="math inline">\(t\)</span>. By <a href="A1-normal_properties.html#thm-lognormal-tail" class="quarto-xref">Theorem&nbsp;<span>A.11</span></a></p>
-<p><span class="math display">\[
-F_{S_T\mit\mathcal{F}_t}^Q(K) = \Phi\left(\frac{\ln(K)-\ln(S_t) - r(T-t) + \frac12\sigma^2(T-t)}{\sigma\sqrt{T-t}}\right) = \Phi(-d_2),
-\]</span></p>
-<p>and by <a href="A1-normal_properties.html#thm-lognormal-truncated-first-moment" class="quarto-xref">Theorem&nbsp;<span>A.12</span></a></p>
+<p>By <a href="A1-normal_properties.html#thm-lognormal-tail" class="quarto-xref">Theorem&nbsp;<span>A.11</span></a></p>
 <p><span class="math display">\[
 \begin{align*}
-\E_t^Q\left[S_T\,1_{S_T&gt;K} \right] =&amp; e^{\ln(S_t) + r(T-t)}\;\times \\
+F_t^Q(K) =&amp; \Phi\left(\frac{\ln(K)-\ln(S_t) - r(T-t) + \frac12\sigma^2(T-t)}{\sigma\sqrt{T-t}}\right)\\
+\Phi(-d_2)
+\end{align*}
+\]</span></p>
+<p>where <span class="math inline">\(d_t\)</span> is a parameter defined in <a href="#sec-hedging_bs" class="quarto-xref"><span>Section 4.2</span></a>. By <a href="A1-normal_properties.html#thm-lognormal-truncated-first-moment" class="quarto-xref">Theorem&nbsp;<span>A.12</span></a></p>
+<p><span class="math display">\[
+\begin{align*}
+\E_t^Q\left[S_T\,1_{S_T&lt;K} \right] =&amp; e^{\ln(S_t) + r(T-t)}\;\times \\
 &amp; \Phi\left(-\frac{\ln(S_t) + r(T-t) - \frac12\sigma^2(T-t)-\ln(K)}{\sigma\sqrt{T-t}}\right) \\
 =&amp; S_t\,e^{r(T-t)}\,\Phi(-d_1)
 \end{align*}
 \]</span></p>
-<p>where <span class="math inline">\(d_1\)</span> and <span class="math inline">\(d_2\)</span> are defined as in our previous derivation of the put option value. Putting these results together we have</p>
+<p>where <span class="math inline">\(d_1\)</span> is also defined in <a href="#sec-hedging_bs" class="quarto-xref"><span>Section 4.2</span></a>.</p>
+<p>Putting these results together gives us</p>
 <p><span class="math display">\[
 V_t^\text{Put} = e^{-r(T-t)}\Phi(-d_2)\,K - S_t\,\Phi(-d_1)
 \]</span></p>
@@ -706,8 +728,9 @@ Merton, Robert C. 1973. <span>“Theory of Rational Option Pricing.”</span> <e
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn1"><p>Technically, this condition is slightly weaker than the one implied by the First Fundamental Theorem of Asset Pricing. It implies that the stochastic process is a <strong>local martingale</strong> rather than a martingale. All martingales are local martingales, but not all local martingales are martingales. In practice, however, this distinction is not likely to be important for most of the stochastic processes encountered in applied work.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>The version of Girsanov’s theorem presented here is specialized to one-dimensional Wiener processes. More general versions apply to multidimensional diffusion processes and are formulated in terms of Radon–Nikodym derivatives. These extensions are not required for the models considered in this book.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Because this partial derivative is nearly always negative, it is common practice to drop the negative sign and report only the magnitude of <span class="math inline">\(\Theta\)</span> in applied work.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Technically, this condition is slightly weaker than the one implied by the First Fundamental Theorem of Asset Pricing. It implies that the stochastic process is a <strong>local martingale</strong> rather than a martingale. All martingales are local martingales, but not all local martingales are martingales. In practice, however, this distinction is not likely to be important for most of the stochastic processes encountered in applied work.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The version of Girsanov’s theorem presented here is specialized to one-dimensional Wiener processes. More general versions apply to multidimensional diffusion processes and are formulated in terms of Radon–Nikodym derivatives. These extensions are not required for the models considered in this book.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section>
 

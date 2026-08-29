@@ -20,6 +20,7 @@ from .bs_option_value import bs_option_value
 from .cir_bond_value import cir_bond_value
 from .CompensatedPoissonProcess import CompensatedPoissonProcess
 from .CompoundPoissonProcess import CompoundPoissonProcess
+from .CorrelatedWienerProcess import CorrelatedWienerProcess
 from .CoxIngersollRoss import CoxIngersollRoss
 from .DeterministicFn import DeterministicFn
 from .GeometricBrownianMotion import GeometricBrownianMotion
@@ -27,13 +28,13 @@ from .ito_integral import ito_integral
 from .JumpType import JumpType
 from .merton_option_value import merton_option_value
 from .MertonJumpProcess import MertonJumpProcess
+from .MultivariateStochasticProcess import MultivariateStochasticProcess
 from .OrnsteinUhlenbeck import OrnsteinUhlenbeck
 from .PoissonProcess import PoissonProcess
 from .SamplePaths import SamplePaths
 from .StochasticProcess import StochasticProcess
 from .vasicek_bond_value import vasicek_bond_value
 from .Wiener import Wiener
-from .MultivariateStochasticProcess import MultivariateStochasticProcess
 
 __all__ = {
     "SamplePaths",
@@ -49,6 +50,7 @@ __all__ = {
     "JumpType",
     "MertonJumpProcess",
     "MultivariateStochasticProcess",
+    "CorrelatedWienerProcess",
     "vasicek_bond_value",
     "cir_bond_value",
     "bs_option_value",

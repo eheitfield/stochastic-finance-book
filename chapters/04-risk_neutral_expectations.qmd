@@ -81,11 +81,22 @@ $$
 \pd{V}{t} + \frac12 \sigma^2\,S^2\,\pdd{V}{S} + \pd{V}{S}\,S\,r - V\,r = 0.
 $$
 
-This is the celebrated Black-Scholes pricing equation. Before putting it to use, it is worth pausing to reflect on some of its key properties. First, observe that this is a deterministic partial differential equation. Although the stock value, $S$, follows a stochastic differential equation, over short increments of time the derivative's value depends only on the current level of $S$. Second, the result is quite general. We have not yet said anything about the details of the derivative we seek to price beyond that it depends on a smooth function of $S$ and $t$. This formula can be used to price a wide variety of derivative products. Finally, notice that the stock's drift term, $\mu$, does not appear in the Black-Scholes equation. This reflects a deep economic insight: because the derivative can be perfectly hedged, investors require no compensation for bearing stock price risk. Once the risk has been eliminated only the risk-free rate remains.
+This is the celebrated Black-Scholes pricing equation. Before putting it to use, it is worth pausing to reflect on some of its key properties. First, observe that this is a deterministic partial differential equation. Although the stock value $S$ is a stochastic process, over short increments of time the derivative's value depends only on the current level of $S$. Second, the result is quite general. We have not yet said anything about the details of the derivative we seek to price beyond that it depends on a smooth function of $S$ and $t$. This formula can be used to price a wide variety of derivative products. Finally, notice that the stock's drift term $\mu$ does not appear in the Black-Scholes equation. This reflects a deep economic insight: because the derivative can be perfectly hedged, investors require no compensation for bearing stock price risk. Once the risk has been eliminated only the risk-free rate remains.
 
-## Valuing put and call options {#sec-hedging_bs}
 
-To see how we can apply the Black-Scholes formula in practice, consider a simple European put option that gives the owner the opportunity to sell a stock $S$ at the strike price $K$ on date $T$. When the contract matures the option holder will purchase the stock and deliver it to the option seller for the strike prices if $S_T < K$, otherwise she will do nothing. Thus the terminal value of the put option is
+## Valuing equity options {#sec-hedging_bs}
+
+The Black-Scholes formula became famous as a tool for pricing and analyzing options contracts that allow the holder to take specified actions depending on the price of a reference asset. We can rewrite the Black-Scholes PDE a follows:
+
+$$
+Vr = S\,\Delta\,r + \Theta + \frac12 \sigma^2\,S^2\,\Gamma
+$$
+
+where $\Delta = \partial V/\partial S$, $\Theta = \partial V/\partial t$, , and $\Gamma = \partial^2 V/(\partial S)^2$.  The partial derivative terms -- $\Delta$, $\Theta$, and $\Gamma$ -- are the three most common "greeks" used by options traders and risk managers to summarize and compare different options contracts.  
+
+Holding $S$ constant, over a small increment of time a tradable option must generate a return equal to the risk-free rate $r$.  The equation above shows how this payout can be decomposed into three components.  The first component, $S\,\Delta\,r$, captures the cost associated with maintaining the risk-free portfolio's dynamic hedge. $\Delta$ measures the local sensitivity of the options's value to a change in the value of the reference asset.  By definition, options that are "long" with respect to the reference asset have positive $\Delta$ and "short" options have negative $\Delta$. The second component, $\Theta$, is the time decay of the option contract.  $\Theta$ is negative for options because the economic value of holding an option is higher the longer the option is a available.^[Because this partial derivative is nearly always negative, it is common practice to drop the negative sign and report only the magnitude of $\Theta$ in applied work.]  The last term, $\frac12\sigma^2\Gamma$, is a convexity adjustment reflecting the fact that nonlinear derivatives such as options are sensitive to the volatility of the reference asset. For options $\Gamma$ is usually positive.  Having an option to take action based on the price of a reference asset is not particularly useful if the price never changes.
+
+To see how we can apply the Black-Scholes formula in practice, consider a simple European put option that gives the owner the opportunity to sell a stock valued at $S$ at the strike price $K$ on date $T$. When the contract matures the option holder will purchase the stock and deliver it to the option seller for the strike prices if $S_T < K$, otherwise she will do nothing. Thus, the terminal value of the put option is
 
 $$
 V_T^{\text{Put}} = \max\left(K-S_T, 0\right).
@@ -120,6 +131,10 @@ A European call option that gives the holder the right to buy the stock for the 
 $$
 V_t^{\text{Call}} = S_t\,\Phi(d_1) - K\,e^{-r(T-t)}\,\Phi(d_2).
 $$
+
+@fig-bs_option_path shows the relationship between a simulated stock price and the value of put and call options on that stock over time.
+
+![Simulation of the price of a stock and the values of put and call options on the stock.](../figures/bs_option_path.svg){#fig-bs_option_path}
 
 While more sophisticated models are used to value stock options today, we can gain a lot of intuition for the economics of equity options by examining these Black-Scholes solutions. @fig-bs_put_payoff shows how time-to-maturity and the initial stock price affects the value of a put option. The put option performs like an insurance contract against the risk that the value of the stock will fall. Its terminal value moves in the opposite direction as $S_T$ and can never fall below zero. All else equal, a higher strike price implies a higher value for the put option at every point in time because it increases the likelihood and magnitude of potential payouts when the contract matures. Conversely, the put option's value at time $t$ is a decreasing function of $S_t$ because a higher value for the stock today means that positive terminal payouts are less likely and will tend to be smaller in magnitude if they occur.
 
@@ -271,49 +286,54 @@ $$
 
 ## Option pricing redux {#sec-q_measure_bs}
 
-Consider again a simple European put option that gives the owner the opportunity to sell the asset $S$ at a the strike price $K$ at date $T$. As we have seen, we can use the Black-Scholes PDE derived from a hedging portfolio to price this option. In this example, we derive the same result using $Q$-measure expectations.
+Consider again a simple European put option that gives the owner the opportunity to sell the asset $S$ at a the strike price $K$ at date $T$. In @sec-hedging_bs we used teh Black-Scholes PDE derived from a hedging portfolio to price this option. The same result can be obtained using the FTAP and $Q$-measure expectations.
 
 The terminal payoff of the put option is 
 
 $$
 V_T^{\text{Put}} = \max\left(K-S_T, 0\right).
 $$
+The FTAP implies that the value of the option at time $t$ is
 
-In @sec-gbm we showed that when $\{S_t\}$ follows a GBM process under the physical measure , $S_T$ has a lognormal distribution. In @sec-q_bs_derivation we we that under the risk-neutral measure $\{S_t\}$ also follows a GBM process, albeit with a different drift parameter ($\mu^Q=r$). Thus, we can conclude that under the $Q$ measure
+$$
+\begin{align*}
+V_t^\text{Put} =& \E_t^Q\left[e^{-r(T-t)}V_T^{\text{Put}}\right] \\
+=& e^{-r(T-t)}\E_t^Q\left[\max\left(K-S_T, 0\right)\right] \\
+=& e^{-r(T-t)}\E_t^Q\left[\left(K-S_T\right)1_{S_T<K}\right] \\
+=& e^{-r(T-t)}\left(\E_t^Q\left[1_{S_T<K}\right]K-\E_t^Q\left[S_T1_{S_T<K}\right]\right) \\
+=& e^{-r(T-t)}F_t^Q(K)\,K - e^{-r(T-t)}\E_t^Q\left[S_T\,1_{S_T<K} \right],
+\end{align*}
+$$
+where $F_t^Q(s)$ is the cumulative distribution function of $S_T$ given information available at $t$ and $1_x$ is notation for an indicator function that is equal to one if the condition $x$ is true and zero otherwise.  Evidently, if we can write down expressions for $F_{S_T|S_t}^Q(K)$ and $\E_t^Q\left[S_T\,1_{S_T<K} \right]$ we will have a closed-form expression for the option value.
+
+In @sec-gbm we showed that when $\{S_t\}$ follows a GBM process under the physical measure $S_T$ has a lognormal distribution. In @sec-q_bs_derivation we saw that under the risk-neutral measure $\{S_t\}$ also follows a GBM process, albeit with a different drift parameter ($\mu^Q=r$). Thus, we can conclude that under the $Q$ measure
 
 $$
 S_T \mid \mathcal{F}_t \sim \text{LogNormal}\left(\ln(S_t) + r\,(T-t) - \frac12\sigma^,(T-t),\; \sigma^,(T-t)\right).
 $$
 
-The FTAP implies that the value of the put option at time $t$ is the discounted expected value of its terminal payoff under the risk-neutral measure:
-
-$$
-V_t^\text{Put} = \E_t^Q\left[e^{-r(T-t)}V_T^{\text{Put}}\right] = e^{-r(T-t)}\E_t^Q\left[\max\left(K-S_T, 0\right)\right].
-$$
-
-The expected value of the terminal payoff can be expressed as
-
-$$
-\E_t^Q\left[\max\left(K-S_T,0\right)\right] = F_{S_T|S_t}^Q(K)\,K - \E_t^Q\left[S_T\,1_{S_T>K} \right]
-$$
-
-Where $F_{S_T\mid\mathcal{F}_t}^Q(\cdot)$ is the lognormal CDF for $S_T$ given information available at time $t$. By @thm-lognormal-tail
-
-$$
-F_{S_T\mit\mathcal{F}_t}^Q(K) = \Phi\left(\frac{\ln(K)-\ln(S_t) - r(T-t) + \frac12\sigma^2(T-t)}{\sigma\sqrt{T-t}}\right) = \Phi(-d_2),
-$$ 
-
-and by @thm-lognormal-truncated-first-moment
+By @thm-lognormal-tail
 
 $$
 \begin{align*}
-\E_t^Q\left[S_T\,1_{S_T>K} \right] =& e^{\ln(S_t) + r(T-t)}\;\times \\ 
+F_t^Q(K) =& \Phi\left(\frac{\ln(K)-\ln(S_t) - r(T-t) + \frac12\sigma^2(T-t)}{\sigma\sqrt{T-t}}\right)\\
+\Phi(-d_2)
+\end{align*}
+$$ 
+
+where $d_t$ is a parameter defined in @sec-hedging_bs. By @thm-lognormal-truncated-first-moment
+
+$$
+\begin{align*}
+\E_t^Q\left[S_T\,1_{S_T<K} \right] =& e^{\ln(S_t) + r(T-t)}\;\times \\ 
 & \Phi\left(-\frac{\ln(S_t) + r(T-t) - \frac12\sigma^2(T-t)-\ln(K)}{\sigma\sqrt{T-t}}\right) \\
 =& S_t\,e^{r(T-t)}\,\Phi(-d_1)
 \end{align*}
 $$
 
-where $d_1$ and $d_2$ are defined as in our previous derivation of the put option value. Putting these results together we have
+where $d_1$ is also defined in @sec-hedging_bs.
+
+Putting these results together gives us
 
 $$
 V_t^\text{Put} = e^{-r(T-t)}\Phi(-d_2)\,K - S_t\,\Phi(-d_1)

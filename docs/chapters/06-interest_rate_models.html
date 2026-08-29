@@ -391,7 +391,7 @@ window.Quarto = {
    
   <ul>
   <li><a href="#the-ornstein-uhlenbeck-process" id="toc-the-ornstein-uhlenbeck-process" class="nav-link active" data-scroll-target="#the-ornstein-uhlenbeck-process"><span class="header-section-number">6.1</span> The Ornstein-Uhlenbeck process</a></li>
-  <li><a href="#vasiceks-model-and-the-valuation-of-real-bonds" id="toc-vasiceks-model-and-the-valuation-of-real-bonds" class="nav-link" data-scroll-target="#vasiceks-model-and-the-valuation-of-real-bonds"><span class="header-section-number">6.2</span> Vasicek’s model and the valuation of real bonds</a></li>
+  <li><a href="#sec-vasicek" id="toc-sec-vasicek" class="nav-link" data-scroll-target="#sec-vasicek"><span class="header-section-number">6.2</span> Vasicek’s model and the valuation of real bonds</a></li>
   <li><a href="#the-cox-ingersoll-ross-process" id="toc-the-cox-ingersoll-ross-process" class="nav-link" data-scroll-target="#the-cox-ingersoll-ross-process"><span class="header-section-number">6.3</span> The Cox-Ingersoll-Ross Process</a></li>
   <li><a href="#bond-pricing-under-the-cir-model" id="toc-bond-pricing-under-the-cir-model" class="nav-link" data-scroll-target="#bond-pricing-under-the-cir-model"><span class="header-section-number">6.4</span> Bond pricing under the CIR model</a></li>
   <li><a href="#taking-stock-and-looking-forward" id="toc-taking-stock-and-looking-forward" class="nav-link" data-scroll-target="#taking-stock-and-looking-forward"><span class="header-section-number">6.5</span> Taking stock and looking forward</a></li>
@@ -545,8 +545,8 @@ Figure&nbsp;6.3: Probability densities of 10,000 Ornstein-Uhlenbeck process simu
 </div>
 <p>The Ornstein–Uhlenbeck process provides the mathematical foundation for several important financial models. In the next section we will examine a classic model that makes use of an Ornstein–Uhlenbeck process to describe short-term interest rates.</p>
 </section>
-<section id="vasiceks-model-and-the-valuation-of-real-bonds" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="vasiceks-model-and-the-valuation-of-real-bonds"><span class="header-section-number">6.2</span> Vasicek’s model and the valuation of real bonds</h2>
+<section id="sec-vasicek" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="sec-vasicek"><span class="header-section-number">6.2</span> Vasicek’s model and the valuation of real bonds</h2>
 <p>As discussed in the previous chapter, in continuous-time finance the short rate is the instantaneous interest rate at which an investor can borrow or lend money without risk. The short rate is a non-traded state variable that is not directly observable in the market, though in practice it is well proxied by very short-term overnight risk-free rates such as the effective federal funds rate or the secured overnight financing rate (SOFR). <span class="citation" data-cites="vasicek1977equilibrium">Vašı́ček (<a href="#ref-vasicek1977equilibrium" role="doc-biblioref">1977</a>)</span> models the short rate <span class="math inline">\(r_t\)</span> as a mean-reverting Ornstein-Uhlenbeck process under the physical measure:</p>
 <p><span class="math display">\[
 dr_t = \kappa\,(\theta_P - r_t)\,dt + \sigma\,dW_t^P.

@@ -116,7 +116,7 @@ As show in @fig-OU_paths and @fig-OU_dist, even when the O-U process starts far 
 
 The Ornstein–Uhlenbeck process provides the mathematical foundation for several important financial models. In the next section we will examine a classic model that makes use of an Ornstein–Uhlenbeck process to describe short-term interest rates.
 
-## Vasicek's model and the valuation of real bonds
+## Vasicek's model and the valuation of real bonds {#sec-vasicek}
 
 As discussed in the previous chapter, in continuous-time finance the short rate is the instantaneous interest rate at which an investor can borrow or lend money without risk. The short rate is a non-traded state variable that is not directly observable in the market, though in practice it is well proxied by very short-term overnight risk-free rates such as the effective federal funds rate or the secured overnight financing rate (SOFR). @vasicek1977equilibrium models the short rate $r_t$ as a mean-reverting Ornstein-Uhlenbeck process under the physical measure:
 

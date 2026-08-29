@@ -211,6 +211,35 @@ window.MathJax = {
 };
 </script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -336,8 +365,20 @@ window.MathJax = {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#dealing-with-multiple-sources-of-uncertainty" id="toc-dealing-with-multiple-sources-of-uncertainty" class="nav-link active" data-scroll-target="#dealing-with-multiple-sources-of-uncertainty"><span class="header-section-number">8</span> Dealing with multiple sources of uncertainty</a>
+  <ul class="collapse">
+  <li><a href="#correlated-wiener-processes" id="toc-correlated-wiener-processes" class="nav-link" data-scroll-target="#correlated-wiener-processes"><span class="header-section-number">8.1</span> Correlated Wiener processes</a></li>
+  <li><a href="#ito-calculus-for-correlated-wiener-processes" id="toc-ito-calculus-for-correlated-wiener-processes" class="nav-link" data-scroll-target="#ito-calculus-for-correlated-wiener-processes"><span class="header-section-number">8.2</span> Ito calculus for correlated Wiener processes</a></li>
+  <li><a href="#valuing-claims-on-a-risky-asset-with-stochastic-discount-rates" id="toc-valuing-claims-on-a-risky-asset-with-stochastic-discount-rates" class="nav-link" data-scroll-target="#valuing-claims-on-a-risky-asset-with-stochastic-discount-rates"><span class="header-section-number">8.3</span> Valuing claims on a risky asset with stochastic discount rates</a></li>
+  <li><a href="#options-pricing-with-stochastic-interest-rates" id="toc-options-pricing-with-stochastic-interest-rates" class="nav-link" data-scroll-target="#options-pricing-with-stochastic-interest-rates"><span class="header-section-number">8.4</span> Options pricing with stochastic interest rates</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -361,9 +402,268 @@ window.MathJax = {
 </header>
 
 
-<p>TO BE WRITTEN.</p>
+<p>WORKING DRAFT</p>
+<p>THIS CHAPTER IS NOT READY FOR REVIEW</p>
+<section id="dealing-with-multiple-sources-of-uncertainty" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Dealing with multiple sources of uncertainty</h1>
+<p>All of the models we have encountered thus far involve only one source of uncertainty. In the basic Black-Scholes model a single Wiener process drives th geometric Brownian motion asset price process. Likewise, in the Vasicek and Cox-Ingersol-Ross models, a single Wiener process determines the evolution over time of the short interest rate. In this chapter we will show how the tools of Ito calculus can be generalized to work with models involving systems of correlated Wiener processes. We will then illustrate the application of these tools to price futures and forward contracts.</p>
+<section id="correlated-wiener-processes" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="correlated-wiener-processes"><span class="header-section-number">8.1</span> Correlated Wiener processes</h2>
+<p>A system of correlated Wiener processes can be constructed from a linear combination of independent processes.</p>
+<div class="callout callout-style-default callout-tip no-icon callout-titled" title="Correlated Wiener Processes">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Correlated Wiener Processes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(\mathbf{\Sigma}\)</span> be an <span class="math inline">\(n\)</span>-dimensional positive definite correlation matrix and let <span class="math inline">\(\mathbf{C}\)</span> be a positive definite factor of <span class="math inline">\(\mathbf{\Sigma}\)</span> such that <span class="math inline">\(\mathbf{C}\mathbf{C}' = \mathbf{\Sigma}\)</span>. If <span class="math inline">\(\mathbf{Z}_t = \left(z_t^{(1)},\ldots,z_t^{(n)}\right)'\)</span> is an <span class="math inline">\(n\)</span>-vector of independent Wiener processes then</p>
+<p><span class="math display">\[
+\mathbf{W}_t = \mathbf{C}\mathbf{Z}_t
+\]</span></p>
+<p>is an <span class="math inline">\(n\)</span>-vector of <strong>correlated Wiener processes</strong> with instantaneous covariance matrix <span class="math inline">\(\mathbf{\Sigma}\)</span>. Increments of <span class="math inline">\(\mathbf{W}_t\)</span> satisfy</p>
+<p><span class="math display">\[
+\mathbf{W}_{t+\Delta t} - \mathbf{W}_t \sim N\left(\mathbf{0},\; \mathbf{\Sigma}\,\Delta t)\right).
+\]</span></p>
+<p>Disjoint increments of <span class="math inline">\(\mathbf{W}_t\)</span> are independent. Each element <span class="math inline">\(W_t^{(i)}\)</span> of <span class="math inline">\(\mathbf{W}_t\)</span> is a univariate Wiener process.</p>
+</div>
+</div>
+<p>While any number of correlated Wiener processes may be used in real-world financial modeling applications, in this introductory text we will generally only work with two correlated processes at a time. In the two-dimensional case the factor matrix can be written as</p>
+<p><span class="math display">\[
+\mathbf{C} = \begin{bmatrix}1 &amp; 0 \\ \rho &amp; \sqrt{1-\rho^2}\end{bmatrix}
+\]</span></p>
+<p>so that <span class="math inline">\(W_t^{(1)} = Z_t^{(1)}\)</span> and <span class="math inline">\(W_t^{(2)} = \rho\,Z_t^{(1)} + \sqrt{1-\rho^2}\,Z_t^{(2)}\)</span>. The covariance between contemporaneous increments is <span class="math inline">\(Cov\left[\Delta W^{(1)}_t, \Delta W^{(2)}_t\right] = \rho\Delta t\)</span>.</p>
+<p><a href="#fig-biv_wiener" class="quarto-xref">Figure&nbsp;<span>8.1</span></a> shows two examples of simulated paths traced out by pairs of Wiener processes on two-dimensional planes. In the first panel, the two processes are uncorrelated (<span class="math inline">\(\rho=0\)</span>) and the paths fill a circular region centered at the origin. In the second panel the processes are positively correlated (<span class="math inline">\(\rho=0.75\)</span>) and the paths fill an elliptical area. The simulated paths are less likely to enter the upper-left and lower-right quadrants because when <span class="math inline">\(W_t^1\)</span> and <span class="math inline">\(W_t^2\)</span> are positively correlated realized values of the two processes at a point in time are less likely to be of opposite signs.</p>
+<div id="fig-biv_wiener" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-biv_wiener-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/biv_wiener.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-biv_wiener-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;8.1: Simulated two-dimensional paths traced out by realizations of bivariate Wiener processes
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="ito-calculus-for-correlated-wiener-processes" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="ito-calculus-for-correlated-wiener-processes"><span class="header-section-number">8.2</span> Ito calculus for correlated Wiener processes</h2>
+<p>The rules for working with individual Wiener process differentials described in <a href="03-stochastic_calculus.html#tbl-ito_rules" class="quarto-xref">Table&nbsp;<span>3.1</span></a> apply to each element of a vector of Wiener processes as well. However, when these processes are correlated we must also consider the possibility that differentials of correlate processes may interact with one another. Recall that for a single process <span class="math inline">\((dW_t)^2\)</span> is of order <span class="math inline">\(O(dt)\)</span> and, because the squared differential converges in mean square to <span class="math inline">\(dt\)</span> as <span class="math inline">\(dt\)</span> approaches <span class="math inline">\(0\)</span>, we can use the substitution rule <span class="math inline">\((dW_t)^2 = dt\)</span>. Similar reasoning leads to a substitution rule for the product of two contemporaneous Weiner process differentials.</p>
+<p><span class="math inline">\(dW_t^{(1)}\)</span> and <span class="math inline">\(dW_t^{(2)}\)</span> are both of order <span class="math inline">\(O(\sqrt{dt})\)</span> so <span class="math inline">\(dW_t^{(1)} dW_t^{(2)}\)</span> is of order <span class="math inline">\(O(dt)\)</span>. The mean of this product of differential is</p>
+<p><span class="math display">\[
+\begin{align*}
+\E\left[dW_t^{(1)} dW_t^{(2)}\right] =&amp; E\left[dZ_t^{(1)}\left(\rho\,dZ_t^{(1)}+\sqrt{1-\rho^2}\, dZ_t^{(2)}\right)\right] \\
+=&amp; \rho\,E\left[\left(dZ_t^{(1)}\right)^2\right] + \rho\,\sqrt{1-\rho^2}\,E\left[ dZ_t^{(1)}\,dZ_t^{(2)}\right] \\
+=&amp; \rho\,dt.
+\end{align*}
+\]</span></p>
+<p>The variance is</p>
+<p><span class="math display">\[
+\begin{align*}
+\Var\left[dW_t^{(1)} dW_t^{(2)}\right] =&amp; E\left[\left(dW_t^{(1)} dW_t^{(2)}\right)^2\right] - E\left[dW_t^{(1)} dW_t^{(2)}\right]^2 \\
+=&amp; E\left[\left(dZ_t^{(1)}\left(\rho\,dZ_t^{(1)}+\sqrt{1-\rho^2}\, dZ_t^{(2)}\right)\right)^2\right] - \rho^2\,dt^2 \\
+=&amp; \rho^2 E\left[\left(dZ_t^{(1)}\right)^4\right] \\
+&amp;+ (1-\rho^2)E\left[\left(Z_t^{(1)}\right)^2\right]E\left[\left(Z_t^{(2)}\right)^2\right] \\
+&amp;+ \rho\sqrt{1-\rho^2}E\left[\left(Z_t^{(1)}\right)^3\right]E\left[Z_t^{(2)}\right] \\
+&amp;- \rho^2\,dt^2 \\
+=&amp; \rho^2 3\,dt^2 + (1-\rho^2)\,dt^2 - \rho^2\,dt^2 \\
+=&amp; (1+\rho^2)dt^2.
+\end{align*}
+\]</span></p>
+<p>Thus <span class="math display">\[
+\begin{align*}
+\lim_{dt\to 0}\E\left[dW_t^{(1)} dW_t^{(2)}-\rho\,dt\right] &amp;= \lim_{dt\to 0} \Var\left[dW_t^{(1)} dW_t^{(2)}\right] \\
+&amp;= \lim_{dt\to 0} (1+\rho^2)dt^2 \\
+&amp;= 0,
+\end{align*}
+\]</span> and therefore <span class="math inline">\(dW_t^{(1)}dW_t^{(2)} \toms\,\rho dt\)</span> as <span class="math inline">\(dt\to 0\)</span>. In working with products of correlated Wiener process differentials we can apply the substitution rule</p>
+<p><span class="math display">\[
+dW_t^{(1)}dW_t^{(2)} = \rho\,dt.
+\]</span></p>
+<p>We can use this substitution rule along with the ones for single Wiener processes to derive a bivariate version of Ito’s Lemma. Suppose we have two correlated Ito processes,</p>
+<p><span class="math display">\[
+dX_t = \mu_t^X dt + \sigma_t^X dW_t^X
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+dY_t = \mu_t^Y dt + \sigma_t^Y dW_t^Y.
+\]</span></p>
+<p>From our derivation of the single variable version of Ito’s Lemma, we know that <span class="math inline">\((dX)^2 = \sigma^X dt\)</span> and <span class="math inline">\((dY)^2 = \sigma^Y dt\)</span>. And, using our new substitution rule for the product of correlated Wiener processes, <span class="math display">\[
+\begin{align*}
+dXdY =&amp; (\mu_t^X dt + \sigma_t^X dW_t^X)(\mu_t^X dt + \sigma_t^X dW_t^X) \\
+=&amp; \mu^X\mu^Y (dt)^2 + \mu^X\sigma^Y(dtdW^Y) + \mu^Y\sigma^X(dtdW^X) + \sigma^X\sigma^Y(dW^XdW^Y) \\
+=&amp; \sigma^X \sigma^Y \rho\,dt.
+\end{align*}
+\]</span></p>
+<p>Now consider a smooth function <span class="math inline">\(f(x,y)\)</span> with first and second partial derivatives <span class="math inline">\(f_x\)</span>, <span class="math inline">\(f_y\)</span>, <span class="math inline">\(f_{xx}\)</span>, <span class="math inline">\(f_{yy}\)</span> and <span class="math inline">\(f_{xy}\)</span>. We can express a second-order Taylor series expansion for the change in <span class="math inline">\(f(X,Y\)</span>)$ in differential form as</p>
+<p><span class="math display">\[
+\begin{align*}
+df(X,Y) =&amp;
+f_x dX + f_y dY +
+\frac12 f_{xx} (dX)^2 + \frac12 f_{yy}(dY)^2 + f_{xy}dX dY \\
+=&amp; f_{x}(\mu^X dt + \sigma^X dW^X) \\
+&amp;+ f_{y}(\mu^Y dt + \sigma^X dW^Y) \\
+&amp;+ \frac12 f_{xx}\sigma^X dt + \frac12 f_{yy}\sigma^Y dt + f_{xy}\sigma^X\sigma^Y\rho dt \\
+=&amp; \left(f_x\mu^X + f_y\mu^Y + \frac12 f_{xx}\sigma^X + \frac12 f_{yy}\sigma^Y + f_{xy}\sigma^X\sigma^Y\rho\right)dt \\
+&amp;+ f_x \sigma^X dW^X + f_y \sigma^Y dW^Y.
+\end{align*}
+\]</span></p>
+<p>Just as with the univariate version of Ito’s Lemma, second-order differentials contribute to the drift of the transformed stochastic process. If we allow the function to also depend on time, we can easily derive the slightly more general version of Ito’s Lemma for a pair of correlated Ito processes.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Ito's Lemma (Bivariate Case)">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ito’s Lemma (Bivariate Case)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let <span class="math inline">\(\{(X_t,Y_t)\}\)</span> by a bivariate stochastic process that satisfies the SDEs</p>
+<p><span class="math display">\[
+dX_t = \mu^x_t\,dt + \sigma^x_t\,dW^x_t,
+\]</span> and</p>
+<p><span class="math display">\[
+dY_t = \mu^y_t\,dt + \sigma^y_t\,dW^y_t
+\]</span> with <span class="math inline">\(\E[dW^x_t dW^y_t] = \rho\)</span>, and let</p>
+<p><span class="math display">\[
+f(t,x,y)
+\]</span></p>
+<p>be a function that is continuously differentiable in <span class="math inline">\(t\)</span> and twice continuously differentiable in <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>Then the process</p>
+<p><span class="math display">\[
+Y_t = f(t,X_t,Y_t)
+\]</span></p>
+<p>satisfies</p>
+<p><span class="math display">\[
+\begin{align*}
+df(t,X_t,Y_t)
+=&amp;
+\frac{\partial f}{\partial t}\,dt
++
+\frac{\partial f}{\partial x}\,dX_t
++
+\frac{\partial f}{\partial y}\,dY_t \\
+&amp;+
+\frac{1}{2}
+\frac{\partial^2 f}{(\partial x)^2}
+(dX_t)^2
++
+\frac{1}{2}
+\frac{\partial^2 f}{(\partial y)^2}
+(dY_t)^2
++
+\frac{\partial^2 f}{(\partial x\partial y)}
+(dX_t dY_t),
+\end{align*}
+\]</span></p>
+<p>or equivalently,</p>
+<p><span class="math display">\[
+\begin{align*}
+df(t,X_t)
+=&amp;
+\left(
+\frac{\partial f}{\partial t}
++
+\mu^x_t
+\frac{\partial f}{\partial x}
++
+\mu^y_t
+\frac{\partial f}{\partial y}
++
+\frac{(\sigma^x_t)^2}{2}
+\frac{\partial^2 f}{(\partial x)^2}
++
+\frac{(\sigma^y_t)^2}{2}
+\frac{\partial^2 f}{(\partial y)^2}
++
+\sigma^x_t \sigma^y_t
+\frac{\partial^2 f}{\partial x\partial y}
+\right)
+dt \\
+&amp;+
+\sigma^x_t
+\frac{\partial f}{\partial x}
+\,dW^x_t
++
+\sigma^y
+\frac{\partial f}{\partial y}
+\,dW^y_t.
+\end{align*}
+\]</span></p>
+</div>
+</div>
+<p>A direct corollary to Ito’s Lemma is a product rule for correlated Ito processes. If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are Ito processes then</p>
+<p><span class="math display">\[
+d(X\,Y) = X\,dY + Y\,dX + \rho\,\sigma^x\sigma^y \,dt.
+\]</span></p>
+</section>
+<section id="valuing-claims-on-a-risky-asset-with-stochastic-discount-rates" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="valuing-claims-on-a-risky-asset-with-stochastic-discount-rates"><span class="header-section-number">8.3</span> Valuing claims on a risky asset with stochastic discount rates</h2>
+<p>In this section we will consider how to value derivatives on an asset such as an equity security or equity index when future interest rates are uncertain. Assume that under the physical measure the asset follows the GBM process</p>
+<p><span class="math display">\[
+\frac{dS_t}{S_t} = \mu\,dt + \sigma_S\,dW_t^S
+\]</span></p>
+<p>and, as in the Vasicek model, the short rate follows an Ornstien-Uhlenbeck process</p>
+<p><span class="math display">\[
+dr_t = \kappa\,(\theta - r_t) + \sigma_r\,dW_t^r.
+\]</span></p>
+<p>To capture the idea that equity returns may reflect the current state of the economy we assume that</p>
+<p><span class="math display">\[
+\Cov[W_t^S,W_t^r] = \rho.
+\]</span></p>
+<p>We would usually expect <span class="math inline">\(\rho\)</span> to be positive, consistent with the idea that interest rates and equity returns tend to rise when the economy is growing more quickly.</p>
+<p>As in <a href="06-interest_rate_models.html#sec-vasicek" class="quarto-xref"><span>Section 6.2</span></a>, we can use Girsanov’s Theorem to derive an short-rate process under the risk-neutral measure. If we assume a constant risk premium parameter, then the only thing that changes in the short-rate process is the value of <span class="math inline">\(\theta\)</span>. Similarly, as in <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.5</span></a>, the FTAP implies that the risk-neutral drift will be equal to the short rete. Thus, under the <span class="math inline">\(Q\)</span>-measure we have</p>
+<p><span class="math display">\[
+\frac{dS_t}{S_t} = r_t\,dt + \sigma_S\,dW_t^{QS}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+dr_t = \kappa\,(\theta_Q - r_t) + \sigma_r\,dW_t^{Qr}.
+\]</span></p>
+<p>Importantly, the correlation parameter and volatility parameters do not change when we move from the physical to the risk neutral measure.</p>
+<p>Let <span class="math inline">\(V(S_t,r_t,t)\)</span> be the value at time <span class="math inline">\(t\)</span> of an option or other derivative whose final payoff <span class="math inline">\(V(S_T,r_T,T)\)</span> is tied to the value of the reference asset <span class="math inline">\(S_T\)</span> and possibly the prevailing short rate <span class="math inline">\(r_T\)</span>. To keep notation under control, we will drop time subscripts for the time being and use subscripts to denote partial derivatives instead. For example <span class="math inline">\(V_S\)</span> is the partial derivative of <span class="math inline">\(V\)</span> with respect to <span class="math inline">\(S\)</span>. Observe from the Wiener process substitutions rules that <span class="math inline">\((dS)^2 = S\sigma_S dt\)</span>, <span class="math inline">\((dr)^2 = \sigma_r dt\)</span>, and <span class="math inline">\((dSdr) = S\sigma_S\sigma_r\rho dt\)</span></p>
+<p><span class="math display">\[
+\begin{align*}
+dV =&amp; V_t dt + V_S dS + V_r dr + \frac12 V_SS(dS)^2 + \frac12 V_{rr}(dr)^2 + V_{Sr} (dS\,dr)\\
+=&amp; V_t dt + V_S (S\,r\,dt + S\,\sigma_S\,dW^S) + V_r(\kappa\,(\theta - r)dt + \sigma_r\,dW^{r}) \\
+&amp;+ \frac12 V_{SS}S\,\sigma_S\,dt + \frac12 V_{rr}\sigma_r\,dt + V_{Sr}\sigma_S\,\sigma_r\,\rho\,dt \\
+=&amp; \left(V_t + V_S\,S\,r + V_r(\kappa\,(\theta - r) + \frac12 V_{SS}S\,\sigma_S + \frac12 V_{rr}\sigma_r + V_{Sr}\sigma_S\,\sigma_r\,\rho\right)dt \\
+&amp;+ V_S\,S\,\sigma_S\,dW^S + V_r\,\sigma_r\,dW^{r}).
+\end{align*}
+\]</span></p>
+<p>Note that, as with with our earlier fixed interest rate GBM model, <span class="math inline">\(V(S,r,t)\)</span> is an Ito process. The derivative is a traded asset, so the FTAP implies that the drift drift term is equal to <span class="math inline">\(V\,r\)</span>, so</p>
+<p><span class="math display">\[
+\begin{align*}
+Vr =&amp; V_t + V_S\,S\,r + V_r\kappa\,(\theta - r) \\
+&amp;+ \frac12 V_{SS}S\,\sigma_S
++ \frac12 V_{rr}\sigma_r + V_{Sr}\sigma_S\,\sigma_r\,\rho.
+\end{align*}
+\]</span></p>
+<p>This is a generalization of the Black-Scholes pricing PDE we derived in <a href="04-risk_neutral_expectations.html#sec-hedging_portfolio" class="quarto-xref"><span>Section 4.1</span></a>. It is identical to the earlier version but includes additional terms that capture the effects of changes in the short rate.</p>
+</section>
+<section id="options-pricing-with-stochastic-interest-rates" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="options-pricing-with-stochastic-interest-rates"><span class="header-section-number">8.4</span> Options pricing with stochastic interest rates</h2>
+<p>Adding stochastic interest rates to our model gives us one more “greek” and a few additional unnamed sensitivity parameters with which evaluate options, as shown in the following alternative form of the pricing PDE:</p>
+<p><span class="math display">\[
+\begin{align*}
+Vr =&amp; \Delta\,S\,r + \Theta + \frac12 \Gamma S\,\sigma_S \\
+&amp;+ \mathrm{P}\,\kappa\,(\theta - r)  + \frac12 V_{rr}\sigma_r + V_{Sr}\sigma_S\,\sigma_r\,\rho.
+\end{align*}
+\]</span></p>
+<p><span class="math inline">\(\mathrm{P} = \frac{\partial V}{\partial r}\)</span>, describes an option value’s sensitivity to small changes in the short interest rate.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The short rate affects the option price through two channels. First, a higher expected interest rate path means that future payouts are discounted more heavily, driving down the value of claims on future cash flows. Second, the interest rate affects the rate of growth of the reference asset under the risk neutral measure. This may either have a positive or negative relation to the option value, depending on whether the option is long or short with respect to the reference asset. <span class="math inline">\(V_{rr}\)</span> reflects the convexity of the option value with respect to changes in interest rates, similar to the way <span class="math inline">\(\Gamma\)</span> captures the nonlinear relationship between the option value and the value of the reference asset. <span class="math inline">\(V_{Sr}\)</span> captures second-order interactions between the reference asset and the short rate.</p>
 
 
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p><span class="math inline">\(\mathrm{P}\)</span> is the capital Greek letter “rho”. This naming convention is a bit unfortunate, as the lower-case Greek rho (<span class="math inline">\(\rho\)</span>) is used here and elsewhere to denote correlation between two random variables.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
