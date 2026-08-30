@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>7&nbsp; Multiple Sources of Uncertainty – A Practical Introduction to Stochastic Processes and Financial Modeling</title>
+<title>7&nbsp; Models with Multiple Sources of Uncertainty – A Practical Introduction to Stochastic Processes and Financial Modeling</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -252,7 +252,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/07-multi_variable_models.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/07-multi_variable_models.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Models with Multiple Sources of Uncertainty</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -322,7 +322,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../chapters/07-multi_variable_models.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></span></a>
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Models with Multiple Sources of Uncertainty</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -370,13 +370,11 @@ window.Quarto = {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#dealing-with-multiple-sources-of-uncertainty" id="toc-dealing-with-multiple-sources-of-uncertainty" class="nav-link active" data-scroll-target="#dealing-with-multiple-sources-of-uncertainty"><span class="header-section-number">8</span> Dealing with multiple sources of uncertainty</a>
-  <ul class="collapse">
-  <li><a href="#correlated-wiener-processes" id="toc-correlated-wiener-processes" class="nav-link" data-scroll-target="#correlated-wiener-processes"><span class="header-section-number">8.1</span> Correlated Wiener processes</a></li>
-  <li><a href="#ito-calculus-for-correlated-wiener-processes" id="toc-ito-calculus-for-correlated-wiener-processes" class="nav-link" data-scroll-target="#ito-calculus-for-correlated-wiener-processes"><span class="header-section-number">8.2</span> Ito calculus for correlated Wiener processes</a></li>
-  <li><a href="#valuing-claims-on-a-risky-asset-with-stochastic-discount-rates" id="toc-valuing-claims-on-a-risky-asset-with-stochastic-discount-rates" class="nav-link" data-scroll-target="#valuing-claims-on-a-risky-asset-with-stochastic-discount-rates"><span class="header-section-number">8.3</span> Valuing claims on a risky asset with stochastic discount rates</a></li>
-  <li><a href="#options-pricing-with-stochastic-interest-rates" id="toc-options-pricing-with-stochastic-interest-rates" class="nav-link" data-scroll-target="#options-pricing-with-stochastic-interest-rates"><span class="header-section-number">8.4</span> Options pricing with stochastic interest rates</a></li>
-  </ul></li>
+  <li><a href="#correlated-wiener-processes" id="toc-correlated-wiener-processes" class="nav-link active" data-scroll-target="#correlated-wiener-processes"><span class="header-section-number">7.1</span> Correlated Wiener processes</a></li>
+  <li><a href="#ito-calculus-for-correlated-wiener-processes" id="toc-ito-calculus-for-correlated-wiener-processes" class="nav-link" data-scroll-target="#ito-calculus-for-correlated-wiener-processes"><span class="header-section-number">7.2</span> Ito calculus for correlated Wiener processes</a></li>
+  <li><a href="#sec-gbm_vasicek" id="toc-sec-gbm_vasicek" class="nav-link" data-scroll-target="#sec-gbm_vasicek"><span class="header-section-number">7.3</span> The GBM-Vasicek model under the risk-neutral measure</a></li>
+  <li><a href="#revisiting-the-relationship-between-futures-and-forwards-prices" id="toc-revisiting-the-relationship-between-futures-and-forwards-prices" class="nav-link" data-scroll-target="#revisiting-the-relationship-between-futures-and-forwards-prices"><span class="header-section-number">7.4</span> Revisiting the relationship between futures and forwards prices</a></li>
+  <li><a href="#options-pricing-with-stochastic-interest-rates" id="toc-options-pricing-with-stochastic-interest-rates" class="nav-link" data-scroll-target="#options-pricing-with-stochastic-interest-rates"><span class="header-section-number">7.5</span> Options pricing with stochastic interest rates</a></li>
   </ul>
 </nav>
     </div>
@@ -385,7 +383,7 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multiple Sources of Uncertainty</span></h1>
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Models with Multiple Sources of Uncertainty</span></h1>
 </div>
 
 
@@ -404,11 +402,9 @@ window.Quarto = {
 
 <p>WORKING DRAFT</p>
 <p>THIS CHAPTER IS NOT READY FOR REVIEW</p>
-<section id="dealing-with-multiple-sources-of-uncertainty" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Dealing with multiple sources of uncertainty</h1>
 <p>All of the models we have encountered thus far involve only one source of uncertainty. In the basic Black-Scholes model a single Wiener process drives th geometric Brownian motion asset price process. Likewise, in the Vasicek and Cox-Ingersol-Ross models, a single Wiener process determines the evolution over time of the short interest rate. In this chapter we will show how the tools of Ito calculus can be generalized to work with models involving systems of correlated Wiener processes. We will then illustrate the application of these tools to price futures and forward contracts.</p>
-<section id="correlated-wiener-processes" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="correlated-wiener-processes"><span class="header-section-number">8.1</span> Correlated Wiener processes</h2>
+<section id="correlated-wiener-processes" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="correlated-wiener-processes"><span class="header-section-number">7.1</span> Correlated Wiener processes</h2>
 <p>A system of correlated Wiener processes can be constructed from a linear combination of independent processes.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled" title="Correlated Wiener Processes">
 <div class="callout-header d-flex align-content-center">
@@ -436,20 +432,20 @@ window.Quarto = {
 \mathbf{C} = \begin{bmatrix}1 &amp; 0 \\ \rho &amp; \sqrt{1-\rho^2}\end{bmatrix}
 \]</span></p>
 <p>so that <span class="math inline">\(W_t^{(1)} = Z_t^{(1)}\)</span> and <span class="math inline">\(W_t^{(2)} = \rho\,Z_t^{(1)} + \sqrt{1-\rho^2}\,Z_t^{(2)}\)</span>. The covariance between contemporaneous increments is <span class="math inline">\(Cov\left[\Delta W^{(1)}_t, \Delta W^{(2)}_t\right] = \rho\Delta t\)</span>.</p>
-<p><a href="#fig-biv_wiener" class="quarto-xref">Figure&nbsp;<span>8.1</span></a> shows two examples of simulated paths traced out by pairs of Wiener processes on two-dimensional planes. In the first panel, the two processes are uncorrelated (<span class="math inline">\(\rho=0\)</span>) and the paths fill a circular region centered at the origin. In the second panel the processes are positively correlated (<span class="math inline">\(\rho=0.75\)</span>) and the paths fill an elliptical area. The simulated paths are less likely to enter the upper-left and lower-right quadrants because when <span class="math inline">\(W_t^1\)</span> and <span class="math inline">\(W_t^2\)</span> are positively correlated realized values of the two processes at a point in time are less likely to be of opposite signs.</p>
+<p><a href="#fig-biv_wiener" class="quarto-xref">Figure&nbsp;<span>7.1</span></a> shows two examples of simulated paths traced out by pairs of Wiener processes on two-dimensional planes. In the first panel, the two processes are uncorrelated (<span class="math inline">\(\rho=0\)</span>) and the paths fill a circular region centered at the origin. In the second panel the processes are positively correlated (<span class="math inline">\(\rho=0.75\)</span>) and the paths fill an elliptical area. The simulated paths are less likely to enter the upper-left and lower-right quadrants because when <span class="math inline">\(W_t^1\)</span> and <span class="math inline">\(W_t^2\)</span> are positively correlated realized values of the two processes at a point in time are less likely to be of opposite signs.</p>
 <div id="fig-biv_wiener" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-biv_wiener-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <img src="../figures/biv_wiener.svg" class="img-fluid figure-img">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-biv_wiener-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.1: Simulated two-dimensional paths traced out by realizations of bivariate Wiener processes
+Figure&nbsp;7.1: Simulated two-dimensional paths traced out by realizations of bivariate Wiener processes
 </figcaption>
 </figure>
 </div>
 </section>
-<section id="ito-calculus-for-correlated-wiener-processes" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="ito-calculus-for-correlated-wiener-processes"><span class="header-section-number">8.2</span> Ito calculus for correlated Wiener processes</h2>
+<section id="ito-calculus-for-correlated-wiener-processes" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="ito-calculus-for-correlated-wiener-processes"><span class="header-section-number">7.2</span> Ito calculus for correlated Wiener processes</h2>
 <p>The rules for working with individual Wiener process differentials described in <a href="03-stochastic_calculus.html#tbl-ito_rules" class="quarto-xref">Table&nbsp;<span>3.1</span></a> apply to each element of a vector of Wiener processes as well. However, when these processes are correlated we must also consider the possibility that differentials of correlate processes may interact with one another. Recall that for a single process <span class="math inline">\((dW_t)^2\)</span> is of order <span class="math inline">\(O(dt)\)</span> and, because the squared differential converges in mean square to <span class="math inline">\(dt\)</span> as <span class="math inline">\(dt\)</span> approaches <span class="math inline">\(0\)</span>, we can use the substitution rule <span class="math inline">\((dW_t)^2 = dt\)</span>. Similar reasoning leads to a substitution rule for the product of two contemporaneous Weiner process differentials.</p>
 <p><span class="math inline">\(dW_t^{(1)}\)</span> and <span class="math inline">\(dW_t^{(2)}\)</span> are both of order <span class="math inline">\(O(\sqrt{dt})\)</span> so <span class="math inline">\(dW_t^{(1)} dW_t^{(2)}\)</span> is of order <span class="math inline">\(O(dt)\)</span>. The mean of this product of differential is</p>
 <p><span class="math display">\[
@@ -600,9 +596,9 @@ dt \\
 d(X\,Y) = X\,dY + Y\,dX + \rho\,\sigma^x\sigma^y \,dt.
 \]</span></p>
 </section>
-<section id="valuing-claims-on-a-risky-asset-with-stochastic-discount-rates" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="valuing-claims-on-a-risky-asset-with-stochastic-discount-rates"><span class="header-section-number">8.3</span> Valuing claims on a risky asset with stochastic discount rates</h2>
-<p>In this section we will consider how to value derivatives on an asset such as an equity security or equity index when future interest rates are uncertain. Assume that under the physical measure the asset follows the GBM process</p>
+<section id="sec-gbm_vasicek" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="sec-gbm_vasicek"><span class="header-section-number">7.3</span> The GBM-Vasicek model under the risk-neutral measure</h2>
+<p>In this section we will develop key results needed to value derivatives on an asset such as an equity security or equity index when future interest rates are uncertain. Assume that under the physical measure the asset follows the GBM process</p>
 <p><span class="math display">\[
 \frac{dS_t}{S_t} = \mu\,dt + \sigma_S\,dW_t^S
 \]</span></p>
@@ -634,7 +630,7 @@ dV =&amp; V_t dt + V_S dS + V_r dr + \frac12 V_SS(dS)^2 + \frac12 V_{rr}(dr)^2 +
 &amp;+ V_S\,S\,\sigma_S\,dW^S + V_r\,\sigma_r\,dW^{r}).
 \end{align*}
 \]</span></p>
-<p>Note that, as with with our earlier fixed interest rate GBM model, <span class="math inline">\(V(S,r,t)\)</span> is an Ito process. The derivative is a traded asset, so the FTAP implies that the drift drift term is equal to <span class="math inline">\(V\,r\)</span>, so</p>
+<p>Note that, as with with our earlier fixed interest rate GBM model, <span class="math inline">\(V(S,r,t)\)</span> is an Ito process. The derivative is a traded asset, so the FTAP implies that the drift term is equal to <span class="math inline">\(V\,r\)</span>. Thus</p>
 <p><span class="math display">\[
 \begin{align*}
 Vr =&amp; V_t + V_S\,S\,r + V_r\kappa\,(\theta - r) \\
@@ -643,9 +639,116 @@ Vr =&amp; V_t + V_S\,S\,r + V_r\kappa\,(\theta - r) \\
 \end{align*}
 \]</span></p>
 <p>This is a generalization of the Black-Scholes pricing PDE we derived in <a href="04-risk_neutral_expectations.html#sec-hedging_portfolio" class="quarto-xref"><span>Section 4.1</span></a>. It is identical to the earlier version but includes additional terms that capture the effects of changes in the short rate.</p>
+<p>To price derivatives on the asset we will need to know its <span class="math inline">\(Q\)</span>-measure transition distribution of the reference asset and the <span class="math inline">\(Q\)</span>-measure transition distribution of its discounted present value. Deriving these distributions involves math we have already seen; the main challenge is simply keeping our notation from getting out of hand. Throughout this discussion we will be working with the risk-neutral measure, so we will drop notation that distinguished between physical and risk-neutral parameters.</p>
+<p>Applying Ito’s Lemma to <span class="math inline">\(\ln(S_t)\)</span> and integrating the resulting PDE yields</p>
+<p><span class="math display">\[
+\begin{align*}
+\ln(S_T)
+=&amp;
+\ln(S_t)
++
+\int_t^T r_s\,ds
+-\frac12\sigma_S^2\,(T-t)
++\sigma_S\,(W_T^S-W_t^S) \\
+=&amp;
+\ln(S_t) - \frac12\sigma_S^2\,(T-t)
++ I_{t,T} + \sigma_S Y_{t,T}.
+\end{align*}
+\]</span> Notice that this is very similar the PDE solution we derived for a GBM process under the physical measure in <a href="03-stochastic_calculus.html#sec-gbm" class="quarto-xref"><span>Section 3.4</span></a>. Our solution involves two random variables: the Wiener process increment</p>
+<p><span class="math display">\[
+Y_{t,T} = W_t^S-W_t^S
+\]</span> and the integrated short rate</p>
+<p><span class="math display">\[
+I_{T,t} = \int_t^T r_s\,ds.
+\]</span></p>
+<p>From the Wiener process definition we know that <span class="math inline">\(Y_{t,T} \sim N(0,\,(T-t))\)</span>. In <a href="06-interest_rate_models.html#sec-vasicek" class="quarto-xref"><span>Section 6.2</span></a> we found that under the Vasicek model the integrated short-rate process is also normally distributed with mean</p>
+<p><span class="math display">\[
+m_I = \theta\,(T-t) + (r_t - \theta)\,\mathcal{B}(t,T)
+\]</span> and variance <span class="math display">\[
+v_I =\frac{\sigma_r^2}{\kappa^2} \left(
+    (T-t) - 2\mathcal{B}(t,T) + \frac{1}{2\kappa} \left(1-e^{-2\kappa\,T}\right)\right),
+\]</span> where</p>
+<p><span class="math display">\[
+\mathcal{B}(t,T) = \frac{1-e^{-\kappa\,(T-t)}}{\kappa}.
+\]</span></p>
+<p>Thus <span class="math inline">\(\ln(S_T)\)</span> is equal to a constant term plus the sum of two random variables. We now know that <span class="math inline">\(\ln(S_t)\)</span> is normally distributed; we just need to determine its mean and variance.</p>
+<p><span class="math inline">\(I_{t,T}\)</span> and <span class="math inline">\(Y_{t,T}\)</span> depend on correlated Wiener processes, so they are correlated as well. The covariance between them is</p>
+<p><span class="math display">\[
+\begin{align*}
+c_{IY} =&amp; \Cov_t^Q[I_{t,T},Y_{t,T}] \\
+=&amp; \E_t^Q\left[\left(I_{t,T}-m_I\right)Y_{t,T}\right] \\
+=&amp; \E_t^Q\left[\left(\sigma_r\int_t^T \mathcal{B}(s,T)dW_s^r\right)
+\left(\int_t^T dW_s^S\right)\right] \\
+=&amp; \rho\,\sigma_r\,\int_t^T \mathcal{B}(s,T)ds \\
+=&amp; \rho\,\frac{\sigma_r}{\kappa}\left((T-t)-\mathcal{B}(t,T)\right).
+\end{align*}
+\]</span> Thus, using the standard properties of correlated normal random variables, we have</p>
+<p><span class="math display">\[
+\ln(S_T)\;|\;\mathcal{F}_t \sim
+N\left(\ln(S_t) - \frac12\sigma_S^2\,(T-t) + m_I,\; v_I + \sigma^2_S(T-t) + 2\sigma_S\,c_{IY}\right).
+\]</span> The discounted present value of <span class="math inline">\(S_T\)</span> at date <span class="math inline">\(t\)</span> is</p>
+<p><span class="math display">\[
+\tilde S_t = e^{-\int_t^Tr_sds}S_t = e^{-I_{t,T}}S_T.
+\]</span></p>
+<p>Or, in log form,</p>
+<p>$$ <span class="math display">\[\begin{align*}
+\ln(\tilde S_t) =&amp; \ln(S_t) - I_{t,T} \\
+=&amp; \ln(S_t) - \frac12\sigma_S^2\,(T-t)
++ I_{t,T} + \sigma_S Y_{t,T} - I_{t,T} \\
+=&amp; \ln(S_t) - \frac12\sigma_S^2\,(T-t)
++ \sigma_S Y_{t,T}.
+
+\end{align*}\]</span> $$ As with the fixed interest rate version of the GBM model, discounting the <span class="math inline">\(Q\)</span> measure process removes the trend term, giving us the simple transition distribution</p>
+<p><span class="math display">\[
+\ln(\tilde S_t) \;|\;\mathcal{F}_t \sim N\left(\ln(S_t) - \frac12\sigma_S^2\,(T-t),\;\sigma_S^2\,(T-t)\right).
+\]</span> It follows that <span class="math inline">\(S_T\)</span> and <span class="math inline">\(\tilde S_T\)</span> each have lognormal distributions.</p>
 </section>
-<section id="options-pricing-with-stochastic-interest-rates" class="level2" data-number="8.4">
-<h2 data-number="8.4" class="anchored" data-anchor-id="options-pricing-with-stochastic-interest-rates"><span class="header-section-number">8.4</span> Options pricing with stochastic interest rates</h2>
+<section id="revisiting-the-relationship-between-futures-and-forwards-prices" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="revisiting-the-relationship-between-futures-and-forwards-prices"><span class="header-section-number">7.4</span> Revisiting the relationship between futures and forwards prices</h2>
+<p>In <a href="05-discounting_cash_flows.html#sec-f_and_f" class="quarto-xref"><span>Section 5.4</span></a> we saw that the futures price <span class="math inline">\(F_t\)</span> for a contract to receive delivery of a reference asset at date <span class="math inline">\(T\)</span> is <span class="math display">\[
+F_t = \E_t^Q[S_T].
+\]</span></p>
+<p>With our model of the reference asset value process <span class="math inline">\(\{S_t\}\)</span> in hand, we can now compute the futures price explicitly. In <a href="#sec-gbm_vasicek" class="quarto-xref"><span>Section 7.3</span></a> we showed that under the <span class="math inline">\(Q\)</span> measure <span class="math inline">\(\ln(S_T)| \mathcal{F}_t\)</span> has a normal distribution with a known mean. From <a href="A1-normal_properties.html#thm-lognormal-moments" class="quarto-xref">Theorem&nbsp;<span>A.10</span></a>, we can conclude that</p>
+<p><span class="math display">\[
+\begin{align*}
+\ln(F_t) =&amp; \E_t^Q[\ln(S_T)] + \frac12\Var[\ln(S_T)] \\
+=&amp;\ln(S_t) - \frac12\sigma_S^2\,(T-t) + m_I + \frac12 \left(v_I + \sigma^2_S(T-t) + 2\sigma_S\,c_{IY}\right) \\
+=&amp; \ln(S_t) + m_I + \frac12v_I + \sigma_S c_{IY}.
+\end{align*}
+\]</span> Or, equivalently,</p>
+<p><span class="math display">\[
+F_t = S_t\,e^{m_I + \frac12v_I + \sigma_S c_{IY}}.
+\]</span> The futures price is the current spot price scaled by three factors: the expected integrated short-rate path, a convexity adjustment that arises from uncertainty in the short-rate path, and an adjustment for correlation between the short rate and the value of the reference asset.</p>
+<p>Recall from <a href="05-discounting_cash_flows.html#sec-f_and_f" class="quarto-xref"><span>Section 5.4</span></a> that the forward price <span class="math inline">\(K_t\)</span> to receive the same asset is</p>
+<p><span class="math display">\[
+K_t = \frac{S_t}{P_{t,T}}
+\]</span> where <span class="math inline">\(P_{i,T}\)</span> is the price of a zero-coupon bond derived in <a href="06-interest_rate_models.html#sec-vasicek" class="quarto-xref"><span>Section 6.2</span></a>. Using notation define in <a href="#sec-gbm_vasicek" class="quarto-xref"><span>Section 7.3</span></a>, the bond price can be written as</p>
+<p><span class="math display">\[
+P_{t,T} = e^{-m_I + \frac12 v_I}
+\]</span> and the forward price is</p>
+<p><span class="math display">\[
+K_t = S_t\,e^{m_I-\frac12 v_I}.
+\]</span></p>
+<p>The future and forward price both depend on the current spot price and the <span class="math inline">\(Q\)</span>-measure expected short-rate path, but they involve different convexity adjustments arising from differences in the timing of cash flows between the buyer and seller. Expressed as a ratio, this difference is</p>
+<p><span class="math display">\[
+\frac{F_t}{K_t} = e^{v_I + \sigma_S c_{IY}}
+\]</span> The difference between futures and forwards prices depends on both the level of uncertainty in short rate path (v_I) and interest-asset correlation <span class="math inline">\(\sigma_S c_{IV}\)</span>.</p>
+<p>A couple of special cases are worth noting. Suppose, as in <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.5</span></a>, that the short rate is fixed. In this case <span class="math inline">\(v_I = c_{IY} = 0\)</span> and the futures and forwards prices are identical. The should not be surprising. In <a href="05-discounting_cash_flows.html#sec-f_and_f" class="quarto-xref"><span>Section 5.4</span></a> we showed that the two prices will match when <span class="math inline">\(\Cov_t^Q[f_{t,T}, S_T] = 0\)</span>. But now suppose that the short rate is uncertain but is uncorrelated with <span class="math inline">\(S_T\)</span>, so that <span class="math inline">\(c_{IY}=0\)</span> but <span class="math inline">\(v_I &gt; 0\)</span>. Perhaps unexpectedly, <span class="math inline">\(F_t &gt; K_t\)</span>.</p>
+<p>Does this contradict our finding from <a href="05-discounting_cash_flows.html#sec-f_and_f" class="quarto-xref"><span>Section 5.4</span></a>? No.&nbsp;The discount rate <span class="math inline">\(f_{t,T}\)</span> is a nonlinear function of <span class="math inline">\(I\)</span> and the asset price <span class="math inline">\(S_T\)</span> is a nonlinear function of both <span class="math inline">\(I\)</span> and <span class="math inline">\(Y\)</span>. Volatility in the integrated interest rate path can induce correlation between the discount rate and the reference asset price even if shocks to the two processes are independent. It is not enough for the underlying sources of uncertainty to be uncorrelated. What matters for the forward–futures relationship is the covariance between the stochastic discount factor and the terminal asset price. In models with stochastic interest rates, this dependence arises naturally because the short rate both determines the discount factor and enters the risk-neutral dynamics of traded asset prices.</p>
+<p><a href="#fig-f_and_f" class="quarto-xref">Figure&nbsp;<span>7.2</span></a> shows the simulated time path for a stock price and the prices of a futures contract and a forward contract on that stock. Both the futures and the forward price converge to the spot price as the expiry date approaches. For plausible parameter values the gap between the forward and futures is small relative to the gap between both prices and the spot price.</p>
+<div id="fig-f_and_f" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-f_and_f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="../figures/f_and_f_path.svg" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-f_and_f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;7.2: Simulated path of a futures price and forward price compared to the path of the reference asset spot price over time.
+</figcaption>
+</figure>
+</div>
+</section>
+<section id="options-pricing-with-stochastic-interest-rates" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="options-pricing-with-stochastic-interest-rates"><span class="header-section-number">7.5</span> Options pricing with stochastic interest rates</h2>
 <p>Adding stochastic interest rates to our model gives us one more “greek” and a few additional unnamed sensitivity parameters with which evaluate options, as shown in the following alternative form of the pricing PDE:</p>
 <p><span class="math display">\[
 \begin{align*}
@@ -656,7 +759,6 @@ Vr =&amp; \Delta\,S\,r + \Theta + \frac12 \Gamma S\,\sigma_S \\
 <p><span class="math inline">\(\mathrm{P} = \frac{\partial V}{\partial r}\)</span>, describes an option value’s sensitivity to small changes in the short interest rate.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The short rate affects the option price through two channels. First, a higher expected interest rate path means that future payouts are discounted more heavily, driving down the value of claims on future cash flows. Second, the interest rate affects the rate of growth of the reference asset under the risk neutral measure. This may either have a positive or negative relation to the option value, depending on whether the option is long or short with respect to the reference asset. <span class="math inline">\(V_{rr}\)</span> reflects the convexity of the option value with respect to changes in interest rates, similar to the way <span class="math inline">\(\Gamma\)</span> captures the nonlinear relationship between the option value and the value of the reference asset. <span class="math inline">\(V_{Sr}\)</span> captures second-order interactions between the reference asset and the short rate.</p>
 
 
-</section>
 </section>
 <section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
 <hr>

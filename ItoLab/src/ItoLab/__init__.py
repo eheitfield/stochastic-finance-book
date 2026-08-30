@@ -34,6 +34,7 @@ from .PoissonProcess import PoissonProcess
 from .SamplePaths import SamplePaths
 from .StochasticProcess import StochasticProcess
 from .vasicek_bond_value import vasicek_bond_value
+from .gbm_vasicek_futures_price import gbm_vasicek_futures_price
 from .Wiener import Wiener
 
 __all__ = {
@@ -52,6 +53,7 @@ __all__ = {
     "MultivariateStochasticProcess",
     "CorrelatedWienerProcess",
     "vasicek_bond_value",
+    "gbm_vasicek_futures_price",
     "cir_bond_value",
     "bs_option_value",
     "merton_option_value",

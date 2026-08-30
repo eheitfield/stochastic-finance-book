@@ -1,10 +1,9 @@
-## Multiple Sources of Uncertainty
+# Models with Multiple Sources of Uncertainty
 
 WORKING DRAFT
 
 THIS CHAPTER IS NOT READY FOR REVIEW
 
-# Dealing with multiple sources of uncertainty
  
 All of the models we have encountered thus far involve only one source of uncertainty.  In the basic Black-Scholes model a single Wiener process drives th geometric Brownian motion asset price process.  Likewise, in the Vasicek and Cox-Ingersol-Ross models, a single Wiener process determines the evolution over time of the short interest rate.  In this chapter we will show how the tools of Ito calculus can be generalized to work with models involving systems of correlated Wiener processes. We will then illustrate the application of these tools to price futures and forward contracts.
  
@@ -215,9 +214,9 @@ $$
 d(X\,Y) = X\,dY + Y\,dX + \rho\,\sigma^x\sigma^y \,dt.
 $$
  
-## Valuing claims on a risky asset with stochastic discount rates
+## The GBM-Vasicek model under the risk-neutral measure {#sec-gbm_vasicek}
  
-In this section we will consider how to value derivatives on an asset such as an equity security or equity index when future interest rates are uncertain.  Assume that under the physical measure the asset follows the GBM process
+In this section we will develop key results needed to value derivatives on an asset such as an equity security or equity index when future interest rates are uncertain.  Assume that under the physical measure the asset follows the GBM process
  
 $$
 \frac{dS_t}{S_t} = \mu\,dt + \sigma_S\,dW_t^S
@@ -263,7 +262,7 @@ dV =& V_t dt + V_S dS + V_r dr + \frac12 V_SS(dS)^2 + \frac12 V_{rr}(dr)^2 + V_{
 \end{align*}
 $$
  
-Note that, as with with our earlier fixed interest rate GBM model, $V(S,r,t)$ is an Ito process.  The derivative is a traded asset, so the FTAP implies that the drift drift term is equal to $V\,r$, so
+Note that, as with with our earlier fixed interest rate GBM model, $V(S,r,t)$ is an Ito process.  The derivative is a traded asset, so the FTAP implies that the drift term is equal to $V\,r$. Thus
  
 $$
 \begin{align*}
@@ -274,6 +273,152 @@ Vr =& V_t + V_S\,S\,r + V_r\kappa\,(\theta - r) \\
 $$
  
 This is a generalization of the Black-Scholes pricing PDE we derived in @sec-hedging_portfolio.  It is identical to the earlier version but includes additional terms that capture the effects of changes in the short rate.
+
+To price derivatives on the asset we will need to know its $Q$-measure transition distribution of the reference asset and the $Q$-measure transition distribution of its discounted present value.  Deriving these distributions involves math we have already seen; the main challenge is simply keeping our notation from getting out of hand.  Throughout this discussion we will be working with the risk-neutral measure, so we will drop notation that distinguished between physical and risk-neutral parameters.
+
+Applying Ito's Lemma to $\ln(S_t)$ and integrating the resulting PDE yields
+
+$$
+\begin{align*}
+\ln(S_T)
+=&
+\ln(S_t)
++
+\int_t^T r_s\,ds
+-\frac12\sigma_S^2\,(T-t)
++\sigma_S\,(W_T^S-W_t^S) \\
+=&
+\ln(S_t) - \frac12\sigma_S^2\,(T-t)
++ I_{t,T} + \sigma_S Y_{t,T}.
+\end{align*}
+$$
+Notice that this is very similar the PDE solution we derived for a GBM process under the physical measure in @sec-gbm.  Our solution involves two random variables: the Wiener process increment 
+
+$$
+Y_{t,T} = W_t^S-W_t^S
+$$ 
+and the integrated short rate 
+
+$$
+I_{T,t} = \int_t^T r_s\,ds.
+$$
+
+From the Wiener process definition we know that $Y_{t,T} \sim N(0,\,(T-t))$. In @sec-vasicek we found that under the Vasicek model the integrated short-rate process is also normally distributed with mean
+
+$$
+m_I = \theta\,(T-t) + (r_t - \theta)\,\mathcal{B}(t,T)
+$$
+and variance
+$$
+v_I =\frac{\sigma_r^2}{\kappa^2} \left( 
+    (T-t) - 2\mathcal{B}(t,T) + \frac{1}{2\kappa} \left(1-e^{-2\kappa\,T}\right)\right),
+$$
+where
+
+$$
+\mathcal{B}(t,T) = \frac{1-e^{-\kappa\,(T-t)}}{\kappa}.
+$$
+
+Thus $\ln(S_T)$ is equal to a constant term plus the sum of two random variables. We now know that $\ln(S_t)$ is normally distributed; we just need to determine its mean and variance.
+
+$I_{t,T}$ and $Y_{t,T}$ depend on correlated Wiener processes, so they are correlated as well.  The covariance between them is
+
+$$
+\begin{align*}
+c_{IY} =& \Cov_t^Q[I_{t,T},Y_{t,T}] \\
+=& \E_t^Q\left[\left(I_{t,T}-m_I\right)Y_{t,T}\right] \\
+=& \E_t^Q\left[\left(\sigma_r\int_t^T \mathcal{B}(s,T)dW_s^r\right)
+\left(\int_t^T dW_s^S\right)\right] \\
+=& \rho\,\sigma_r\,\int_t^T \mathcal{B}(s,T)ds \\
+=& \rho\,\frac{\sigma_r}{\kappa}\left((T-t)-\mathcal{B}(t,T)\right).
+\end{align*}
+$$
+Thus, using the standard properties of correlated normal random variables, we have
+
+$$
+\ln(S_T)\;|\;\mathcal{F}_t \sim 
+N\left(\ln(S_t) - \frac12\sigma_S^2\,(T-t) + m_I,\; v_I + \sigma^2_S(T-t) + 2\sigma_S\,c_{IY}\right).
+$$
+The discounted present value of $S_T$ at date $t$ is
+
+$$
+\tilde S_t = e^{-\int_t^Tr_sds}S_t = e^{-I_{t,T}}S_T.
+$$
+
+Or, in log form,
+
+$$
+\begin{align*}
+\ln(\tilde S_t) =& \ln(S_t) - I_{t,T} \\
+=& \ln(S_t) - \frac12\sigma_S^2\,(T-t)
++ I_{t,T} + \sigma_S Y_{t,T} - I_{t,T} \\
+=& \ln(S_t) - \frac12\sigma_S^2\,(T-t)
++ \sigma_S Y_{t,T}. 
+
+\end{align*}
+$$
+As with the fixed interest rate version of the GBM model, discounting the $Q$ measure process removes the trend term, giving us the simple transition distribution
+
+$$
+\ln(\tilde S_t) \;|\;\mathcal{F}_t \sim N\left(\ln(S_t) - \frac12\sigma_S^2\,(T-t),\;\sigma_S^2\,(T-t)\right).
+$$
+It follows that $S_T$ and $\tilde S_T$ each have lognormal distributions.
+
+
+## Revisiting the relationship between futures and forwards prices
+
+In @sec-f_and_f we saw that the futures price $F_t$ for a contract to receive delivery of a reference asset at date $T$ is
+$$
+F_t = \E_t^Q[S_T].
+$$
+
+With our model of the reference asset value process $\{S_t\}$ in hand, we can now compute the futures price explicitly. In @sec-gbm_vasicek we showed that under the $Q$ measure $\ln(S_T)| \mathcal{F}_t$ has a normal distribution with a known mean.  From @thm-lognormal-moments, we can conclude that
+
+$$
+\begin{align*}
+\ln(F_t) =& \E_t^Q[\ln(S_T)] + \frac12\Var[\ln(S_T)] \\
+=&\ln(S_t) - \frac12\sigma_S^2\,(T-t) + m_I + \frac12 \left(v_I + \sigma^2_S(T-t) + 2\sigma_S\,c_{IY}\right) \\
+=& \ln(S_t) + m_I + \frac12v_I + \sigma_S c_{IY}.
+\end{align*}
+$$
+Or, equivalently,
+
+$$
+F_t = S_t\,e^{m_I + \frac12v_I + \sigma_S c_{IY}}.
+$$
+The futures price is the current spot price scaled by three factors: the expected integrated short-rate path, a convexity adjustment that arises from uncertainty in the short-rate path, and an adjustment for correlation between the short rate and the value of the reference asset.
+
+Recall from @sec-f_and_f that the forward price $K_t$ to receive the same asset is
+
+$$
+K_t = \frac{S_t}{P_{t,T}}
+$$
+where $P_{i,T}$ is the price of a zero-coupon bond derived in @sec-vasicek.  Using notation define in @sec-gbm_vasicek, the bond price can be written as
+
+$$
+P_{t,T} = e^{-m_I + \frac12 v_I}
+$$
+and the forward price is
+
+$$
+K_t = S_t\,e^{m_I-\frac12 v_I}.
+$$
+
+The future and forward price both depend on the current spot price and the $Q$-measure expected short-rate path, but they involve different convexity adjustments arising from differences in the timing of cash flows between the buyer and seller.  Expressed as a ratio, this difference is
+
+$$
+\frac{F_t}{K_t} = e^{v_I + \sigma_S c_{IY}}
+$$
+The difference between futures and forwards prices depends on both the level of uncertainty in short rate path (v_I) and interest-asset correlation $\sigma_S c_{IV}$.  
+
+A couple of special cases are worth noting.  Suppose, as in @sec-q_measure_bs, that the short rate is fixed.  In this case $v_I = c_{IY} = 0$ and the futures and forwards prices are identical.  The should not be surprising.  In @sec-f_and_f we showed that the two prices will match when $\Cov_t^Q[f_{t,T}, S_T] = 0$. But now suppose that the short rate is uncertain but is uncorrelated with $S_T$, so that $c_{IY}=0$ but $v_I > 0$.  Perhaps unexpectedly, $F_t > K_t$.  
+
+Does this contradict our finding from @sec-f_and_f?  No. The discount rate $f_{t,T}$ is a nonlinear function of $I$ and the asset price $S_T$ is a nonlinear function of both $I$ and $Y$. Volatility in the integrated interest rate path can induce correlation between the discount rate and the reference asset price even if shocks to the two processes are independent.  It is not enough for the underlying sources of uncertainty to be uncorrelated. What matters for the forward–futures relationship is the covariance between the stochastic discount factor and the terminal asset price. In models with stochastic interest rates, this dependence arises naturally because the short rate both determines the discount factor and enters the risk-neutral dynamics of traded asset prices.
+
+@fig-f_and_f shows the simulated time path for a stock price and the prices of a futures contract and a forward contract on that stock. Both the futures and the forward price converge to the spot price as the expiry date approaches. For plausible parameter values the gap between the forward and futures is small relative to the gap between both prices and the spot price.
+
+![Simulated path of a futures price and forward price compared to the path of the reference asset spot price over time.](../figures/f_and_f_path.svg){#fig-f_and_f}
+
 
 ## Options pricing with stochastic interest rates
  

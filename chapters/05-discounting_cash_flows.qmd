@@ -211,11 +211,11 @@ $$
 $$
 The duration and convexity are moments of the positive and negative cash flow components weighted by each component's contribution to the present value of the net position.
 
-## The economic difference between futures and forwards
+## The economic difference between futures and forwards {#sec-f_and_f}
  
 Futures and forwards are derivative contracts designed to allow market participants to lock in the price they will pay for an asset in the future, or to express a view on the change in the value of that asset over time.  Despite their similarity, the market structure for trading and clearing these contracts differ markedly.  Forward contracts are bespoke, bilateral arrangements between a pair of counterparties, while futures contracts are standardized, exchange traded, and centrally cleared.  Abstracting from these differences, forwards and futures also differ in terms of the timing of contract payment streams.  As we will show in this note, these timing difference mean that the economic interpretation of forwards and futures priced are not the same.
 
-A forward contract is similar to a European call option except that the there is no optionality.  At date $t$, the counterparty who is long a forward contract agrees to pay a fixed price $K_t$ at date $T$ in exchange for a specified quantity of an asset whose future value is $S_T$. In the absence of arbitrage, $K_t$ must be set so that the value of the forward contract is zero at date $t$.  Otherwise either the buyer or the seller would earn positive risk-neutral returns. Thus, using our standard $Q$-measure valuation formula,
+A forward contract is similar to a European call option except that there is no optionality.  At date $t$, the counterparty who is long the forward contract agrees to pay a fixed price $K_t$ at date $T$ in exchange for a specified quantity of an asset whose future value is $S_T$. In the absence of arbitrage, $K_t$ must be set so that the value of the forward contract is zero at date $t$ so that neither the buyer nor the seller can earn positive risk-free returns. Thus, using our standard $Q$-measure valuation formula,
  
 $$
 \begin{align*}
@@ -227,13 +227,13 @@ $$
  
 The forward price is the $Q$-measure expectation of the asset value plus an adjustment term that reflects the extent to which the asset will tend to have higher value in states of the world where future wealth is more highly valued today.
 
-The FTAP implies that if $S_t$ is an asset that generates no intermediate benefit flows (such as dividends) or cost flows (such as storage costs) then its discounted value is a martingale under the $Q$ measure. Substitution the martingale condition $S_t = \E_^Q[D_{t,T}S_T]$ into the expression for $K_t$ gives us another way to interpret the forward price:
+The FTAP implies that if $S_t$ is an asset that generates no intermediate benefit flows (such as dividends) or cost flows (such as storage costs) then its discounted value is a martingale under the $Q$ measure. Substituting the martingale condition $S_t = \E_t^Q[D_{t,T}S_T]$ into the expression for $K_t$ gives us another way to interpret the forward price:
 
 $$
 K_t = \frac{S_t}{P_{t,T}}.
 $$
 
-Under no arbitrage, the forward price must be equal to the opportunity cost (in terms of foregone risk-free interest income) of buying the asset at $t$ and holding it until $T$.
+Under no arbitrage, the forward price must reflect the opportunity cost (in terms of foregone risk-free interest income) of buying the asset at $t$ and holding it until $T$.
 
 In a futures contract, market participants also transact at a price $F_t$ that ensures that the value of the contract at $t$ is zero.  However, rather than exchanging the full amount of the contract price at expiry, counterparties agree to mark the contract to market and exchange cash flows on an ongoing basis as gains and losses are realized.  If the contract rises in value, the seller pays the buyer the amount of this appreciation, and, likewise, if the contract falls in value the buyer makes a payment to the seller. These payments are called *variation margin*.  The cumulative net payments to the buyer over the life of the contract is
 $$
@@ -241,9 +241,9 @@ $$
 $$
 The present value of these payments depends on the times at which they are realized. Since the margin payments are computed to keep the value of the contract at zero over time, the futures price process $\{F_t\}$ must satisfy
 $$
-\E_t^Q\left[\int_t^T D_{t,s}dF_s\right] = 0.
+\E_t^Q\left[\int_t^T D_{t,s}dF_s\right] = 0
 $$
-An implication of this is that $\{F_t\}$ must have zero drift.  Otherwise someone could enter into the contract with a long or short position at no cost and instantly receive a positive $Q$-measure expected payment, which would violate the no arbitrage condition. Thus
+for all values of $t$. An implication of this is that $\{F_t\}$ must have zero drift.  Otherwise someone could enter into the contract with a long or short position at no cost and instantly receive a positive $Q$-measure expected payment, which would violate the no arbitrage condition. Thus
 $$
 E_t^Q[dF_t]=0
 $$ 

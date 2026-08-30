@@ -380,11 +380,120 @@ def figure_mjd_daily_return(seed: Optional[int] = None) -> None:
 
 
 # =============================================================================
+# Price path simulations
+# =============================================================================
+
+
+def figure_bs_option_path(seed: Optional[int] = None) -> None:
+    s0 = 90
+    r = 0.05
+    mu = 0.08
+    sigma = 0.20
+    k = 100
+    max_T = 1.0
+    n_inc = 1000
+
+    s_path = ito.GeometricBrownianMotion(s0=s0, mu=mu, sigma=sigma).generate_paths(
+        n_paths=1, n_inc=n_inc, max_T=max_T, seed=seed
+    )
+    v_put = []
+    v_call = []
+    for i in range(n_inc):
+        ttm = max_T - s_path.times[i]
+        v_s = s_path.paths[0, i]
+        v_put.append(
+            ito.bs_option_value(S=v_s, K=k, T=ttm, r=r, sigma=sigma, option="put")
+        )
+        v_call.append(
+            ito.bs_option_value(S=v_s, K=k, T=ttm, r=r, sigma=sigma, option="call")
+        )
+
+    fig, axs = plt.subplots(nrows=2, sharex=True, figsize=(8, 8))
+    axs[0].plot(s_path.times, s_path.paths.T)
+    axs[0].set_title("Stock Price")
+    axs[0].axhline(y=k, label="Strike Price", color="salmon", linestyle="--")
+    axs[0].legend()
+    axs[1].plot(s_path.times, v_put, label="Put")
+    axs[1].plot(s_path.times, v_call, label="Call")
+    axs[1].set_title("Option Value")
+    axs[1].legend()
+    axs[1].set_xlabel("t")
+
+    fig.tight_layout()
+    fig.savefig(FIGURE_DIR / "bs_option_path.svg")
+    plt.close(fig)
+
+
+def figure_f_and_f_path(seed: Optional[int] = None) -> None:
+    s0 = 100
+    r0 = 0.01
+    mu = 0.08
+    sigma_s = 0.20
+    kappa = 0.6
+    sigma_r = 0.03
+    theta_p = 0.04
+    theta_q = 0.035
+    rho = 0.0
+    max_T = 5.0
+    n_inc = 1000
+
+    s_path = ito.GeometricBrownianMotion(s0=s0, mu=mu, sigma=sigma_s).generate_paths(
+        n_paths=1, n_inc=n_inc, max_T=max_T, seed=seed
+    )
+    r_path = ito.OrnsteinUhlenbeck(
+        x0=r0, theta=theta_p, kappa=kappa, sigma=sigma_r
+    ).generate_paths(n_paths=1, n_inc=n_inc, max_T=max_T, seed=seed)
+
+    fut_price = []
+    fwd_price = []
+    for i in range(n_inc):
+        s = s_path.paths[0, i]
+        r = r_path.paths[0, i]
+        t = s_path.times[i]
+        ttm = max_T - t
+        fut_price.append(
+            ito.gbm_vasicek_futures_price(
+                S=s,
+                r=r,
+                T=max_T,
+                t=t,
+                kappa=kappa,
+                theta=theta_q,
+                sigma_r=sigma_r,
+                sigma_S=sigma_s,
+                rho=rho,
+            )
+        )
+        P_t = ito.vasicek_bond_value(
+            r_t=r, tau=ttm, kappa=kappa, theta_q=theta_q, sigma=sigma_r
+        )
+        fwd_price.append(s / P_t)
+    spot = s_path.paths[0, :]
+
+    fig, axs = plt.subplots(nrows=2, sharex=True, figsize=(8, 8))
+    axs[0].plot(s_path.times, fut_price, label="Future")
+    axs[0].plot(s_path.times, fwd_price, label="Forward")
+    axs[0].plot(s_path.times, spot, label="Spot")
+    axs[0].legend()
+    axs[0].set_title("Price")
+    axs[1].plot(s_path.times, np.log(fut_price) - np.log(spot), label="Future")
+    axs[1].plot(s_path.times, np.log(fwd_price) - np.log(spot), label="Forward")
+    axs[1].legend()
+    axs[1].yaxis.set_major_formatter(lambda x, pos: f"{x:.0%}")
+    axs[1].set_title("Spread to Spot")
+    axs[1].set_xlabel("t")
+
+    fig.tight_layout()
+    fig.savefig(FIGURE_DIR / "f_and_f_path.svg")
+    plt.close(fig)
+
+
+# =============================================================================
 # Other figure functions
 # =============================================================================
 
 
-def figure_matingale_ex(seed: Optional[int] = None) -> None:
+def figure_martingale_ex(seed: Optional[int] = None) -> None:
     if not seed:
         seed = 1234
     lam = 5.0
@@ -718,6 +827,7 @@ def figure_mjd_vs_bs_put_payoff() -> None:
     alpha = -0.01
     delta = 0.07
     eta = 1.0
+
     fig, ax = plt.subplots(figsize=(6, 4))
     ax.set_ylabel(r"Option Value ($V^{\text{Put}}_0$)")
     ax.set_xlabel(r"Stock Price ($S_0$)")
@@ -887,46 +997,6 @@ def ridge_plot(
     return fig, axs
 
 
-def figure_bs_option_path(seed: Optional[int] = None) -> None:
-    s0 = 90
-    r = 0.05
-    mu = 0.08
-    sigma = 0.20
-    k = 100
-    max_T = 1.0
-    n_inc = 1000
-
-    s_path = ito.GeometricBrownianMotion(s0=s0, mu=mu, sigma=sigma).generate_paths(
-        n_paths=1, n_inc=n_inc, max_T=max_T, seed=seed
-    )
-    v_put = []
-    v_call = []
-    for i in range(n_inc):
-        ttm = max_T - s_path.times[i]
-        v_s = s_path.paths[0, i]
-        v_put.append(
-            ito.bs_option_value(S=v_s, K=k, T=ttm, r=r, sigma=sigma, option="put")
-        )
-        v_call.append(
-            ito.bs_option_value(S=v_s, K=k, T=ttm, r=r, sigma=sigma, option="call")
-        )
-
-    fig, axs = plt.subplots(nrows=2, sharex=True, figsize=(8, 8))
-    axs[0].plot(s_path.times, s_path.paths.T)
-    axs[0].set_title("Stock Price")
-    axs[0].axhline(y=k, label="Strike Price", color="salmon", linestyle="--")
-    axs[0].legend()
-    axs[1].plot(s_path.times, v_put, label="Put")
-    axs[1].plot(s_path.times, v_call, label="Call")
-    axs[1].set_title("Option Value")
-    axs[1].legend()
-    axs[1].set_xlabel("t")
-
-    fig.tight_layout()
-    fig.savefig(FIGURE_DIR / "bs_option_path.svg")
-    plt.close(fig)
-
-
 # =============================================================================
 # Figure orchestration
 # =============================================================================
@@ -937,7 +1007,7 @@ def all_figures() -> None:
     figure_poisson_paths(MASTER_SEED)
     figure_poisson_dist(MASTER_SEED + 10)
     figure_comp_pois_paths(MASTER_SEED + 110)
-    figure_matingale_ex(MASTER_SEED + 130)
+    figure_martingale_ex(MASTER_SEED + 130)
     # Chapter 2
     figure_wiener_limit(MASTER_SEED + 20)
     figure_weiner_frac(MASTER_SEED + 30)
@@ -965,7 +1035,9 @@ def all_figures() -> None:
     figure_cir_dist(MASTER_SEED + 95)
     figure_cir_term_structure()
     figure_cir_vol()
-    figure_biv_wiener(MASTER_SEED + 250)
+    figure_biv_wiener(MASTER_SEED + 25)
+    # Chapter 7
+    figure_bs_option_path(seed=MASTER_SEED + 250)
     # Chapter 8
     figure_nas_daily_ret()
     figure_cpp_paths(seed=MASTER_SEED + 150)
@@ -976,7 +1048,7 @@ def all_figures() -> None:
 
 
 def test_figures() -> None:
-    figure_bs_option_path(seed=MASTER_SEED + 250)
+    figure_f_and_f_path(seed=MASTER_SEED + 500)
 
 
 def main() -> None:
