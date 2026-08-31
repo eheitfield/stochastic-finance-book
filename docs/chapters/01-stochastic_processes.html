@@ -371,11 +371,10 @@ window.Quarto = {
    
   <ul>
   <li><a href="#probability-spaces" id="toc-probability-spaces" class="nav-link active" data-scroll-target="#probability-spaces"><span class="header-section-number">1.1</span> Probability spaces</a></li>
-  <li><a href="#stochastic-processes-random-functions-that-evolve-over-time" id="toc-stochastic-processes-random-functions-that-evolve-over-time" class="nav-link" data-scroll-target="#stochastic-processes-random-functions-that-evolve-over-time"><span class="header-section-number">1.2</span> Stochastic processes: random functions that evolve over time</a></li>
-  <li><a href="#sec-poisson_process" id="toc-sec-poisson_process" class="nav-link" data-scroll-target="#sec-poisson_process"><span class="header-section-number">1.3</span> Example: the Poisson process</a></li>
-  <li><a href="#sec-filtrations" id="toc-sec-filtrations" class="nav-link" data-scroll-target="#sec-filtrations"><span class="header-section-number">1.4</span> Modeling information flow over time with filtrations and conditional expectations</a></li>
-  <li><a href="#sec-martingales" id="toc-sec-martingales" class="nav-link" data-scroll-target="#sec-martingales"><span class="header-section-number">1.5</span> Martingales</a></li>
-  <li><a href="#taking-stock-and-looking-forward" id="toc-taking-stock-and-looking-forward" class="nav-link" data-scroll-target="#taking-stock-and-looking-forward"><span class="header-section-number">1.6</span> Taking stock and looking forward</a></li>
+  <li><a href="#sec-processes" id="toc-sec-processes" class="nav-link" data-scroll-target="#sec-processes"><span class="header-section-number">1.2</span> Stochastic processes: random functions that evolve over time</a></li>
+  <li><a href="#sec-filtrations" id="toc-sec-filtrations" class="nav-link" data-scroll-target="#sec-filtrations"><span class="header-section-number">1.3</span> Modeling information flow over time with filtrations and conditional expectations</a></li>
+  <li><a href="#sec-martingales" id="toc-sec-martingales" class="nav-link" data-scroll-target="#sec-martingales"><span class="header-section-number">1.4</span> Martingales</a></li>
+  <li><a href="#taking-stock-and-looking-forward" id="toc-taking-stock-and-looking-forward" class="nav-link" data-scroll-target="#taking-stock-and-looking-forward"><span class="header-section-number">1.5</span> Taking stock and looking forward</a></li>
   </ul>
 </nav>
     </div>
@@ -426,8 +425,8 @@ P\left(\bigcup_{i=1}^{\infty} A_i\right) = \sum_{i=1}^{\infty} P(A_i).
 <p>Importantly, and perhaps surprisingly, a probability measure need not reflect the literal physical odds that an event will occur. All that is required is that the measure satisfy the conditions listed above. We’ll see later that notional probability measures not directly related to physical odds play a central roll in asset pricing. Two probability measures <span class="math inline">\(P\)</span> and <span class="math inline">\(P'\)</span> are considered <strong>equivalent probability measures</strong> if they both assign positive probabilities to the same events, even if those probabilities differ in magnitude.</p>
 <p>Taken together, the triple <span class="math inline">\((\Omega, \mathcal{F}, P)\)</span> forms a probability space. In a nutshell, the sample space <span class="math inline">\(\Omega\)</span> tells you what <em>can</em> happen, the sigma-algebra <span class="math inline">\(\mathcal{F}\)</span> tells you what collections of outcomes you’re allowed to ask about, and the probability measure <span class="math inline">\(P\)</span> tells you how likely those collections are to occur.</p>
 </section>
-<section id="stochastic-processes-random-functions-that-evolve-over-time" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="stochastic-processes-random-functions-that-evolve-over-time"><span class="header-section-number">1.2</span> Stochastic processes: random functions that evolve over time</h2>
+<section id="sec-processes" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="sec-processes"><span class="header-section-number">1.2</span> Stochastic processes: random functions that evolve over time</h2>
 <p>Typically, in applied work, we find it more convenient to work with numerical quantities that depend on outcomes in <span class="math inline">\(\Omega\)</span>, rather than those outcomes directly. A <strong>random variable</strong> is a function, <span class="math inline">\(x:\Omega \rightarrow \R\)</span>, that maps elements of the sample space to the real line.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The cumulative distribution functions we commonly interact with assign probabilities to ranges of outputs of random variables. In the background the probability space determines how these probabilities are determined.</p>
 <p>A <strong>stochastic process</strong> is a collection of random variables indexed by time. Formally, a stochastic process is a family</p>
 <p><span class="math display">\[
@@ -443,10 +442,7 @@ X_t : \Omega \rightarrow \mathbb{R}
 \]</span></p>
 <p>is called a <strong>sample path</strong> or <strong>realization</strong> of the process.</p>
 <p>In practice, you should think about a stochastic process as a random function that evolves over time. A deterministic function like <span class="math inline">\(Y_t(\omega) = t^2\)</span> can be viewed as a particularly uninteresting example of a stochastic process. It generates the same path no matter what value of <span class="math inline">\(\omega\)</span> you plug into it.</p>
-</section>
-<section id="sec-poisson_process" class="level2" data-number="1.3">
-<h2 data-number="1.3" class="anchored" data-anchor-id="sec-poisson_process"><span class="header-section-number">1.3</span> Example: the Poisson process</h2>
-<p>A Poisson process, is an example of a stochastic process which describes the occurrence of random events through time. We’ll put it to use later in this book to model jumps in asset prices.</p>
+<p>A Poisson process is an example of a stochastic process that describes the occurrence of random events through time. We’ll put it to use later in this book to model jumps in asset prices.</p>
 <div class="callout callout-style-default callout-tip no-icon callout-titled" title="Poisson Process">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -459,11 +455,11 @@ X_t : \Omega \rightarrow \mathbb{R}
 <div class="callout-body-container callout-body">
 <p>A process <span class="math inline">\(\{N_t\}_{t \ge 0}\)</span> is called a <strong>Poisson process</strong> with intensity (arrival rate) <span class="math inline">\(\eta &gt; 0\)</span><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> if it satisfies the following properties:</p>
 <ol type="1">
-<li><p><strong>Initial Condition</strong></p>
+<li><p>Initial Condition</p>
 <p><span class="math display">\[
 N_0 = 0.
 \]</span></p></li>
-<li><p><strong>Independent Increments</strong></p>
+<li><p>Independent Increments</p>
 <p>For any times</p>
 <p><span class="math display">\[
 0 \le t_0 &lt; t_1 &lt; \cdots &lt; t_n,
@@ -476,7 +472,7 @@ N_{t_2}-N_{t_1}, \quad
 N_{t_n}-N_{t_{n-1}}
 \]</span></p>
 <p>are independent random variables.</p></li>
-<li><p><strong>Stationary Increments</strong></p>
+<li><p>*Stationary Increments</p>
 <p>For any <span class="math inline">\(0 \le s &lt; t\)</span>, the increment depends only on the length of the interval:</p>
 <p><span class="math display">\[
 N_t - N_s
@@ -522,8 +518,8 @@ E[N_t] = \eta\,t,
 \operatorname{Var}(N_t) = \eta\,t.
 \]</span></p>
 </section>
-<section id="sec-filtrations" class="level2" data-number="1.4">
-<h2 data-number="1.4" class="anchored" data-anchor-id="sec-filtrations"><span class="header-section-number">1.4</span> Modeling information flow over time with filtrations and conditional expectations</h2>
+<section id="sec-filtrations" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="sec-filtrations"><span class="header-section-number">1.3</span> Modeling information flow over time with filtrations and conditional expectations</h2>
 <p>Finance is largely about forecasting the future from the past or inferring the value of an asset today based on information about the likelihood of future events. When working with random processes that evolve over time, we need a mathematically rigorous way to describe how information is revealed gradually. This is where the notion of filtrations comes in.</p>
 <p>A <strong>filtration</strong> is a sequence of sigma-algebras <span class="math inline">\(\{\mathcal{F}_t\}_{t \geq 0}\)</span> that satisfies:</p>
 <p><span class="math display">\[\mathcal{F}_s \subseteq \mathcal{F}_t \subseteq \mathcal{F} \quad \text{whenever } s \leq t\]</span></p>
@@ -541,7 +537,7 @@ E[N_t] = \eta\,t,
 \E_t[X_t] = X_t.
 \]</span></p>
 <p>Virtually all of the stochastic processes you are likely to encounter in applied continuous-time finance are adapted to a filtratation. They describe the evolution over time of observable phenomena like equity prices and interest rates that are known in the past but not in the future.</p>
-<p>Consider the Poisson process, <span class="math inline">\(\{N_t\}\)</span>, we introduced in <a href="#sec-poisson_process" class="quarto-xref"><span>Section 1.3</span></a>. Suppose we wish to predict the number of events that will have occurred by a later time <span class="math inline">\(T&gt;t\)</span>. At time <span class="math inline">\(t\)</span>, we already know that <span class="math inline">\(N_t\)</span> events have occurred. The only uncertainty comes from the future arrivals between <span class="math inline">\(t\)</span> and <span class="math inline">\(T\)</span>. Because the increments of a Poisson process are independent,</p>
+<p>Consider the Poisson process, <span class="math inline">\(\{N_t\}\)</span>, we introduced in <a href="#sec-processes" class="quarto-xref"><span>Section 1.2</span></a>. Suppose we wish to predict the number of events that will have occurred by a later time <span class="math inline">\(T&gt;t\)</span>. At time <span class="math inline">\(t\)</span>, we already know that <span class="math inline">\(N_t\)</span> events have occurred. The only uncertainty comes from the future arrivals between <span class="math inline">\(t\)</span> and <span class="math inline">\(T\)</span>. Because the increments of a Poisson process are independent,</p>
 <p><span class="math display">\[
 \E_t[N_T]
 =
@@ -551,8 +547,8 @@ N_t + \lambda(T-t),
 <p>When working with processes like the Poisson process that generate sample paths with discontinuities it is sometimes necessary to distinguish between processes that are adapted and those that are “predictable”. An adapted process is known from information available at time <span class="math inline">\(t\)</span>. A <strong>predictable</strong> process can be known from information available up to, but not including, time <span class="math inline">\(t\)</span>. Such a process is measurable with respect to <span class="math inline">\(\lim_{s\to t-} \mathcal{F}_s\)</span>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> This distinction is, admittedly, rather subtle. Predictable is a stronger condition than adapted. All processes that are predictable are also adapted, and all processes that generate continuous sample paths that are adapted are also predictable. However, some processes that generate discontinuous sample paths may be adapted but not predictable.</p>
 <p>For example, at 2:00 P.M. eastern time on the last day of its regular meetings, the Federal Reserve’s Federal Open Market Committee announces decisions about its policies related to the management of short-term interest rates. These announcements frequently cause bond yields to jump. If we model a bond’s yield using a jump process, <span class="math inline">\(\{X_t\}\)</span>, we will probably assume that it is adapted but not predictable. Market participants can observe the bond yield up to 2:00, but they do not know what it will be once the FOMC announcement is published. If <span class="math inline">\(\{X_t\}\)</span> is not predictable then market participants cannot react to the FOMC’s announcement until after it has occurred.</p>
 </section>
-<section id="sec-martingales" class="level2" data-number="1.5">
-<h2 data-number="1.5" class="anchored" data-anchor-id="sec-martingales"><span class="header-section-number">1.5</span> Martingales</h2>
+<section id="sec-martingales" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="sec-martingales"><span class="header-section-number">1.4</span> Martingales</h2>
 <p>Conditional expectations allow us to make predictions about future random variables using only the information available at the present time. This leads naturally to an important class of stochastic processes known as martingales.</p>
 <p>A stochastic process <span class="math inline">\(\{X_t\}\)</span> is called a <strong>martingale</strong> with respect to the filtration <span class="math inline">\(\{\mathcal{F}_t\}\)</span> if</p>
 <p><span class="math display">\[
@@ -593,9 +589,9 @@ Figure&nbsp;1.2: Simulated compensated Poisson process paths conditional on thre
 </div>
 <p>Martingales play a central role continuous-time finance. One of the most important results developed later in this book is that, under an appropriate probability measure, the discounted prices of traded assets are martingales. This simple observation forms the foundation much of modern asset pricing.</p>
 </section>
-<section id="taking-stock-and-looking-forward" class="level2" data-number="1.6">
-<h2 data-number="1.6" class="anchored" data-anchor-id="taking-stock-and-looking-forward"><span class="header-section-number">1.6</span> Taking stock and looking forward</h2>
-<p>Much of the material we’ve covered in the this chapter might seem pretty abstract, so much so that at this point you may be wondering whether the word “practical” in the title of this book is really appropriate. Fear not! In this book each chapter is more applied that the one before it. So we’re now at the peak of abstraction,looking down a steady slope toward the applied financial models to come. In the next chapter we will introduce the single most important stochastic process in continuous-time finance, a process that forms the foundation of all of the applied models we are looking forward to.</p>
+<section id="taking-stock-and-looking-forward" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="taking-stock-and-looking-forward"><span class="header-section-number">1.5</span> Taking stock and looking forward</h2>
+<p>Much of the material we’ve covered in this chapter might seem pretty abstract, so much so that at this point you may be wondering whether the word “practical” in the title of this book is really appropriate. Fear not! In this book each chapter is more applied that the one before it. We’re now standing at the peak of abstraction, looking down a steady slope toward the applied financial models to come. In the next chapter we will introduce the single most important stochastic process in continuous-time finance, a process that forms the foundation of all of the applied models we can look forward to.</p>
 
 
 </section>

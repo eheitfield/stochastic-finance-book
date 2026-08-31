@@ -354,7 +354,6 @@ $$
 + I_{t,T} + \sigma_S Y_{t,T} - I_{t,T} \\
 =& \ln(S_t) - \frac12\sigma_S^2\,(T-t)
 + \sigma_S Y_{t,T}. 
-
 \end{align*}
 $$
 As with the fixed interest rate version of the GBM model, discounting the $Q$ measure process removes the trend term, giving us the simple transition distribution
@@ -415,10 +414,11 @@ A couple of special cases are worth noting.  Suppose, as in @sec-q_measure_bs, t
 
 Does this contradict our finding from @sec-f_and_f?  No. The discount rate $f_{t,T}$ is a nonlinear function of $I$ and the asset price $S_T$ is a nonlinear function of both $I$ and $Y$. Volatility in the integrated interest rate path can induce correlation between the discount rate and the reference asset price even if shocks to the two processes are independent.  It is not enough for the underlying sources of uncertainty to be uncorrelated. What matters for the forward–futures relationship is the covariance between the stochastic discount factor and the terminal asset price. In models with stochastic interest rates, this dependence arises naturally because the short rate both determines the discount factor and enters the risk-neutral dynamics of traded asset prices.
 
-@fig-f_and_f shows the simulated time path for a stock price and the prices of a futures contract and a forward contract on that stock. Both the futures and the forward price converge to the spot price as the expiry date approaches. For plausible parameter values the gap between the forward and futures is small relative to the gap between both prices and the spot price.
+@fig-f_and_f shows the simulated time path for a stock price and the prices of a futures contract and a forward contract on that stock. Both the futures and the forward price converge to the spot price as the expiry date approaches. For plausible parameter values the gap between the forward and futures is small relative to the gap between both prices and the spot price.  The tendency for spot priced to lie below forward and futures prices, called *contango*, is a common feature of markets where access to the reference asset does not convey a significant convenience yield.  In this case, as we have seen, the gap between the forward price and the spot price reflects the opportunity cost of the capital that would be needed to hold the asset over the remaining term of the contract. 
 
 ![Simulated path of a futures price and forward price compared to the path of the reference asset spot price over time.](../figures/f_and_f_path.svg){#fig-f_and_f}
 
+Perhaps the most important thing one should take away from this discussion, aside from an appreciation of the beautiful math, is that care must be taken in interpreting forwards and futures prices.  Although both contracts are similar, they discount future claims differently, owing to the differing timings of cash flows between buyers and sellers.  Neither price reflects an expectation of the future price of the reference asset under the physical measure.  They both embody a risk premium needed to compensate market participants for committing to a price today for an asset that will be delivered in an uncertain future.
 
 ## Options pricing with stochastic interest rates
  

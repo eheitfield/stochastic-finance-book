@@ -691,14 +691,15 @@ N\left(\ln(S_t) - \frac12\sigma_S^2\,(T-t) + m_I,\; v_I + \sigma^2_S(T-t) + 2\si
 \tilde S_t = e^{-\int_t^Tr_sds}S_t = e^{-I_{t,T}}S_T.
 \]</span></p>
 <p>Or, in log form,</p>
-<p>$$ <span class="math display">\[\begin{align*}
+<p><span class="math display">\[
+\begin{align*}
 \ln(\tilde S_t) =&amp; \ln(S_t) - I_{t,T} \\
 =&amp; \ln(S_t) - \frac12\sigma_S^2\,(T-t)
 + I_{t,T} + \sigma_S Y_{t,T} - I_{t,T} \\
 =&amp; \ln(S_t) - \frac12\sigma_S^2\,(T-t)
 + \sigma_S Y_{t,T}.
-
-\end{align*}\]</span> $$ As with the fixed interest rate version of the GBM model, discounting the <span class="math inline">\(Q\)</span> measure process removes the trend term, giving us the simple transition distribution</p>
+\end{align*}
+\]</span> As with the fixed interest rate version of the GBM model, discounting the <span class="math inline">\(Q\)</span> measure process removes the trend term, giving us the simple transition distribution</p>
 <p><span class="math display">\[
 \ln(\tilde S_t) \;|\;\mathcal{F}_t \sim N\left(\ln(S_t) - \frac12\sigma_S^2\,(T-t),\;\sigma_S^2\,(T-t)\right).
 \]</span> It follows that <span class="math inline">\(S_T\)</span> and <span class="math inline">\(\tilde S_T\)</span> each have lognormal distributions.</p>
@@ -735,7 +736,7 @@ K_t = S_t\,e^{m_I-\frac12 v_I}.
 \]</span> The difference between futures and forwards prices depends on both the level of uncertainty in short rate path (v_I) and interest-asset correlation <span class="math inline">\(\sigma_S c_{IV}\)</span>.</p>
 <p>A couple of special cases are worth noting. Suppose, as in <a href="04-risk_neutral_expectations.html#sec-q_measure_bs" class="quarto-xref"><span>Section 4.5</span></a>, that the short rate is fixed. In this case <span class="math inline">\(v_I = c_{IY} = 0\)</span> and the futures and forwards prices are identical. The should not be surprising. In <a href="05-discounting_cash_flows.html#sec-f_and_f" class="quarto-xref"><span>Section 5.4</span></a> we showed that the two prices will match when <span class="math inline">\(\Cov_t^Q[f_{t,T}, S_T] = 0\)</span>. But now suppose that the short rate is uncertain but is uncorrelated with <span class="math inline">\(S_T\)</span>, so that <span class="math inline">\(c_{IY}=0\)</span> but <span class="math inline">\(v_I &gt; 0\)</span>. Perhaps unexpectedly, <span class="math inline">\(F_t &gt; K_t\)</span>.</p>
 <p>Does this contradict our finding from <a href="05-discounting_cash_flows.html#sec-f_and_f" class="quarto-xref"><span>Section 5.4</span></a>? No.&nbsp;The discount rate <span class="math inline">\(f_{t,T}\)</span> is a nonlinear function of <span class="math inline">\(I\)</span> and the asset price <span class="math inline">\(S_T\)</span> is a nonlinear function of both <span class="math inline">\(I\)</span> and <span class="math inline">\(Y\)</span>. Volatility in the integrated interest rate path can induce correlation between the discount rate and the reference asset price even if shocks to the two processes are independent. It is not enough for the underlying sources of uncertainty to be uncorrelated. What matters for the forward–futures relationship is the covariance between the stochastic discount factor and the terminal asset price. In models with stochastic interest rates, this dependence arises naturally because the short rate both determines the discount factor and enters the risk-neutral dynamics of traded asset prices.</p>
-<p><a href="#fig-f_and_f" class="quarto-xref">Figure&nbsp;<span>7.2</span></a> shows the simulated time path for a stock price and the prices of a futures contract and a forward contract on that stock. Both the futures and the forward price converge to the spot price as the expiry date approaches. For plausible parameter values the gap between the forward and futures is small relative to the gap between both prices and the spot price.</p>
+<p><a href="#fig-f_and_f" class="quarto-xref">Figure&nbsp;<span>7.2</span></a> shows the simulated time path for a stock price and the prices of a futures contract and a forward contract on that stock. Both the futures and the forward price converge to the spot price as the expiry date approaches. For plausible parameter values the gap between the forward and futures is small relative to the gap between both prices and the spot price. The tendency for spot priced to lie below forward and futures prices, called <em>contango</em>, is a common feature of markets where access to the reference asset does not convey a significant convenience yield. In this case, as we have seen, the gap between the forward price and the spot price reflects the opportunity cost of the capital that would be needed to hold the asset over the remaining term of the contract.</p>
 <div id="fig-f_and_f" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-f_and_f-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -746,6 +747,7 @@ Figure&nbsp;7.2: Simulated path of a futures price and forward price compared to
 </figcaption>
 </figure>
 </div>
+<p>Perhaps the most important thing one should take away from this discussion, aside from an appreciation of the beautiful math, is that care must be taken in interpreting forwards and futures prices. Although both contracts are similar, they discount future claims differently, owing to the differing timings of cash flows between buyers and sellers. Neither price reflects an expectation of the future price of the reference asset under the physical measure. They both embody a risk premium needed to compensate market participants for committing to a price today for an asset that will be delivered in an uncertain future.</p>
 </section>
 <section id="options-pricing-with-stochastic-interest-rates" class="level2" data-number="7.5">
 <h2 data-number="7.5" class="anchored" data-anchor-id="options-pricing-with-stochastic-interest-rates"><span class="header-section-number">7.5</span> Options pricing with stochastic interest rates</h2>

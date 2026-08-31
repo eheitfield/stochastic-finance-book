@@ -8,7 +8,7 @@ In all of the models we have considered thus far, uncertainty has been driven by
 
 ## The compound Poisson process
 
-In @sec-poisson_process we introduced the Poisson process, which describes the number of discrete events that accumulate over a period of time. The compound Poisson process augments the Poisson process by modeling the size of events as well as their number.
+In @sec-processes we introduced the Poisson process, which describes the number of discrete events that accumulate over a period of time. The compound Poisson process augments the Poisson process by modeling the size of events as well as their number.
 
 ::: {.callout-tip title="Compound Poisson Process"}
 Let $N_t$ be a Poisson process with intensity parameter $\eta$ and let $Y_1, Y_2, ...$ by i.i.d. random variables that are independent of $N_t$. The **compound Poisson process** is

@@ -511,7 +511,7 @@ d_2 =d_1-\sigma\,\sqrt{T-t}.
 <p><span class="math display">\[
 V_t^{\text{Call}} = S_t\,\Phi(d_1) - K\,e^{-r(T-t)}\,\Phi(d_2).
 \]</span></p>
-<p><a href="#fig-bs_option_path" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> shows the relationship between a simulated stock price and the value of put and call options on that stock over time.</p>
+<p><a href="#fig-bs_option_path" class="quarto-xref">Figure&nbsp;<span>4.1</span></a> shows the relationship between a simulated stock price and the value of put and call options on that stock over time. In this example the stock starts off below the strike price. An options trader would say that the put option is “in the money” and the call option is “out of the money.” Early on the stock fluctuates near the strike price and the values of the put and call options are near mirror images of one another. Closer to the expiry date, the outcome becomes more certain and the value of the out-of-the-money call option drops toward zero while the value of the in-the-money put option continues to move almost one-for-one with the negative of the stock price.</p>
 <div id="fig-bs_option_path" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-bs_option_path-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -586,13 +586,13 @@ V_t^\text{Put} = \E_t^Q\left[e^{r\,(T-t)}\,V_T^\text{Put}\right].
 <p>The Second Theorem states that if the market is complete then there is only one valid risk-neutral measure. In a <strong>complete market</strong> every contingent claim can be replicated by a portfolio of traded assets. The price of a claim is then uniquely determined by the no-arbitrage condition. In the Black-Scholes model we were able to construct a risk-free hedging portfolio because the market was complete. Had the value of the stock been influenced by additional sources of uncertainty we would not have been able to construct such a portfolio, there would have been multiple possible risk-neutral measures, and the price of the derivative would not have been uniquely determined by the no-arbitrage condition. We will see examples of incomplete markets later in this book.</p>
 <p>With the FTAP in hand we do not need to explicitly construct a hedging portfolio to value a derivative. Instead, derivative pricing can proceed in two stages. First, we determine a <span class="math inline">\(Q\)</span>-measure process that makes the present value of traded assets a martingale. Then, given a derivative’s payoff function, we compute the discounted expected value of the derivative’s future payoffs under the <span class="math inline">\(Q\)</span> measure to determine its price.</p>
 <p>Of course, in practice this strategy may be easier said than done. The FTAP guarantees the existence of a risk-neutral measure, but it does not tell us how to find it. For that, we need Girsanov’s theorem, which provides a very convenient way of moving between equivalent probability measures when we are working with Wiener processes.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
-<div class="callout callout-style-default callout-note no-icon callout-titled" title="Girsanov's Theorem (Similified)">
+<div class="callout callout-style-default callout-note no-icon callout-titled" title="Girsanov's Theorem (Simplified)">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Girsanov’s Theorem (Similified)
+<span class="screen-reader-only">Note</span>Girsanov’s Theorem (Simplified)
 </div>
 </div>
 <div class="callout-body-container callout-body">

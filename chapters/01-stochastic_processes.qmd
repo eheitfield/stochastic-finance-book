@@ -32,7 +32,7 @@ Importantly, and perhaps surprisingly, a probability measure need not reflect th
 
 Taken together, the triple $(\Omega, \mathcal{F}, P)$ forms a probability space. In a nutshell, the sample space $\Omega$ tells you what *can* happen, the sigma-algebra $\mathcal{F}$ tells you what collections of outcomes you're allowed to ask about, and the probability measure $P$ tells you how likely those collections are to occur.
 
-## Stochastic processes: random functions that evolve over time
+## Stochastic processes: random functions that evolve over time {#sec-processes}
 
 Typically, in applied work, we find it more convenient to work with numerical quantities that depend on outcomes in $\Omega$, rather than those outcomes directly. A **random variable** is a function, $x:\Omega \rightarrow \R$, that maps elements of the sample space to the real line.[^01-stochastic_processes-1] The cumulative distribution functions we commonly interact with assign probabilities to ranges of outputs of random variables. In the background the probability space determines how these probabilities are determined.
 
@@ -60,20 +60,18 @@ is called a **sample path** or **realization** of the process.
 
 In practice, you should think about a stochastic process as a random function that evolves over time. A deterministic function like $Y_t(\omega) = t^2$ can be viewed as a particularly uninteresting example of a stochastic process. It generates the same path no matter what value of $\omega$ you plug into it.
 
-## Example: the Poisson process {#sec-poisson_process}
-
-A Poisson process, is an example of a stochastic process which describes the occurrence of random events through time. We'll put it to use later in this book to model jumps in asset prices.
+A Poisson process is an example of a stochastic process that describes the occurrence of random events through time. We'll put it to use later in this book to model jumps in asset prices.
 
 ::: {.callout-tip title="Poisson Process"}
 A process $\{N_t\}_{t \ge 0}$ is called a **Poisson process** with intensity (arrival rate) $\eta > 0$[^01-stochastic_processes-2] if it satisfies the following properties:
 
-1.  **Initial Condition**
+1.  Initial Condition
 
     $$
     N_0 = 0.
     $$
 
-2.  **Independent Increments**
+2.  Independent Increments
 
     For any times
 
@@ -92,7 +90,7 @@ A process $\{N_t\}_{t \ge 0}$ is called a **Poisson process** with intensity (ar
 
     are independent random variables.
 
-3.  **Stationary Increments**
+3. *Stationary Increments
 
     For any $0 \le s < t$, the increment depends only on the length of the interval:
 
@@ -175,7 +173,7 @@ $$
 
 Virtually all of the stochastic processes you are likely to encounter in applied continuous-time finance are adapted to a filtratation. They describe the evolution over time of observable phenomena like equity prices and interest rates that are known in the past but not in the future.
 
-Consider the Poisson process, $\{N_t\}$, we introduced in @sec-poisson_process. Suppose we wish to predict the number of events that will have occurred by a later time $T>t$. At time $t$, we already know that $N_t$ events have occurred. The only uncertainty comes from the future arrivals between $t$ and $T$. Because the increments of a Poisson process are independent,
+Consider the Poisson process, $\{N_t\}$, we introduced in @sec-processes. Suppose we wish to predict the number of events that will have occurred by a later time $T>t$. At time $t$, we already know that $N_t$ events have occurred. The only uncertainty comes from the future arrivals between $t$ and $T$. Because the increments of a Poisson process are independent,
 
 $$
 \E_t[N_T]
@@ -238,4 +236,4 @@ Martingales play a central role continuous-time finance. One of the most importa
 
 ## Taking stock and looking forward
 
-Much of the material we've covered in the this chapter might seem pretty abstract, so much so that at this point you may be wondering whether the word "practical" in the title of this book is really appropriate. Fear not! In this book each chapter is more applied that the one before it. So we're now at the peak of abstraction,looking down a steady slope toward the applied financial models to come. In the next chapter we will introduce the single most important stochastic process in continuous-time finance, a process that forms the foundation of all of the applied models we are looking forward to.
+Much of the material we've covered in this chapter might seem pretty abstract, so much so that at this point you may be wondering whether the word "practical" in the title of this book is really appropriate. Fear not! In this book each chapter is more applied that the one before it. We're now standing at the peak of abstraction, looking down a steady slope toward the applied financial models to come. In the next chapter we will introduce the single most important stochastic process in continuous-time finance, a process that forms the foundation of all of the applied models we can look forward to.

@@ -219,9 +219,9 @@ A forward contract is similar to a European call option except that there is no 
  
 $$
 \begin{align*}
-0 =& E_t^Q[D_{t,T}(S_T-K_t)] \\
-K_t =& \frac{E_t^Q(D_{t,T}S_T)}{P_{t,T}} \\
-K_t =& E_t^Q[S_T] + \frac{Cov_t^Q[D_{t,T}, S_t]}{P_{t,T}}.
+0 =& \E_t^Q[D_{t,T}(S_T-K_t)] \\
+K_t =& \frac{\E_t^Q(D_{t,T}S_T)}{P_{t,T}} \\
+K_t =& \E_t^Q[S_T] + \frac{\Cov_t^Q[D_{t,T}, S_t]}{P_{t,T}}.
 \end{align*}
 $$
  
@@ -252,13 +252,15 @@ $$
 F_t = E_t^Q[S_t].
 $$
  
-Comparing $K_t$ and $F_t$, we see that when the future path of interest rates is uncertain, forward and futures prices for delivery of the same asset at the same expiry date will differ from one another.  If the asset's future value is positively correlated with future interest rates, then a holder of a long futures position will tend to receive positive variation margin payments at times when the present value of those payments are relatively low and will need to make variation margin payments when their present values are relatively high.  This timing effect exactly offsets the correlation between asset values and discount rates embedded in the forward price.  Only when the asset's value is uncorrelated with interest rates can futures and forwards prices be expected to match.
+Comparing $K_t$ and $F_t$, we see that when the future path of interest rates is uncertain, forward and futures prices for delivery of the same asset at the same expiry date will differ from one another.  If the asset's future value is positively correlated with future interest rates, then a holder of a long futures position will tend to receive positive variation margin payments at times when the present value of those payments are relatively low and will need to make variation margin payments when their present values are relatively high.  This timing effect exactly offsets the correlation between asset values and discount rates embedded in the forward price.  Only when the asset's value is uncorrelated with interest rates can futures and forwards prices be expected to match. 
+
+ As we will see later in this book, it is actually quite difficult, and more than a little contrived, to write down a model in which asset prices are uncorrelated under the $Q$ measure with stochastic discount factors.  In many cases the FTAP implies that the asset value should grow at the short rate.  Since discount factors also depend on the short rate, asset values and discount rates are likely to be correlated.
 
 ## Taking stock and looking forward
 
-In this chapter we have shown how time-varying short interest rates complicates the valuation of both known and unknown future cash flows.  This additional complexity brings with it new economic insights.  We have seen that when interest rates are uncertain, even assets with certain future cash flows entail risks because their present value may change over time as interest rates move.  This is not merely an academic risk mattering only to quant nerds; investors ignore it at their peril. For example, in 2023 Silicon Valley Bank famously failed, in part, because it lost money on "safe" U.S. Treasury securities whose market values were marked down when interest rates unexpectedly rose. 
+In this chapter we have shown how time-varying short interest rates complicate the valuation of both known and unknown future cash flows.  This additional complexity brings with it new economic insights.  We have seen that when interest rates are uncertain, even assets with certain future cash flows entail risks because their present value may change over time as interest rates move.  This is not merely an academic point mattering only to quant nerds; investors ignore it at their peril. For example, in 2023 Silicon Valley Bank famously failed, in part, because it lost money on "safe" U.S. Treasury securities whose market values were marked down when interest rates unexpectedly rose. 
 
-The situation become even more nuanced when future payoffs are uncertain.  In this case an asset's current value depends not only on its risk neutral expected payout, but also on the correlation between future payouts and future interest rates.  Assets that generate higher payouts when interest rates are low command a premium relative to their risk-neutral expectations. This correlation effect can be undone by marking assets to market and transferring payments between buyers and sellers over time, as is done with futures contracts.  
+The situation becomes even more nuanced when future payoffs are uncertain.  In this case an asset's current value depends not only on its risk-neutral expected payout, but also on the correlation between future payouts and future interest rates.  This correlation effect can be undone by marking assets to market and transferring payments between buyers and sellers over time, as is done with futures contracts.  
 
 Whether certain or uncertain, we cannot value future cash flows without knowing something about the time path of future interest rates.  In the next chapter we introduce two classic models of interest rates and show how they can be used to value bonds with certain cash flows.  In later chapters we will model uncertain cash flows and uncertain interest rates together.
 

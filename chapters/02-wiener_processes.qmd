@@ -51,7 +51,7 @@ another limit of an average of random variables that is also normally distribute
 ::: {.callout-tip title="Wiener Process"}
 A process $\left\{W_t\right\}_{t\geq 0}$ is called a **Wiener process** or a Brownian motion process if it satisfies the following properties:
 
-1.  **Initial Condition**
+1.  Initial Condition
 
     $$
     W_0 = 0
@@ -59,7 +59,7 @@ A process $\left\{W_t\right\}_{t\geq 0}$ is called a **Wiener process** or a Bro
 
     almost surely.
 
-2.  **Independent Increments**
+2.  Independent Increments
 
     For any times
 
@@ -78,7 +78,7 @@ A process $\left\{W_t\right\}_{t\geq 0}$ is called a **Wiener process** or a Bro
 
     are independent random variables.
 
-3.  **Stationary Gaussian Increments**
+3.  Stationary Gaussian Increments
 
     For any $0 \le s < t$,
 
@@ -88,7 +88,7 @@ A process $\left\{W_t\right\}_{t\geq 0}$ is called a **Wiener process** or a Bro
 
     meaning that the increment is normally distributed with mean zero and variance $t-s$.
 
-4.  **Continuous Sample Paths**
+4.  Continuous Sample Paths
 
     For almost every outcome $\omega \in \Omega$, the function
 
@@ -178,7 +178,7 @@ $$
 \lim_{h\to 0} \E\left[(X_n-X)^2\right] = 0.
 $$
 
-Shorthand notation for mean squared convergence is $X_n \toms X$ or $\lim_{n\to\infty}X_n \eqasm X$.. A process that converges almost surely also converges in mean square, but the opposite is not true. Mean-square convergence permits individual paths to fluctuate no matter how large $n$ grows without ever settling to a particular value. Instead, it simply requires that the size of the discrepancy, averaged across all paths, diminishes quickly as $n\rightarrow\infty$. Because they demand less, definitions of objects like integrals based on mean-square convergence criteria can be applied to a broader range of stochastic processes, including Wiener processes.
+Shorthand notation for mean squared convergence is $X_n \toms X$ or $\lim_{n\to\infty}X_n \eqams X$.. A process that converges almost surely also converges in mean square, but the opposite is not true. Mean-square convergence permits individual paths to fluctuate no matter how large $n$ grows without ever settling to a particular value. Instead, it simply requires that the size of the discrepancy, averaged across all paths, diminishes quickly as $n\rightarrow\infty$. Because they demand less, definitions of objects like integrals based on mean-square convergence criteria can be applied to a broader range of stochastic processes, including Wiener processes.
 
 Individual Wiener paths are too irregular for ordinary calculus — they can’t be differentiated, and sums built along a single path don’t settle down to a limit. Mean-square convergence sidesteps this by changing what we ask for: instead of requiring convergence on each path separately, we only require that the mean squared discrepancy shrinks to zero. A quantity can fail to converge on any single path, and yet still converge in this aggregate, population-level sense. This allows us to build a rigorous integral against a process whose paths, examined one at a time, are too wild to integrate against at all.
 

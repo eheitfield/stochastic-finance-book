@@ -466,12 +466,12 @@ W_t - W_s = \lim_{N\to\infty} \frac{1}{n_t-n_s}\sum_{i = n_s}^{n_t} X_i (t-s),
 <div class="callout-body-container callout-body">
 <p>A process <span class="math inline">\(\left\{W_t\right\}_{t\geq 0}\)</span> is called a <strong>Wiener process</strong> or a Brownian motion process if it satisfies the following properties:</p>
 <ol type="1">
-<li><p><strong>Initial Condition</strong></p>
+<li><p>Initial Condition</p>
 <p><span class="math display">\[
 W_0 = 0
 \]</span></p>
 <p>almost surely.</p></li>
-<li><p><strong>Independent Increments</strong></p>
+<li><p>Independent Increments</p>
 <p>For any times</p>
 <p><span class="math display">\[
 0 \le t_0 &lt; t_1 &lt; \cdots &lt; t_n,
@@ -484,13 +484,13 @@ W_{t_2}-W_{t_1}, \quad
 W_{t_n}-W_{t_{n-1}}
 \]</span></p>
 <p>are independent random variables.</p></li>
-<li><p><strong>Stationary Gaussian Increments</strong></p>
+<li><p>Stationary Gaussian Increments</p>
 <p>For any <span class="math inline">\(0 \le s &lt; t\)</span>,</p>
 <p><span class="math display">\[
 W_t - W_s \sim N(0,\, t-s),
 \]</span></p>
 <p>meaning that the increment is normally distributed with mean zero and variance <span class="math inline">\(t-s\)</span>.</p></li>
-<li><p><strong>Continuous Sample Paths</strong></p>
+<li><p>Continuous Sample Paths</p>
 <p>For almost every outcome <span class="math inline">\(\omega \in \Omega\)</span>, the function</p>
 <p><span class="math display">\[
 t \mapsto W_t(\omega)
@@ -560,7 +560,7 @@ f'(t)
 <p><span class="math display">\[
 \lim_{h\to 0} \E\left[(X_n-X)^2\right] = 0.
 \]</span></p>
-<p>Shorthand notation for mean squared convergence is <span class="math inline">\(X_n \toms X\)</span> or <span class="math inline">\(\lim_{n\to\infty}X_n \eqasm X\)</span>.. A process that converges almost surely also converges in mean square, but the opposite is not true. Mean-square convergence permits individual paths to fluctuate no matter how large <span class="math inline">\(n\)</span> grows without ever settling to a particular value. Instead, it simply requires that the size of the discrepancy, averaged across all paths, diminishes quickly as <span class="math inline">\(n\rightarrow\infty\)</span>. Because they demand less, definitions of objects like integrals based on mean-square convergence criteria can be applied to a broader range of stochastic processes, including Wiener processes.</p>
+<p>Shorthand notation for mean squared convergence is <span class="math inline">\(X_n \toms X\)</span> or <span class="math inline">\(\lim_{n\to\infty}X_n \eqams X\)</span>.. A process that converges almost surely also converges in mean square, but the opposite is not true. Mean-square convergence permits individual paths to fluctuate no matter how large <span class="math inline">\(n\)</span> grows without ever settling to a particular value. Instead, it simply requires that the size of the discrepancy, averaged across all paths, diminishes quickly as <span class="math inline">\(n\rightarrow\infty\)</span>. Because they demand less, definitions of objects like integrals based on mean-square convergence criteria can be applied to a broader range of stochastic processes, including Wiener processes.</p>
 <p>Individual Wiener paths are too irregular for ordinary calculus — they can’t be differentiated, and sums built along a single path don’t settle down to a limit. Mean-square convergence sidesteps this by changing what we ask for: instead of requiring convergence on each path separately, we only require that the mean squared discrepancy shrinks to zero. A quantity can fail to converge on any single path, and yet still converge in this aggregate, population-level sense. This allows us to build a rigorous integral against a process whose paths, examined one at a time, are too wild to integrate against at all.</p>
 </section>
 <section id="taking-stock-and-looking-forward" class="level2" data-number="2.4">

@@ -132,7 +132,7 @@ $$
 V_t^{\text{Call}} = S_t\,\Phi(d_1) - K\,e^{-r(T-t)}\,\Phi(d_2).
 $$
 
-@fig-bs_option_path shows the relationship between a simulated stock price and the value of put and call options on that stock over time.
+@fig-bs_option_path shows the relationship between a simulated stock price and the value of put and call options on that stock over time.  In this example the stock starts off below the strike price.  An options trader would say that the put option is "in the money" and the call option is "out of the money."  Early on the stock fluctuates near the strike price and the values of the put and call options are near mirror images of one another.  Closer to the expiry date, the outcome becomes more certain and the value of the out-of-the-money call option drops toward zero while the value of the in-the-money put option continues to move almost one-for-one with the negative of the stock price.
 
 ![Simulation of the price of a stock and the values of put and call options on the stock.](../figures/bs_option_path.svg){#fig-bs_option_path}
 
@@ -195,7 +195,7 @@ Of course, in practice this strategy may be easier said than done. The FTAP guar
 
 [^04-risk_neutral_expectations-2]: The version of Girsanov's theorem presented here is specialized to one-dimensional Wiener processes. More general versions apply to multidimensional diffusion processes and are formulated in terms of Radon--Nikodym derivatives. These extensions are not required for the models considered in this book.
 
-::: {.callout-note title="Girsanov's Theorem (Similified)"}
+::: {.callout-note title="Girsanov's Theorem (Simplified)"}
 Suppose that $W_t^P$ is a Wiener process under the probability measure $P$. Under suitable regularity conditions, there exists an equivalent probability measure $P'$ such that
 
 $$
